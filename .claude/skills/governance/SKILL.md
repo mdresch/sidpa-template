@@ -25,3 +25,4 @@ description: Automated governance change pipeline (Stage 16) for paired diff cla
 - Progression gating (ADR-005): candidate amendment verified via `compare_decision_results()`. Progression yields +1.0 reward; regression triggers healing/reversion, disposition override to `escalate_to_human`, and yields -1.5 penalty.
 - Stage 16 scope boundary: pipeline terminates with a validated governance baseline; Stage 17 Execution Adaptation is strictly out of scope.
 - Zero storage expansion: no new Cosmos containers or LearningStore record types (ADR-002 Invariant #2).
+
