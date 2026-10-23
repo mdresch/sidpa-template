@@ -1,0 +1,26 @@
+# Project Management Plan (PMP)
+
+**Source:** [Project-Charter.md](Project-Charter.md)
+**Governance Policy:** `approve-pmp`
+
+**This is the integrated Project Management Plan, formalized after the Project Charter is approved and before technical specifications (ADR, BRD, FDD, User Stories) are drafted.**
+
+## 1. Executive Summary & Baselines
+- **Scope Baseline:** Approved scope boundary traced to Charter objectives.
+- **Schedule Baseline / Progressive Elaboration:** Milestones established; duration detailed progressively from empirical evidence.
+- **Cost Baseline / Progressive Elaboration:** Investment limits from Business Case; detailed cost tracked as resources are committed.
+
+## 2. Integrated Subsidiary Management Plans
+- **Scope Management Plan:** How requirements and scope changes are evaluated and controlled.
+- **Requirements Management Plan:** Traceability chain from Charter to ADR/BRD/FDD/Stories.
+- **Risk Management Plan:** Risk register, probability/impact scoring, and mitigation protocols.
+- **Quality Management Plan:** Contract-test criteria, zero-drift verification, and regression prevention rules.
+- **Resource Management Plan:** Roles, responsibilities, and agent authority tiers.
+- **Communications Management Plan:** Project transparency, PR reviews, and audit log cadence.
+- **Stakeholder Engagement Plan:** Human approval gates and escalation pathways.
+
+## 3. Feedback Loop from Adaptation
+When an **Adaptation Plan** (Stage 17) is approved, this PMP and its subsidiary plans are updated with tailored operational changes, which in turn trigger refined ADRs, BRDs, FDDs, and Stories for the next cycle.
+
+## What this is not yet
+This document integrates governance and operational plans. It does NOT contain code architecture or solution logic—those belong in ADRs, BRDs, and FDDs, which are drafted only after this PMP is approved.
