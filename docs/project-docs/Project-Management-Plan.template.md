@@ -1,4 +1,25 @@
+---
+pmbok_edition: "PMBOK 8"
+pmbok_process_group: "Planning"
+pmbok_process: "4.2 Develop Project Management Plan"
+lifecycle_stage: "Stage 6 (Project)"
+governance_policy: "approve-pmp"
+inputs:
+  - "Project-Charter.md"
+  - "Subsidiary management plans (Scope, Risk, Quality, etc.)"
+process: "Integrate subsidiary management plans, establish baselines, define governance gates"
+outputs:
+  - "Project-Management-Plan.md"
+---
+
 # Project Management Plan (PMP)
+
+> **PMBOK 8 Process:** `4.2 Develop Project Management Plan` (Planning)  
+> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 6 (Project)`  
+> **Inputs:** Project-Charter.md, Subsidiary management plans (Scope, Risk, Quality, etc.)  
+> **Process:** Integrate subsidiary management plans, establish baselines, define governance gates  
+> **Outputs:** Project-Management-Plan.md
+
 
 **Source:** [Project-Charter.md](Project-Charter.md)
 **Governance Policy:** `approve-pmp`

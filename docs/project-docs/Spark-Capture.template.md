@@ -1,4 +1,25 @@
+---
+pmbok_edition: "PMBOK 8"
+pmbok_process_group: "Initiating"
+pmbok_process: "Pre-Project / Strategic Need Identification"
+lifecycle_stage: "Stage 1 (Intent)"
+governance_policy: "approve-ideation"
+inputs:
+  - "Business need or raw strategic impulse"
+  - "Market / environment trigger event"
+process: "Capture raw problem statement and motivation without premature solutioning"
+outputs:
+  - "Spark-Capture.md (Source for Ideation)"
+---
+
 # Spark Capture
+
+> **PMBOK 8 Process:** `Pre-Project / Strategic Need Identification` (Initiating)  
+> **Governance Policy:** `approve-ideation` | **Lifecycle Stage:** `Stage 1 (Intent)`  
+> **Inputs:** Business need or raw strategic impulse, Market / environment trigger event  
+> **Process:** Capture raw problem statement and motivation without premature solutioning  
+> **Outputs:** Spark-Capture.md (Source for Ideation)
+
 
 **Date:** <date>
 **Captured by:** <real name>

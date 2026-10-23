@@ -1,4 +1,27 @@
+---
+pmbok_edition: "PMBOK 8"
+pmbok_process_group: "Planning"
+pmbok_process: "5.4 Create WBS & Backlog Elaboration"
+lifecycle_stage: "Stage 7 (Requirement: Story)"
+governance_policy: "approve-user-stories"
+inputs:
+  - "FDD-*.md"
+  - "BRD-*.md"
+  - "ADR-*.md"
+process: "Decompose solution requirements into testable user stories with explicit acceptance criteria"
+outputs:
+  - "user-stories/epic-*.md"
+  - "Testable User Stories"
+---
+
 # Epic <N>: <Title>
+
+> **PMBOK 8 Process:** `5.4 Create WBS & Backlog Elaboration` (Planning)  
+> **Governance Policy:** `approve-user-stories` | **Lifecycle Stage:** `Stage 7 (Requirement: Story)`  
+> **Inputs:** FDD-*.md, BRD-*.md, ADR-*.md  
+> **Process:** Decompose solution requirements into testable user stories with explicit acceptance criteria  
+> **Outputs:** user-stories/epic-*.md, Testable User Stories
+
 
 **Source ADR:** [ADR-<NNN>](../07-architecture/ADR-<NNN>-<slug>.md)
 **Source BRD/FDD:** [BRD-<NNN>](../project-docs/Business-Requirements/BRD-<NNN>-<slug>.md) / [FDD-<NNN>](../project-docs/Functional-Design/FDD-<NNN>-<slug>.md)

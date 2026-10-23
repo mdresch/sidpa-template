@@ -1,4 +1,26 @@
+---
+pmbok_edition: "PMBOK 8"
+pmbok_process_group: "Planning"
+pmbok_process: "5.3 Define Scope & Detailed Interface/Solution Design"
+lifecycle_stage: "Stage 7 (Requirement: Solution)"
+governance_policy: "approve-fdd"
+inputs:
+  - "ADR-*.md"
+  - "BRD-*.md"
+  - "Quality Management Plan"
+process: "Specify technical interfaces, data schemas, algorithmic logic, and invariant contracts"
+outputs:
+  - "FDD-*.md"
+---
+
 # FDD-<NNN>: <Title>
+
+> **PMBOK 8 Process:** `5.3 Define Scope & Detailed Interface/Solution Design` (Planning)  
+> **Governance Policy:** `approve-fdd` | **Lifecycle Stage:** `Stage 7 (Requirement: Solution)`  
+> **Inputs:** ADR-*.md, BRD-*.md, Quality Management Plan  
+> **Process:** Specify technical interfaces, data schemas, algorithmic logic, and invariant contracts  
+> **Outputs:** FDD-*.md
+
 
 **Source ADR:** [ADR-<NNN>](../../07-architecture/ADR-<NNN>-<slug>.md)
 **Source BRD:** [BRD-<NNN>](../Business-Requirements/BRD-<NNN>-<slug>.md)

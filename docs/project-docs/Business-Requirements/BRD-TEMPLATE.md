@@ -1,4 +1,25 @@
+---
+pmbok_edition: "PMBOK 8"
+pmbok_process_group: "Planning"
+pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope"
+lifecycle_stage: "Stage 7 (Requirement: Business)"
+governance_policy: "approve-brd"
+inputs:
+  - "Project-Charter.md"
+  - "Project-Management-Plan.md (Scope Management Plan)"
+process: "Define functional and non-functional business requirements and stakeholder rules"
+outputs:
+  - "BRD-*.md"
+---
+
 # BRD-<NNN>: <Title>
+
+> **PMBOK 8 Process:** `5.2 Collect Requirements & 5.3 Define Scope` (Planning)  
+> **Governance Policy:** `approve-brd` | **Lifecycle Stage:** `Stage 7 (Requirement: Business)`  
+> **Inputs:** Project-Charter.md, Project-Management-Plan.md (Scope Management Plan)  
+> **Process:** Define functional and non-functional business requirements and stakeholder rules  
+> **Outputs:** BRD-*.md
+
 
 **Source ADR:** [ADR-<NNN>](../../07-architecture/ADR-<NNN>-<slug>.md) — <its real status>
 **Status:** Draft — business rules derived from an Accepted ADR, not yet built

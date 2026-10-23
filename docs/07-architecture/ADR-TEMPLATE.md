@@ -1,4 +1,26 @@
+---
+pmbok_edition: "PMBOK 8"
+pmbok_process_group: "Planning"
+pmbok_process: "5.3 Define Scope & Systems Architecture Planning"
+lifecycle_stage: "Stage 7 (Requirement: Architecture)"
+governance_policy: "approve-adr"
+inputs:
+  - "Ideation-Document.md (Hypotheses)"
+  - "Project-Management-Plan.md"
+  - "BRD-*.md"
+process: "Formulate architectural decisions, evaluate trade-off alternatives, specify consequences"
+outputs:
+  - "ADR-*.md"
+---
+
 # ADR <NNN>: <Title>
+
+> **PMBOK 8 Process:** `5.3 Define Scope & Systems Architecture Planning` (Planning)  
+> **Governance Policy:** `approve-adr` | **Lifecycle Stage:** `Stage 7 (Requirement: Architecture)`  
+> **Inputs:** Ideation-Document.md (Hypotheses), Project-Management-Plan.md, BRD-*.md  
+> **Process:** Formulate architectural decisions, evaluate trade-off alternatives, specify consequences  
+> **Outputs:** ADR-*.md
+
 
 ## 1. Executive Brief
 <One paragraph: what's real today, what gap this closes, what the decision actually is. State it as a finding, not a proposal — if you haven't verified the "what's real today" part against actual code/docs yet, you're not ready to write this section.>

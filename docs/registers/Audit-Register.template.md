@@ -1,4 +1,27 @@
+---
+pmbok_edition: "PMBOK 8"
+pmbok_process_group: "Monitoring & Controlling"
+pmbok_process: "8.2 Manage Quality & 8.3 Control Quality Audits"
+lifecycle_stage: "Stage 11 (Audit Record)"
+governance_policy: "approve-audit-record"
+inputs:
+  - "Deliverables (Source code)"
+  - "Verification Evidence (Contract test runs)"
+  - "Telemetry"
+process: "Perform compliance audits, identify drift or regressions, document corrective actions"
+outputs:
+  - "Audit-Register.md"
+  - "Approved Audit Findings"
+---
+
 # Audit Register — <project>
+
+> **PMBOK 8 Process:** `8.2 Manage Quality & 8.3 Control Quality Audits` (Monitoring & Controlling)  
+> **Governance Policy:** `approve-audit-record` | **Lifecycle Stage:** `Stage 11 (Audit Record)`  
+> **Inputs:** Deliverables (Source code), Verification Evidence (Contract test runs), Telemetry  
+> **Process:** Perform compliance audits, identify drift or regressions, document corrective actions  
+> **Outputs:** Audit-Register.md, Approved Audit Findings
+
 
 | Field | Value |
 |---|---|

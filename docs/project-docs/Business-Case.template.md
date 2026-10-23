@@ -1,4 +1,25 @@
+---
+pmbok_edition: "PMBOK 8"
+pmbok_process_group: "Initiating"
+pmbok_process: "Business Documents / Economic Feasibility Analysis"
+lifecycle_stage: "Stage 4 (Benefit)"
+governance_policy: "approve-business-case"
+inputs:
+  - "Ideation-Document.md (Hypotheses)"
+  - "Organizational strategic goals"
+process: "Evaluate economic viability, ROI expectations, investment limits, and business alternatives"
+outputs:
+  - "Business-Case.md (Input to Benefits Statement & Project Charter)"
+---
+
 # Business Case
+
+> **PMBOK 8 Process:** `Business Documents / Economic Feasibility Analysis` (Initiating)  
+> **Governance Policy:** `approve-business-case` | **Lifecycle Stage:** `Stage 4 (Benefit)`  
+> **Inputs:** Ideation-Document.md (Hypotheses), Organizational strategic goals  
+> **Process:** Evaluate economic viability, ROI expectations, investment limits, and business alternatives  
+> **Outputs:** Business-Case.md (Input to Benefits Statement & Project Charter)
+
 
 **Source:** [Ideation-Document.md](Ideation-Document.md)
 

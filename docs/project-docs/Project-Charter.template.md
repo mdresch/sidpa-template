@@ -1,4 +1,27 @@
+---
+pmbok_edition: "PMBOK 8"
+pmbok_process_group: "Initiating"
+pmbok_process: "4.1 Develop Project Charter"
+lifecycle_stage: "Stage 2 (Objective)"
+governance_policy: "approve-charter"
+inputs:
+  - "Business-Case.md"
+  - "Benefits-Statement.md"
+  - "Ideation-Document.md"
+process: "Formally authorize project, assign sponsor authority, define measurable objectives"
+outputs:
+  - "Project-Charter.md"
+  - "Assumption Log"
+---
+
 # Project Charter
+
+> **PMBOK 8 Process:** `4.1 Develop Project Charter` (Initiating)  
+> **Governance Policy:** `approve-charter` | **Lifecycle Stage:** `Stage 2 (Objective)`  
+> **Inputs:** Business-Case.md, Benefits-Statement.md, Ideation-Document.md  
+> **Process:** Formally authorize project, assign sponsor authority, define measurable objectives  
+> **Outputs:** Project-Charter.md, Assumption Log
+
 
 **Source:** [Benefits-Statement.md](Benefits-Statement.md)
 

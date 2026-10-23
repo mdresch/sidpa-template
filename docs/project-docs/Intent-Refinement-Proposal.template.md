@@ -1,4 +1,26 @@
+---
+pmbok_edition: "PMBOK 8"
+pmbok_process_group: "Closing"
+pmbok_process: "4.7 Close Project or Phase & Strategic Cognitive Feedback"
+lifecycle_stage: "Stage 18 (Intent Refinement)"
+governance_policy: "approve-intent-refinement"
+inputs:
+  - "Adaptation-Plan.md"
+  - "Actual Outcomes (Stage 12)"
+  - "Lessons Learned Register"
+process: "Synthesize outcomes and adaptations to refine top-of-chain intent for subsequent iterations"
+outputs:
+  - "Intent-Refinement-Proposal.md (Catalyst for next Spark Capture)"
+---
+
 # Intent Refinement Proposal
+
+> **PMBOK 8 Process:** `4.7 Close Project or Phase & Strategic Cognitive Feedback` (Closing)  
+> **Governance Policy:** `approve-intent-refinement` | **Lifecycle Stage:** `Stage 18 (Intent Refinement)`  
+> **Inputs:** Adaptation-Plan.md, Actual Outcomes (Stage 12), Lessons Learned Register  
+> **Process:** Synthesize outcomes and adaptations to refine top-of-chain intent for subsequent iterations  
+> **Outputs:** Intent-Refinement-Proposal.md (Catalyst for next Spark Capture)
+
 
 **Source:** [Adaptation-Plan.md](Adaptation-Plan.md), [Audit-Register.md](../registers/Audit-Register.template.md)
 **Governance Policy:** pprove-intent-refinement

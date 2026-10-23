@@ -1,4 +1,26 @@
+---
+pmbok_edition: "PMBOK 8"
+pmbok_process_group: "Initiating"
+pmbok_process: "Pre-Project / Design Assumption Formulation"
+lifecycle_stage: "Stage 1 (Intent) & Stage 3 (Hypothesis)"
+governance_policy: "approve-ideation & classify-hypothesis-status"
+inputs:
+  - "Spark-Capture.md"
+  - "Historical telemetry & lessons learned"
+process: "Formulate falsifiable hypotheses with empirical evaluation criteria"
+outputs:
+  - "Ideation-Document.md"
+  - "HYP-* hypotheses with status logs"
+---
+
 # Ideation Document
+
+> **PMBOK 8 Process:** `Pre-Project / Design Assumption Formulation` (Initiating)  
+> **Governance Policy:** `approve-ideation & classify-hypothesis-status` | **Lifecycle Stage:** `Stage 1 (Intent) & Stage 3 (Hypothesis)`  
+> **Inputs:** Spark-Capture.md, Historical telemetry & lessons learned  
+> **Process:** Formulate falsifiable hypotheses with empirical evaluation criteria  
+> **Outputs:** Ideation-Document.md, HYP-* hypotheses with status logs
+
 
 **Source:** [Spark-Capture.md](Spark-Capture.md)
 
