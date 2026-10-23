@@ -1,4 +1,9 @@
+# Python caches & runtime
+__pycache__/
+*.pyc
+*.pyo
+data/pmbok_runtime/
+.pytest_cache/
 
-
-#Ignore vscode AI rules
+# Ignore vscode AI rules
 .github\instructions\codacy.instructions.md
