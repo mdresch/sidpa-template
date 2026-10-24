@@ -33,17 +33,32 @@ outputs:
 - **Agent Skill / Tooling Updates:** <What agent skills, hooks, or system prompts require revision to enforce the updated governance?>
 - **Environmental / Configuration Changes:** <Any CI/CD, linter, or sandbox environment modifications.>
 
+## Governance Change Impact Matrix
+Every adaptation must formally assess and quantify the impact of accepted Stage 16 governance amendments across the 9 subsidiary management plans before selective re-orchestration:
+
+| Amendment / Change | Scope (5.1) | Schedule (6.1) | Cost (7.1) | Quality (8.1) | Resource (9.1) | Comms (10.1) | Risk (11.1) | Procurement (12.1) | Stakeholder (13.2) |
+|---|---|---|---|---|---|---|---|---|---|
+| `<Amendment ID/Title>` | `None/Low/Med/High` | `None/Low/Med/High` | `None/Low/Med/High` | `None/Low/Med/High` | `None/Low/Med/High` | `None/Low/Med/High` | `None/Low/Med/High` | `None/Low/Med/High` | `None/Low/Med/High` |
+
 ## Tailored Subsidiary Management Plan Updates (Feeding back to PMP)
 Identify which subsidiary management plans require updates as a direct result of this adaptation:
 - [ ] **Scope Management Plan:** <Updates to scope boundaries or change control>
-- [ ] **Requirements Management Plan:** <Updates to requirement validation criteria or traceability>
-- [ ] **Risk Management Plan:** <New risks, altered severity, or revised mitigation strategies>
+- [ ] **Schedule Management Plan:** <Adjusted timeline or duration baselines>
+- [ ] **Cost Management Plan:** <Revised budget, investment limits, or reserve allocations>
 - [ ] **Quality Management Plan:** <New contract test requirements or verification checks>
 - [ ] **Resource Management Plan:** <Updated agent skill definitions, prompts, or authority limits>
 - [ ] **Communications Management Plan:** <Modified reporting, audit, or notification rules>
-- [ ] **Schedule / Cost Plans:** <Adjusted timeline or resource allocation>
+- [ ] **Risk Management Plan:** <New risks, altered severity, or revised mitigation strategies>
+- [ ] **Procurement Management Plan:** <Supplier, vendor, or external package changes>
+- [ ] **Stakeholder Engagement Plan:** <Revised approval gates or escalation matrices>
 
-*Any checked plan triggers an update to `Project-Management-Plan.md`, which cascades into refined ADRs, BRDs, FDDs, and User Stories for the subsequent development cycle.*
+*Any checked plan triggers selective execution via `python scripts/orchestrate_pmbok.py --mode adapt --adaptation-plan docs/project-docs/Adaptation-Plan.md`. Prior baselines are archived to `management-plans/history/{baseline_id}/`.*
+
+## Rollback & Recovery Pathway
+If post-adaptation execution reveals regressions or operational failure (detected via ADR-005 `compare_decision_results()`), atomic rollback is triggered:
+1. Orchestrator restores the previous approved baseline (`PMP-BL-vX.Y.Z`) from `management-plans/history/`.
+2. Emits negative reward (-1.5) to `escalate-diff-response` for the episode.
+3. Restores verified operational stability without history corruption (Invariant 7).
 
 ## Verification & Rollout Gates
 <Measurable criteria confirming the adaptation is successfully operating in practice without causing regressions.>

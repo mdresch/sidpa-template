@@ -67,8 +67,11 @@ class StateStore:
     """
 
     def __init__(self, db_path: str) -> None:
+        from pathlib import Path as _P
+        _p = _P(db_path).resolve()
+        _p.parent.mkdir(parents=True, exist_ok=True)
         self.engine = create_engine(
-            f"sqlite:///{db_path}",
+            f"sqlite:///{_p.as_posix()}",
             connect_args={"check_same_thread": False},
         )
         self._create_tables()

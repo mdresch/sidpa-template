@@ -134,3 +134,13 @@ sidpa-template/
     ├── active-policies/template-governance/
     └── policies/template-governance/
 ```
+
+---
+
+## 5. Governance Invariants & Baseline Versioning Rules
+
+1. **PMP Precedes Technical Specifications:** No ADR, BRD, FDD, or User Story may be considered baseline-approved without an active, approved Project-Management-Plan.md in place.
+2. **Governance Change Impact Matrix:** Every Adaptation Plan must formally evaluate accepted Stage 16 amendments across all 9 subsidiary management plans using a structured Impact Matrix before selective re-orchestration.
+3. **PMP Baseline Versioning & History Archival:** Every approved PMP receives an immutable SemVer identifier (PMP-BL-v1.0.0, PMP-BL-v1.1.0). Prior baselines are atomically archived to docs/project-docs/management-plans/history/{baseline_id}/.
+4. **Baseline Traceability Invariant (Invariant 6):** Every approved PMP, ADR, BRD, FDD, User Story, and Adaptation Plan must reference the governing PMP baseline identifier (PMP-BL-vX.Y.Z) from which it originated.
+5. **Deterministic Rollback Protocol (Invariant 7):** If downstream execution reveals regressions or operational failure (detected via ADR-005 compare_decision_results()), atomic rollback restores the prior approved baseline from archive, restoring stability without history corruption.

@@ -2,6 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.4 Create WBS & Backlog Elaboration"
+pmp_baseline: "PMP-BL-v<X.Y.Z>"
 lifecycle_stage: "Stage 7 (Requirement: Story)"
 governance_policy: "approve-user-stories"
 inputs:
@@ -25,6 +26,8 @@ outputs:
 
 **Source ADR:** [ADR-<NNN>](../07-architecture/ADR-<NNN>-<slug>.md)
 **Source BRD/FDD:** [BRD-<NNN>](../project-docs/Business-Requirements/BRD-<NNN>-<slug>.md) / [FDD-<NNN>](../project-docs/Functional-Design/FDD-<NNN>-<slug>.md)
+
+**Governing Baseline:** `PMP-BL-v<X.Y.Z>` (Invariant 6)
 
 ## Story <N>.1 — <title>
 
