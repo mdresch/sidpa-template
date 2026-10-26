@@ -1,84 +1,38 @@
 ---
 name: pmbok-planning
-description: Orchestrates PMBOK 8 subsidiary management plans and synthesizes the integrated Project Management Plan (PMP) with agent-learning decision validation gates.
+description: How to draft the nine PMBOK 8 subsidiary management plans from their skeletons, approve them through the per-plan gate, and synthesize the integrated Project Management Plan, using the ADR-012 content contract and the ADR-013 approval sequence.
 ---
 
-# PMBOK Planning Skill
+# Skill: pmbok-planning (SIDPA template)
 
-This skill orchestrates the generation, synthesis, and adaptation of the 9 PMBOK 8 subsidiary management plans and the overarching Project Management Plan (PMP) for projects initialized from `sidpa-template`.
+This template no longer ships a plan-generation engine. The earlier SQLite, FastAPI and `orchestrate_pmbok.py` tooling was removed, following the decision in `agent-learning` ADR-034 to retire it in favor of a small pure-Python module. Until that module exists in your project, plans are drafted by a person or an LLM working from the skeletons in `docs/project-docs/management-plans/`. The standards, gates and registers below do not depend on a generator.
 
-## Supported Workflows
+## The sequence (draft, approve, formalize)
 
-### 1. Full Planning Orchestration
-Executed after `Project-Charter.md` is approved by `approve-charter`. Generates all 9 subsidiary management plans and integrates them into `Project-Management-Plan.md`.
+1. **Draft** each plan from its `*.template.md` skeleton (`scripts/init_project.py` copies them to `.md`). Order follows the dependency graph in each plan's `depends_on`: Scope first, then Schedule, then Cost, then the plans that depend on them.
+2. **Approve** each plan routed `full_plan` through `approve-subsidiary-plan` (one policy, parameterized by `plan_id`, human approval permanent). A plan routed `pmp_section` is drafted under `docs/project-docs/.staging/pmp-sections/` and is not approved separately.
+3. **Formalize** the integrated `Project-Management-Plan.md` only when every `full_plan` is approved and not stale, every `pmp_section` is present and not a stub, and every `not_applicable` plan has an approved tailoring rationale. Then run `approve-pmp`.
 
-```powershell
-python scripts/orchestrate_pmbok.py --mode full --charter docs/project-docs/Project-Charter.md
-```
+## The content contract (every plan)
 
-*(Add `--mock` for offline / stub execution without external LLM keys).*
+- **Frontmatter** with the keys in the skeleton: `plan_id`, `plan_name`, `pmbok_edition`, `pmbok_focus_area`, `primary_pmbok_domain`, `secondary_pmbok_domains`, `legacy_process`, `route`, `generator`, `version`, `baseline_id`, `cycle_id`, `owner_role`, `depends_on`, `inputs`, `outputs`, `governance_policy`. Flat keys, quoted strings, string lists only. Domains come from the closed set Governance, Scope, Schedule, Finance, Stakeholders, Resources, Risk.
+- **Three literal headings:** `## 1. Intent, Alignment & Boundaries`, `## 2. Domain Mechanics & Standards`, `## 3. Governance, Control & Decision Rights`. Plan-specific content goes in subsections under them. Renaming a top-level heading raises a structural flag.
+- **Out-of-scope list** in section 1. If nothing is excluded, write `None: <rationale of at least 10 words>`. A placeholder-only item (TBD, TBC, FIXME, N/A) does not count.
+- **Floors and caps** are word-count flags, not blocks. Count words in the body below the frontmatter with the regex `\b[^\W_]+(?:['’][^\W_]+)?\b`, excluding code blocks and HTML comments. Contractions count as one word and hyphenated terms as two.
+- **Plan tiers:** Tier 1 (Scope, Schedule, Cost) cannot be `not_applicable` without a recorded rationale and sponsor confirmation. Tier 2 (Risk, Quality) and Tier 3 (Resource, Stakeholder Engagement, Communications, Procurement) may be, with an approved tailoring rationale.
 
-### 2. Closed-Loop Adaptation Regeneration
-Executed when an `Adaptation-Plan.md` (Stage 17) evaluates governance amendments via the **Governance Change Impact Matrix** and identifies specific subsidiary plans requiring revision after a Stage 16 Governance Change.
+## What blocks and what only flags
 
-```powershell
-python scripts/orchestrate_pmbok.py --mode adapt --adaptation-plan docs/project-docs/Adaptation-Plan.md
-```
+- **Blocks approval (technical integrity):** `generator: stub` or `mock`, unexpanded template tokens (TBD or TODO in square brackets), a missing file, or frontmatter that cannot be parsed.
+- **Flags, resolved by a recorded human rationale:** word count below the floor or above the cap, a missing or thin out-of-scope list, a missing required subsection, metadata that does not match the tailoring matrix or the Cycle Register.
 
-This scans the checklist in `Adaptation-Plan.md`:
-- `[x] Scope Management Plan` $\rightarrow$ regenerates `5.1`
-- `[x] Schedule Management Plan` $\rightarrow$ regenerates `6.1`
-- `[x] Cost Management Plan` $\rightarrow$ regenerates `7.1`
-- `[x] Quality Management Plan` $\rightarrow$ regenerates `8.1`
-- `[x] Resource Management Plan` $\rightarrow$ regenerates `9.1`
-- `[x] Communications Management Plan` $\rightarrow$ regenerates `10.1`
-- `[x] Risk Management Plan` $\rightarrow$ regenerates `11.1`
-- `[x] Procurement Management Plan` $\rightarrow$ regenerates `12.1`
-- `[x] Stakeholder Engagement Plan` $\rightarrow$ regenerates `13.2`
+## Baselines, cycles and staleness
 
-It regenerates only the checked plans, updates `docs/project-docs/management-plans/`, archives prior baselines to `management-plans/history/{baseline_id}/`, and re-synthesizes `docs/project-docs/Project-Management-Plan.md`.
+- Every approved PMP gets a baseline identifier `PMP-BL-vX.Y.Z`. Plans, ADRs, BRDs, FDDs and stories carry `baseline_id` and `cycle_id`.
+- A **cycle** (`CYC-NNN`, recorded in `docs/registers/Cycle-Register.md`) is one pass through the loop. A baseline is the approved result of a cycle, not the cycle itself.
+- Changing a plan marks every plan that depends on it, directly or through another plan, as stale until it is re-verified. Changing a leaf plan invalidates nothing else.
+- Hashes for approvals are computed over the file content with `cycle_id` and `baseline_id` excluded, and are stored in episode metadata and the Cycle Register, never inside the file.
 
-### 3. Decision Validation Gate Verification
-After synthesis, the integrated PMP must be validated via `approve-pmp`:
+## Adaptation and rollback
 
-```powershell
-agent-learn task-policy-decide --agent-id template-governance --task-id approve-pmp
-```
-
-### 4. PMP Baseline Versioning & Traceability Invariant (Invariant 6)
-Every approved PMP receives an immutable SemVer identifier (`PMP-BL-v1.0.0`, `PMP-BL-v1.1.0`). All downstream technical requirements (ADRs, BRDs, FDDs, Stories) must reference the active baseline:
-```yaml
----
-pmp_baseline: "PMP-BL-v1.0.0"
----
-```
-
-### 5. Deterministic Rollback Protocol (Invariant 7)
-If downstream execution triggers regressions, atomic rollback restores the prior approved baseline from archive and penalizes the escalation bandit:
-```powershell
-python scripts/orchestrate_pmbok.py --mode rollback --to-baseline PMP-BL-v1.0.0
-```
-
-### 6. Phase Next Evolutionary Seeding (Stage 18 -> Stage 1)
-When Stage 18 Intent Refinement completes with a disposition of `phase_handoff` and receives full Bayesian governance approval (`approve-intent-refinement`), run the orchestrator in `seed-next` mode to mechanically scaffold Phase $N+1$:
-
-```powershell
-python scripts/orchestrate_pmbok.py --mode seed-next --refinement-proposal docs/project-docs/Intent-Refinement-Proposal.md
-```
-
-This automatically:
-1. Parses `Intent-Refinement-Proposal.md` for governing baseline, validated invariants, and refined child hypotheses.
-2. Increments the major baseline (`PMP-BL-v1.0.0` -> `PMP-BL-v2.0.0`).
-3. Seeds `docs/project-docs/Spark-Capture.md` (Stage 1) referencing the governing refinement.
-4. Seeds `docs/project-docs/Ideation-Document.md` (Stage 1 Ideation) with carried-over child hypotheses ($d=1, 2$) and formal Bayes factor criteria.
-5. Directs the operator to evaluate `approve-ideation` under `template-governance`.
-
-### 7. Administrative Decommissioning (Stage 18 Project Termination)
-If Stage 18 outcome evaluation concludes that the project's strategic intent is fully realized or non-viable (`disposition_type: project_termination`), run the orchestrator in `decommission` mode:
-
-```powershell
-python scripts/orchestrate_pmbok.py --mode decommission --refinement-proposal docs/project-docs/Intent-Refinement-Proposal.md
-```
-
-This generates `docs/archive/decommission_{timestamp}/DECOMMISSION-SUMMARY.md`, archives final baselines, and logs administrative teardown in full compliance with PMBOK 8 Phase Close guidelines.
-
+When an approved Stage 17 `Adaptation-Plan.md` names plans to revise, open a new cycle in the Cycle Register, revise only the named plans, re-approve them and anything stale, then run `approve-pmp`. To roll back, restore the prior baseline from `docs/project-docs/management-plans/history/<baseline_id>/` and record the cycle as `ROLLED_BACK`.

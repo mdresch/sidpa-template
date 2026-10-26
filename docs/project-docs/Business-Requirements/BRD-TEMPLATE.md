@@ -2,7 +2,8 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.2 Collect Requirements & 5.3 Define Scope"
-pmp_baseline: "PMP-BL-v<X.Y.Z>"
+baseline_id: "<target-baseline-id>"
+cycle_id: "CYC-001"
 lifecycle_stage: "Stage 7 (Requirement: Business)"
 governance_policy: "approve-brd"
 inputs:
@@ -23,7 +24,7 @@ outputs:
 
 
 **Source ADR:** [ADR-<NNN>](../../07-architecture/ADR-<NNN>-<slug>.md) — <its real status>
-**Governing Baseline:** `PMP-BL-v<X.Y.Z>` (Invariant 6)
+**Governing Baseline:** `<baseline_id>` · **Cycle:** `<cycle_id>` (see the Cycle Register)
 **Status:** Draft — business rules derived from an Accepted ADR, not yet built
 **Stakeholders:** <the real ones. If there's no formal Product Owner or separate business stakeholder, say that plainly rather than inventing a role.>
 

@@ -2,7 +2,8 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Systems Architecture Planning"
-pmp_baseline: "PMP-BL-v<X.Y.Z>"
+baseline_id: "<target-baseline-id>"
+cycle_id: "CYC-001"
 lifecycle_stage: "Stage 7 (Requirement: Architecture)"
 governance_policy: "approve-adr"
 inputs:
@@ -23,7 +24,7 @@ outputs:
 > **Outputs:** ADR-*.md
 
 
-**Governing Baseline:** `PMP-BL-v<X.Y.Z>` (Invariant 6)
+**Governing Baseline:** `<baseline_id>` · **Cycle:** `<cycle_id>` (see the Cycle Register)
 
 ## 1. Executive Brief
 <One paragraph: what's real today, what gap this closes, what the decision actually is. State it as a finding, not a proposal — if you haven't verified the "what's real today" part against actual code/docs yet, you're not ready to write this section.>
@@ -54,3 +55,17 @@ outputs:
 
 ## 7. References
 <Every file this ADR cites, as a real link/path. Link related ADRs. Cite the gap-tracking document (coverage overview, backlog, whatever this project uses) that justified writing this ADR in the first place.>
+
+## 8. Open Questions & Future Extensions
+<Only real, named open items. Say what is deferred and to what (tooling, a follow-on ADR). An empty section is fine if nothing is open.>
+
+## 9. Amendment Log
+
+| Date | Change | Why |
+|---|---|---|
+| <date> | Proposed | <what this ADR first decided> |
+
+<!--
+Status values: Proposed, Accepted (date, approver, episode id), Superseded. Never write Accepted before the human sign-off exists. When a gate run informs the decision, record the robust utility and the episode id in the Accepted row.
+Section numbers above 7 (References) shift if you add sections; keep cross-references to this ADR's sections correct.
+-->

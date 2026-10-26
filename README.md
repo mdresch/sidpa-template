@@ -14,38 +14,16 @@ Every artifact-producing stage is gated by real, Bayesian `agent_learning` TaskP
 
 ## What's Here
 
-### 1. PMBOK 8 Planning Engine & Python Subsystem (`pmbok/`)
-A complete, modular Python system enforcing PMBOK 8 and BABOK standards:
-- **`pmbok/agents/`** — Autonomous `ProcessAgent` implementations and `ProcessAgentFactory` dynamically creating agents for all PMBOK 8 processes.
-- **`pmbok/engines/`** — `IdeationEngine` and `BusinessCaseGenerator` with strict JSON schema validation.
-- **`pmbok/audit/`** — Multi-layer governance audit subsystem: policy loader, quality control, audit scoring, regex regression testing, and prompt optimizer.
-- **`pmbok/storage/`** — Relational SQLite and file-backed persistence for runtime state, artifacts, and audit registers (`StateStore`, `ArtifactStore`, `AuditStore`).
-- **`pmbok/llm/`** — `FoundryClient` LLM integration with schema validation and retry mechanics.
-- **`pmbok/cli/` & `pmbok/api/`** — Dual interface providing both a CLI (`pmbok/cli/main.py`) and a FastAPI REST service (`pmbok/api/app.py`).
+### 1. Plan standards and skeletons (`docs/project-docs/management-plans/`)
+Nine subsidiary-plan skeletons (`*.template.md`), one per PMBOK 8 plan, each carrying the same content contract: frontmatter (`plan_id`, domains, `route`, `generator`, `baseline_id`, `cycle_id`, `owner_role`, `depends_on`, `inputs`, `outputs`, `governance_policy`), three literal headings (`## 1. Intent, Alignment & Boundaries`, `## 2. Domain Mechanics & Standards`, `## 3. Governance, Control & Decision Rights`), an out-of-scope rule, and word-count floors and caps that are flags, not blocks. The standards come from `agent-learning` ADR-012 and ADR-025 to ADR-033. Scope, Schedule and Cost are Tier 1 (baseline-substantiating); Risk and Quality are Tier 2; Resource, Stakeholder Engagement, Communications and Procurement are Tier 3. Dependencies form a graph rooted at Scope.
 
-### 2. Automation & Orchestration Scripts (`scripts/`)
-Turnkey CLI tools automating setup and planning:
-- **`scripts/init_project.py`** — Initializes a new project from the template, renaming `template-governance` to `<name>-governance` in active policies while keeping `agent-learning-governance` intact, and instantiating `.template.md` document templates.
-- **`scripts/orchestrate_pmbok.py`** — Automates subsidiary plan generation and PMP synthesis:
-  - **Full Planning (`--mode full`)**: Ingests `Project-Charter.md`, generates all 9 subsidiary management plans, and integrates them into `Project-Management-Plan.md`.
-  - **Closed-Loop Adaptation (`--mode adapt`)**: Parses checked items in `Adaptation-Plan.md` (Stage 17) and selectively regenerates only the impacted subsidiary management plans.
-  - **Deterministic Rollback (`--mode rollback`)**: Restores prior baselines from history archives in the event of downstream operational regression.
-  - **Offline Mode (`--mock`)**: Supports deterministic local execution without external API keys.
+### 2. Scripts (`scripts/`)
+- **`scripts/init_project.py`**: renames `template-governance` to `<name>-governance` in the policy store (keeping `agent-learning-governance` intact), then copies the skeletons for the chosen stage to working `.md` files without overwriting anything, filling the project name and start date. Stages: `start` (Spark through Charter and the registers), `plans`, `closing`, `all`.
 
-### 3. Integrated Project Management Plan & Subsidiary Plans (`docs/project-docs/`)
-Structured templates and synthesized markdown documents mapping all 9 PMBOK knowledge areas:
-- `docs/project-docs/Project-Management-Plan.md` (and `.template.md`) — Stage 6 integrated PMP.
-- `docs/project-docs/management-plans/` — Individual subsidiary plans:
-  - `Scope-Management-Plan.md` (PMBOK 5.1)
-  - `Schedule-Management-Plan.md` (PMBOK 6.1)
-  - `Cost-Management-Plan.md` (PMBOK 7.1)
-  - `Quality-Management-Plan.md` (PMBOK 8.1)
-  - `Resource-Management-Plan.md` (PMBOK 9.1)
-  - `Communications-Management-Plan.md` (PMBOK 10.1)
-  - `Risk-Management-Plan.md` (PMBOK 11.1)
-  - `Procurement-Management-Plan.md` (PMBOK 12.1)
-  - `Stakeholder-Engagement-Plan.md` (PMBOK 13.2)
-- `docs/project-docs/management-plans/history/` — Immutable SemVer baseline archive (`PMP-BL-v1.0.0`, etc.).
+This template stores only template values. The earlier SQLite/FastAPI planning engine and `orchestrate_pmbok.py` were removed, following `agent-learning` ADR-034. Plans are drafted from the skeletons (see `.claude/skills/pmbok-planning/SKILL.md`) until a small pure-Python module replaces the old engine.
+
+### 3. Integrated Project Management Plan (`docs/project-docs/`)
+`Project-Management-Plan.template.md` is the Stage 6 integration skeleton. It is created in the `plans` stage and synthesized from the approved plans. Approved baselines are archived to `docs/project-docs/management-plans/history/<baseline_id>/`.
 
 ### 4. Document Templates with PMBOK 8 IPO Annotations (`docs/`)
 All document templates are annotated with PMBOK 8 Process Groups, process numbers, and Inputs/Process/Outputs (IPO) specifications:
@@ -64,7 +42,7 @@ All document templates are annotated with PMBOK 8 Process Groups, process number
 
 ### 5. Agent Skills (`.claude/skills/`)
 Specialized skills driving the automated lifecycle:
-- **`pmbok-planning`** — Subsidiary management plan orchestration, PMP synthesis, adaptation re-orchestration, and baseline rollback.
+- **`pmbok-planning`** — Drafting the nine plans from their skeletons, the per-plan approval gate, PMP formalization, cycles, staleness, adaptation and rollback.
 - **`governance`** — Bayesian TaskPolicy decision validation and policy management.
 - **`implement-story`** — Contract-first TDD implementation workflow.
 - **`heal-contract-failure`** — Autonomous repair loop for broken contracts and failing test suites.
@@ -72,7 +50,7 @@ Specialized skills driving the automated lifecycle:
 ### 6. Bayesian Governance Policies (`data/agent-learning/store/` & `docs/policy-shapes/`)
 Canonical action specifications, decision frames, and idle policy stores:
 - `docs/policy-shapes/` — Action definitions for all 15+ governance policies (`approve-ideation`, `approve-charter`, `approve-business-case`, `approve-pmp`, `approve-adr`, `approve-brd`, `approve-fdd`, `approve-user-stories`, `validate-intent-foundation`, `approve-audit-record`, `classify-diff-type`, `escalate-diff-response`, `approve-adaptation-plan`, `approve-intent-refinement`).
-- `docs/policy-shapes/decision-frames/` — Multi-criteria Bayesian decision frames (e.g. `pmp-approval.json`).
+- `docs/policy-shapes/decision-frames/` — A frame template (`approve-adr.frame.template.json`) and a README. Real frames belong to the project, not the template.
 - `data/agent-learning/store/` — Pre-initialized, idle policy instances.
 
 ### 7. Governance Principles & Empirical Lessons
@@ -89,7 +67,7 @@ The template enforces 5 fundamental governance invariants across the lifecycle:
 1. **PMP Precedes Technical Specifications:** No ADR, BRD, FDD, or User Story may be considered baseline-approved without an active, approved `Project-Management-Plan.md` in place.
 2. **Governance Change Impact Matrix:** Every Adaptation Plan must formally evaluate accepted Stage 16 amendments across all 9 subsidiary management plans using a structured Impact Matrix before selective re-orchestration.
 3. **PMP Baseline Versioning & History Archival:** Every approved PMP receives an immutable SemVer identifier (`PMP-BL-v1.0.0`, `PMP-BL-v1.1.0`). Prior baselines are atomically archived to `docs/project-docs/management-plans/history/{baseline_id}/`.
-4. **Baseline Traceability Invariant (Invariant 6):** Every approved PMP, ADR, BRD, FDD, User Story, and Adaptation Plan must record its governing PMP baseline identifier (`pmp_baseline: "PMP-BL-vX.Y.Z"`).
+4. **Baseline Traceability Invariant (Invariant 6):** Every approved PMP, ADR, BRD, FDD, User Story, and Adaptation Plan must record its governing PMP baseline identifier (`baseline_id: "PMP-BL-vX.Y.Z"` and `cycle_id: "CYC-NNN"`).
 5. **Deterministic Rollback Protocol (Invariant 7):** If downstream execution reveals regressions or operational failure (detected via ADR-005 `compare_decision_results()`), atomic rollback restores the prior approved baseline from archive and penalizes the escalation bandit.
 
 ---
@@ -99,7 +77,7 @@ The template enforces 5 fundamental governance invariants across the lifecycle:
 ```mermaid
 flowchart TD
     SPARK["Stage 1: Intent (Spark Capture & Ideation)<br/>approve-ideation"] --> CHARTER["Stage 2 & 4: Objectives & Benefits (Business Case & Charter)<br/>approve-business-case & approve-charter"]
-    CHARTER --> PMP["Stage 6: Project Management Plan (PMP & 9 Subsidiary Plans)<br/>orchestrate_pmbok.py & approve-pmp"]
+    CHARTER --> PMP["Stage 6: Project Management Plan (PMP & 9 Subsidiary Plans)<br/>approve-pmp"]
     PMP --> REQ["Stage 7: Requirements (ADR → BRD → FDD → Stories)<br/>approve-adr, approve-brd, approve-fdd, approve-user-stories"]
     REQ --> WP["Stage 8: Work Package Entry Gate<br/>validate-intent-foundation"]
     WP --> EXEC["Stage 9-10: Deliverables & Verification Evidence<br/>implement-story & heal-contract-failure"]
@@ -139,8 +117,6 @@ flowchart TD
 
 ## Using This Scaffold for a New Project
 
-## Using This Scaffold for a New Project
-
 You can instantiate SIDPA for a new project in one of two ways:
 - **Approach A (Recommended): GitHub Template / Repo Clone / Fork** — Best when starting a new repository from scratch.
 - **Approach B: Scaffold Copy** — Best when embedding SIDPA governance into an already existing codebase.
@@ -159,11 +135,11 @@ You can instantiate SIDPA for a new project in one of two ways:
    ```powershell
    python scripts/init_project.py --name my-awesome-project
    ```
-   *This automatically updates `data/agent-learning/store/` to `<my-project>-governance` (leaving `agent-learning-governance` intact) and instantiates all `*.template.md` documents.*
+   *This renames the governance agent in `data/agent-learning/store/` to `<my-project>-governance` (leaving `agent-learning-governance` intact), creates the Spark-to-Charter documents and the registers, and opens `CYC-001` in `docs/registers/Cycle-Register.md`. Plan skeletons are created later with `--stage plans`.*
 
 #### Approach B: Embedding into an Existing Codebase (Scaffold Copy)
 If you are adding SIDPA into an established repository:
-1. Copy `pmbok/`, `scripts/`, and `.claude/skills/` into your existing project root.
+1. Copy `scripts/` and `.claude/skills/` into your existing project root.
 2. Copy `data/agent-learning/store/` into your project's store.
 3. Copy `docs/project-docs/`, `docs/07-architecture/`, `docs/registers/`, and `docs/user-stories/` into `docs/`.
 4. Run `python scripts/init_project.py --name <your-project-name>` to configure governance IDs and instantiate `.md` document files.
@@ -176,18 +152,16 @@ If you are adding SIDPA into an established repository:
 3. Author `Business-Case.md` and `Benefits-Statement.md`. Run `approve-business-case`.
 4. Author `Project-Charter.md`. Run `approve-charter`.
 
-### Step 3: Orchestrate PMBOK 8 Subsidiary Plans and PMP
-Generate all 9 subsidiary management plans and synthesize the baseline `Project-Management-Plan.md`:
+### Step 3: Draft the Subsidiary Plans and the PMP
+Create the skeletons once the Charter is approved:
 ```powershell
-python scripts/orchestrate_pmbok.py --mode full --charter docs/project-docs/Project-Charter.md
+python scripts/init_project.py --name my-awesome-project --stage plans
 ```
-*(Add `--mock` if executing offline without live LLM foundry credentials).*
-
-Validate the synthesized PMP through the Bayesian decision gate:
+Draft the plans in dependency order (Scope first), approve each `full_plan` through `approve-subsidiary-plan`, then synthesize the Project Management Plan and run the PMP gate:
 ```powershell
-agent-learn task-policy-decide --agent-id template-governance --task-id approve-pmp
+agent-learn task-policy-decide --agent-id my-awesome-project-governance --task-id approve-pmp --decision-frame <frame>
 ```
-Record the resulting baseline identifier (e.g. `pmp_baseline: "PMP-BL-v1.0.0"`) across all subsequent technical specifications.
+Record the resulting baseline identifier (for example `baseline_id: "PMP-BL-v1.0.0"`) and close or continue the cycle in `docs/registers/Cycle-Register.md`. See `.claude/skills/pmbok-planning/SKILL.md`.
 
 ### Step 4: Technical Specifications & Foundation Gate
 1. Follow the strict authoring sequence: **ADR $\rightarrow$ BRD $\rightarrow$ FDD $\rightarrow$ User Story**.
@@ -204,26 +178,17 @@ When an operational delta, audit finding, or lessons-learned insight necessitate
 1. Pass the proposed diff through the paired governance pipeline (`classify-diff-type` $\rightarrow$ `escalate-diff-response`).
 2. Draft `docs/project-docs/Adaptation-Plan.md` and evaluate the change across all 9 subsidiary management plans using the **Governance Change Impact Matrix**.
 3. Approve the adaptation plan via `approve-adaptation-plan`.
-4. Trigger selective re-orchestration of only the impacted subsidiary plans:
-   ```powershell
-   python scripts/orchestrate_pmbok.py --mode adapt --adaptation-plan docs/project-docs/Adaptation-Plan.md
-   ```
+4. Open a new cycle in the Cycle Register, revise only the impacted subsidiary plans, re-approve them and anything stale, then run `approve-pmp`.
 5. If changes warrant strategic realignment, submit `docs/project-docs/Intent-Refinement-Proposal.md` via `approve-intent-refinement`, closing the loop back to Stage 1 Spark Capture.
 
 ---
 
 ## Running Verification Tests
 
-The template includes an extensive automated test suite covering all modules of the PMBOK 8 planning engine, process agents, audit subsystem, storage layers, and approval gates:
+The template's own tests check that the plan skeletons follow the content contract, that their dependency graph is acyclic and rooted at Scope, that no project-specific artifacts are stored, and that `scripts/init_project.py` scaffolds a working project:
 
 ```powershell
-pytest
-```
-To run targeted unit tests:
-```powershell
-pytest tests/test_models.py
-pytest tests/test_orchestrator.py
-pytest tests/test_audit_system.py
+python -m pytest tests
 ```
 
 ---

@@ -49,7 +49,7 @@ Minimal code only — no speculative generalization.
 Run the story's contract, then its epic's contract suite.
 
 ### 7. Commit & log
-`implementation-log.md`: one entry per completed story, append-only, never edited. If the implementation and its own log entry must be committed together before the commit's hash is known, use a `pending` placeholder, backfilled by whichever commit runs next (or by a pre-commit hook that resolves it automatically, if one exists — confirmed real in at least one of the two source projects).
+`docs/registers/Implementation-Log.md`: one entry per completed story, append-only, never edited. If the implementation and its own log entry must be committed together before the commit's hash is known, use a `pending` placeholder, backfilled by whichever commit runs next (or by a pre-commit hook that resolves it automatically, if one exists — confirmed real in at least one of the two source projects).
 
 ### 8. Open a PR, don't merge directly
 Direct-push-to-default-branch was tried once (ADPA's real Story 1.2) and found to bypass real branch-protection value, not just a compliance checkbox — PR review triggers scrutiny no local check can provide. Push the branch, open the PR, tear down the worktree only after it actually merges upstream.
@@ -73,6 +73,25 @@ Story 5.1 ran this loop without the skill installed in the repo and drifted in f
 
 Also: install this skill into the new project's `.claude/skills/` **before** its first story, not after.
 
+## Lessons from agent-learning Epics 2, 3 and 11 (LL-007, LL-010 to LL-014)
+
+1. **Approve, then commit, then fork (LL-010).** Before `git worktree add`, confirm the story's BRD, FDD and stories are approved, and run `git status --short` in the base checkout. A worktree forks from committed state only. A `Ready` status set by the author is not an approval.
+2. **State every mode and parameter in the FDD (LL-011).** Anything you add at implementation time is an interpretation: record it in the test docstring and the log, and amend the FDD or its open questions. If the FDD is already approved, the amendment needs its own approval.
+3. **Counts and pending notes go stale in the change that resolves them (LL-007).** When a change adds a step, changes a count or completes something another document calls pending, search the repository for the old number or phrase and fix every occurrence in the same change.
+4. **Each rule lives in one story's acceptance criteria (LL-012).** Later stories reference it and assert only what is new, so every contract can be observed failing first.
+5. **Keep the validation command one that runs (LL-013).** If part of the suite cannot run, say which paths were excluded, why, and the resulting count. Never call an exclusion-adjusted count the entire suite.
+6. **Define "blank" once (LL-014).** For loosely typed inputs, one helper covers `None`, blank strings and every empty container type, and each is tested.
+7. **Observe RED honestly.** If the module cannot even be imported before implementation, add a minimal throwaway stub to see each test fail on behavior, then remove it. Tests that already pass are regression guards: name them as such.
+8. **Commit the implementation, then log it.** Record the implementation commit's hash in `docs/registers/Implementation-Log.md` in a separate follow-up commit. Do not amend the implementation commit afterwards. An amend leaves the log pointing at a commit that never reaches the base branch. If a log entry is wrong, append a dated correction entry (the log is append-only) instead of editing it once merged.
+9. **Run the tool through its own environment.** In a fresh worktree use the project's runner (`uv run python -m pytest`), not a global `pytest`, and install the dev extras first.
+10. **The last story of an epic ends with the breakout recap** (Step 9): record `LL-###` entries or a no-new-lessons sign-off in `docs/registers/Lessons-Learned-Register.md`, and propagate component-specific rules to the component skill.
+
+## Registers used by this loop
+
+- `docs/registers/Implementation-Log.md` (Step 7)
+- `docs/registers/Lessons-Learned-Register.md` (Step 9)
+- `docs/registers/Cycle-Register.md` (stories belong to the currently open cycle; the story's `cycle_id` is that cycle)
+
 ## Definition of done
 
-Contract exists and passes; epic's contract suite still passes; `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `implementation-log.md` entry exists, hash `pending` or resolved; contract fixtures are committed and the contract passes on a clean clone.
+Contract exists and passes; epic's contract suite still passes; `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `docs/registers/Implementation-Log.md` entry exists, hash `pending` or resolved; contract fixtures are committed and the contract passes on a clean clone.

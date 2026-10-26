@@ -39,3 +39,17 @@ Every rule below was learned by hitting it, not derived in the abstract. Cited a
 
 19. **Observation → Insight → Lesson Learned is a cross-project concern, not a per-project one to rebuild.** SocialEngage's own `resolve-kb-conflict` lives under a shared knowledge-base-ingestor agent, not under the project's own governance namespace. If a project has access to a shared knowledge base, integrate with it; don't build a project-local copy of this stage without evidence the shared one doesn't fit.
 20. **Adaptation → Intent Refinement remains uncovered everywhere, including in the most mature real precedent.** No project in this methodology's real history has a working shape for "did an accepted change actually change behavior, and should that refine the original Intent/Hypothesis." Don't invent one here — watch for a real first case, the same discipline every other policy in this chain was built by.
+
+
+## 6. Plan standards, cycles and review (agent-learning, October 2026)
+
+1. **Set the plan standard before drafting the plans.** One universal content contract (frontmatter, three headings, out-of-scope rule, word-count flags) plus a short per-plan standard keeps nine plans lintable and reviewable. Drafting first produced nine stub documents that no gate could judge.
+2. **Do not specify a pattern your runtime cannot run.** A word-count regex written with Unicode property classes (`\p{L}`) is rejected by Python's `re`, and an exact-looking rule that cannot execute is worse than a plain one. Use `[^\W_]` for letters and digits and test the pattern.
+3. **A baseline is not a cycle.** The baseline identifier records the approved result and the depth of change. A cycle (`CYC-NNN`) records the pass: its trigger, its outcome, and the versions of the upstream documents it was built on. Rolled-back and abandoned passes need an identity too.
+4. **Version alone does not identify content.** A document that is edited without a version bump needs a content hash to be pinned. Keep the hash in the register and in episode metadata, never inside the file it covers, and exclude linkage keys (`cycle_id`, `baseline_id`) from the hash so re-pointing an unchanged file does not invalidate its approval.
+5. **Never describe an unapproved bootstrap as approved.** A first baseline built over stub plans is an open cycle, not a closed one.
+6. **Copying a decision frame copies its mistakes.** Reusing another document's frame left the criteria descriptions describing the wrong document. Write each frame for the document in front of you.
+7. **Gate scores are a judgment, and the author is a conflicted scorer.** Say who scored, and score the known weaknesses down. A gate result goes stale the moment the document changes, so re-run it.
+8. **Check a review's claims against the repository.** Reviews cited an outdated copy of a standard and claimed a field was missing that was already there. Accept what the evidence supports and say why you decline the rest.
+9. **Append-only means appended.** Fix a wrong log entry with a dated correction entry. Commit the implementation first and record its hash in a follow-up commit, so an amend cannot strand the log on a commit that never merges.
+10. **A template stores template values.** Frames, episodes, filled plans and runtime databases from a real project do not belong in it. Test that it stays that way.

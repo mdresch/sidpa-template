@@ -2,7 +2,8 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Detailed Interface/Solution Design"
-pmp_baseline: "PMP-BL-v<X.Y.Z>"
+baseline_id: "<target-baseline-id>"
+cycle_id: "CYC-001"
 lifecycle_stage: "Stage 7 (Requirement: Solution)"
 governance_policy: "approve-fdd"
 inputs:
@@ -25,7 +26,7 @@ outputs:
 
 **Source ADR:** [ADR-<NNN>](../../07-architecture/ADR-<NNN>-<slug>.md)
 **Source BRD:** [BRD-<NNN>](../Business-Requirements/BRD-<NNN>-<slug>.md)
-**Governing Baseline:** `PMP-BL-v<X.Y.Z>` (Invariant 6)
+**Governing Baseline:** `<baseline_id>` · **Cycle:** `<cycle_id>` (see the Cycle Register)
 **Status:** Draft — technical design derived from an Accepted ADR
 
 ## Design: <name>

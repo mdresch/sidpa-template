@@ -7,3 +7,6 @@ data/pmbok_runtime/
 
 # Ignore vscode AI rules
 .github\instructions\codacy.instructions.md
+
+# Test and tool caches
+.hypothesis/

@@ -2,7 +2,8 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "4.2 Develop Project Management Plan"
-pmp_baseline: "PMP-BL-v1.0.0"
+baseline_id: "<target-baseline-id>"
+cycle_id: "CYC-001"
 lifecycle_stage: "Stage 6 (Project)"
 governance_policy: "approve-pmp"
 inputs:
@@ -17,7 +18,7 @@ outputs:
 
 > **PMBOK 8 Process:** `4.2 Develop Project Management Plan` (Planning)  
 > **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 6 (Project)`  
-> **Baseline Identifier:** `PMP-BL-v1.0.0`  
+> **Baseline Identifier:** `<target-baseline-id>` · **Cycle:** `CYC-001`  
 > **Inputs:** Project-Charter.md, Subsidiary management plans (Scope, Risk, Quality, etc.)  
 > **Process:** Integrate subsidiary management plans, establish baselines, define governance gates  
 > **Outputs:** Project-Management-Plan.md
