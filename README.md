@@ -60,6 +60,12 @@ Canonical action specifications, decision frames, and idle policy stores:
 
 ---
 
+### 8. Learning Methodologies (`docs/methodologies/`)
+- **`catalog.json`** — the 32 learning methodologies, each with a state, an example class (`runnable`, `proof_of_concept`, `documented`) and the ADR or hypothesis where they exist.
+- **`Tailoring-Matrix.md`** — candidate pairings of a need in the store or in lessons learned with a methodology. Every row is a hypothesis.
+- **`docs/registers/Methodology-Best-Practice-Ledger.template.md`** — the append-only ledger of practices. A practice is adopted only on real episodes that meet the tier gate; the template ships no entries. `init_project.py --stage start` scaffolds it.
+- **`docs/methodologies/README.md`** — the layout and the labeling contract for any example (synthetic, not evidence).
+
 ## Core Governance Invariants & Baseline Versioning Rules
 
 The template enforces 5 fundamental governance invariants across the lifecycle:

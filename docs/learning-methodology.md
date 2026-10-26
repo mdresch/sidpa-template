@@ -13,3 +13,7 @@ The gates in this template (`approve-*`, `validate-intent-foundation`) run under
 Every plan is gated by the same `approve-subsidiary-plan` policy, so no plan has its own learned method. Candidates that could apply later if their constraint is lifted: multi-stage credit assignment for Scope, Schedule and Cost (needs an `Episode.trace_id`), safe bandits with action masking for risk responses, and a softmax policy for nonconformance triage in Quality (waivers stay human). Resource, Stakeholder Engagement, Communications and Procurement have no identified candidate.
 
 Record the methodology choice in the ADR or decision note. Until a selection chain exists, it is not recorded as an episode.
+
+## Catalog, matrix and ledger
+
+`docs/methodologies/catalog.json` lists all 32 methodologies with their state; `docs/methodologies/Tailoring-Matrix.md` pairs needs in the store and in lessons learned with candidates (all hypotheses); the project ledger (`docs/registers/Methodology-Best-Practice-Ledger.md`, scaffolded by `init_project.py`) records which practices are candidates and which, on real episodes, are adopted. Examples are synthetic and are not evidence.

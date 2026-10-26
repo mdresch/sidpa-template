@@ -173,6 +173,7 @@ def test_init_start_stage_scaffolds_documents_and_opens_the_first_cycle(scratch_
     assert "<date the project starts>" not in register
     assert "My Demo App" in register
     assert (scratch_copy / "docs/project-docs/Project-Charter.md").exists()
+    assert (scratch_copy / "docs/registers/Methodology-Best-Practice-Ledger.md").exists()
     assert not (scratch_copy / "docs/project-docs/management-plans/Scope-Management-Plan.md").exists()
     store = scratch_copy / "data/agent-learning/store/policies"
     assert (store / "my-demo-app-governance").exists()
@@ -195,3 +196,52 @@ def test_init_rejects_an_empty_project_name(scratch_copy: Path) -> None:
     init = load_init(scratch_copy)
     with pytest.raises(SystemExit):
         init.init_project("---", stage="start")
+
+
+# --- learning methodologies: catalog, tailoring matrix, ledger template -------------------------------
+
+METHODOLOGIES = ROOT / "docs" / "methodologies"
+CLASSES = {"runnable", "proof_of_concept", "documented"}
+RUNNABLE_STATES = {"implemented", "example_only", "partial", "practiced"}
+
+
+def test_methodology_catalog_has_32_entries_with_consistent_classes() -> None:
+    catalog = json.loads((METHODOLOGIES / "catalog.json").read_text(encoding="utf-8"))
+    assert sorted(entry["id"] for entry in catalog) == list(range(1, 33))
+    for entry in catalog:
+        label = f"#{entry['id']}"
+        assert entry["example_class"] in CLASSES, label
+        if entry["state"] in RUNNABLE_STATES:
+            assert entry["example_class"] == "runnable", label
+        elif entry["state"] == "candidate" and entry.get("adr"):
+            assert entry["example_class"] == "proof_of_concept", label
+        else:
+            assert entry["example_class"] == "documented", label
+        if entry["example_class"] == "documented":
+            assert entry.get("reason", "").strip() and entry.get("reopening_condition", "").strip(), label
+            assert entry.get("path") is None, label
+        else:
+            assert str(entry.get("path", "")).startswith("examples/methodologies/"), label
+
+
+def test_tailoring_matrix_rows_are_all_hypotheses_over_existing_catalog_ids() -> None:
+    ids = {entry["id"] for entry in json.loads((METHODOLOGIES / "catalog.json").read_text(encoding="utf-8"))}
+    rows = [
+        [cell.strip() for cell in line.strip().strip("|").split("|")]
+        for line in (METHODOLOGIES / "Tailoring-Matrix.md").read_text(encoding="utf-8").splitlines()
+        if line.startswith("| ") and not line.startswith("| Need") and not line.startswith("|---")
+    ]
+    assert len(rows) == 6
+    for row in rows:
+        assert len(row) == 7, row
+        assert row[1] in {"store", "lessons-learned"}, row
+        assert {int(n) for n in re.findall(r"#(\d+)", row[2])} <= ids, row
+        assert row[4], row
+        assert row[6] == "hypothesis", row
+
+
+def test_ledger_template_ships_no_entries_and_no_adopted_practice() -> None:
+    text = (ROOT / "docs" / "registers" / "Methodology-Best-Practice-Ledger.template.md").read_text(encoding="utf-8")
+    assert not re.search(r"^## BP-\d{3}", text, re.MULTILINE)
+    assert "status: adopted" not in text
+    assert "real-episodes" in text

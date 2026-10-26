@@ -41,6 +41,7 @@ STAGES = {
         "docs/registers/Implementation-Log.template.md",
         "docs/registers/Story-Execution-Register.template.md",
         "docs/registers/Audit-Register.template.md",
+        "docs/registers/Methodology-Best-Practice-Ledger.template.md",
     ],
     "plans": [
         "docs/project-docs/management-plans/*.template.md",
