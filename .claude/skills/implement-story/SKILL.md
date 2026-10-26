@@ -51,8 +51,17 @@ Run the story's contract, then its epic's contract suite.
 ### 7. Commit & log
 `docs/registers/Implementation-Log.md`: one entry per completed story, append-only, never edited. If the implementation and its own log entry must be committed together before the commit's hash is known, use a `pending` placeholder, backfilled by whichever commit runs next (or by a pre-commit hook that resolves it automatically, if one exists — confirmed real in at least one of the two source projects).
 
-### 8. Open a PR, don't merge directly
-Direct-push-to-default-branch was tried once (ADPA's real Story 1.2) and found to bypass real branch-protection value, not just a compliance checkbox — PR review triggers scrutiny no local check can provide. Push the branch, open the PR, tear down the worktree only after it actually merges upstream.
+### 8. Open a PR, get the automated review to a clean state, amend, then merge
+Direct-push-to-default-branch was tried once (ADPA's real Story 1.2) and found to bypass real branch-protection value, not just a compliance checkbox: PR review triggers scrutiny no local check can provide. The story ends on the base branch only after the automated reviewer has nothing further to add. The examples use Amazon Q (`/q review`); substitute your project's reviewer.
+
+1. **Open the PR** from `feat/story-<X.Y>`. The description lists the summary, every interpretation that needs confirming, and the test plan, naming any paths excluded from the suite and why.
+2. **Request the review** by commenting `/q review` on the PR, and again after each push.
+3. **Read the result:** the review summary and the inline comments, noting which commit each is on. Many reviewers only comment and never approve.
+4. **Triage every finding against the repository before acting.** Accept what the code or the spec supports. Decline what it does not, with a one-line reason in the PR. A reviewer's claim is not evidence.
+5. **Amend** in new commits on the story branch. Do not amend or force-push the implementation commit, because the log cites its hash. Re-run the contract and the full suite, push, and request the review again.
+6. **Repeat until the reviewer has no further additions**: its latest review is on the current head commit, it reports no blocking defect or new finding, and no inline comment on the head is unaddressed. Silence is not a clean review. After three rounds, or if a declined finding is repeated, stop and ask the human.
+7. **Record the review** in the story's log entry before merging: the rounds, the findings accepted, and the findings declined with reasons.
+8. **Merge** when the reviewer is clean on the head commit, the PR is mergeable, and the full suite passed on the head commit. Then pull the base branch and remove the worktree. The human can withhold the merge at any point.
 
 ## When Step 1 fails outright — not every "story" is code-shaped
 
@@ -94,4 +103,4 @@ Also: install this skill into the new project's `.claude/skills/` **before** its
 
 ## Definition of done
 
-Contract exists and passes; epic's contract suite still passes; `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `docs/registers/Implementation-Log.md` entry exists, hash `pending` or resolved; contract fixtures are committed and the contract passes on a clean clone.
+Contract exists and passes; epic's contract suite still passes; `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `docs/registers/Implementation-Log.md` entry exists with the resolved implementation hash; contract fixtures are committed and the contract passes on a clean clone; the PR reached a clean automated review with accepted findings amended and declined ones explained, and is merged with the worktree removed.
