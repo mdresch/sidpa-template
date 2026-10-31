@@ -50,6 +50,14 @@ PLAN_MAPPING = {
     "13.2": {"name": "Stakeholder-Engagement-Plan", "title": "Stakeholder Engagement Plan", "flag": "Stakeholder Engagement Plan"},
 }
 
+def get_governance_agent_id() -> str:
+    active_dir = repo_root / "data" / "agent-learning" / "store" / "active-policies"
+    if active_dir.exists():
+        for d in active_dir.iterdir():
+            if d.is_dir() and d.name != "agent-learning-governance":
+                return d.name
+    return "template-governance"
+
 def extract_project_identity(charter_path: Path) -> dict[str, str]:
     """Extract project title and objectives from Project Charter."""
     if not charter_path.exists():
@@ -261,7 +269,7 @@ This subsidiary plan integrates directly into [Project-Management-Plan.md](../Pr
     # Decision Validation Gate Notice
     print("\n-------------------------------------------------------")
     print("  Decision Gate Verification:")
-    print("  Run 'agent-learn task-policy-decide --agent-id template-governance --task-id approve-pmp'")
+    print(f"  Run 'agent-learn task-policy-decide --agent-id {get_governance_agent_id()} --task-id approve-pmp'")
     print("  to formally validate the synthesized PMP.")
     print("-------------------------------------------------------\n")
 
@@ -379,7 +387,7 @@ Submit this ideation document to `template-governance` / `approve-ideation` befo
 
     print("\n-------------------------------------------------------")
     print("  Phase Next Seeding Complete.")
-    print("  Run 'agent-learn task-policy-decide --agent-id template-governance --task-id approve-ideation'")
+    print(f"  Run 'agent-learn task-policy-decide --agent-id {get_governance_agent_id()} --task-id approve-ideation'")
     print("  to evaluate and authorize the new development cycle.")
     print("-------------------------------------------------------\n")
 
