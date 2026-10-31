@@ -3,7 +3,7 @@ artifact_id: schedule-foundation-domain-checklist
 parent_plan_id: schedule-management
 baseline_id: "PMP-BL-v1.0.0"
 route: foundation_artifact
-governance_policy: approve-pmp
+governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
 substage: 6.B-5

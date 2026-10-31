@@ -1,0 +1,133 @@
+{
+  "task": "ADR-008 (Normalized Resource Competency Taxonomies & Leveling Invariants): approve, reject, or request revision under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "architectural_soundness",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Normalizes resource assignments into explicit skills join tables (resource_skills), implements Skills Match Score (SMS) algorithm, and establishes strict invariants on autoLevelTask bounded between +1 and +8 weeks with 25% burnout buffer."
+    },
+    {
+      "id": "alternatives_considered",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Three real alternatives named and rejected: retaining free-text comma-separated string assignees (prevents capability search, capacity analysis, and skill-gap identification), unbounded greedy heuristic scheduling (leads to runaway task delays into indefinite future), full integer linear programming solver (excessive complexity and dependency footprint for local-first desktop application)."
+    },
+    {
+      "id": "consequences_honest",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Consequences accurately require maintaining skill profiles for resources and reject unconstrained automatic leveling that shifts tasks past sprint or quarter bounds."
+    },
+    {
+      "id": "gap_disclosure_quality",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Resolves brittle resource model identified in HYP-ewh-005 and SC-04, guaranteeing leveling determinism."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-4",
+          "support": 0.96,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-5",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-6",
+          "support": 0.92,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-1-and-baseline-feedback",
+          "support": 0.95,
+          "confidence": 0.93
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-4",
+          "support": 0.04,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-5",
+          "support": 0.07,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-6",
+          "support": 0.08,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-1-and-baseline-feedback",
+          "support": 0.05,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-4",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-5",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-6",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-1-and-baseline-feedback",
+          "support": 0.06,
+          "confidence": 0.81
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

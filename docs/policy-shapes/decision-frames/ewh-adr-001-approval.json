@@ -1,0 +1,133 @@
+{
+  "task": "ADR-001 (Five-Tier Immutable Work Breakdown Structure (WBS) Metamodel & Referential Integrity Invariants): approve, reject, or request revision under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "architectural_soundness",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Enforces strict 5-tier relational hierarchy (Portfolio -> Program -> Project -> Task -> Task List Item), SQLite PRAGMA foreign_keys = ON, cascade deletes on task items, restrict on parent tiers, API route parentage validation."
+    },
+    {
+      "id": "alternatives_considered",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Three real alternatives named and rejected: dynamic recursive adjacency tree (breaks deterministic EVM rollups), flat 3-tier model (fails portfolio capital allocation), application-only validation without DB foreign keys (leaves DB vulnerable)."
+    },
+    {
+      "id": "consequences_honest",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Consequences accurately state inflexible tier depth and deletion friction across UI as deliberate architectural tradeoffs."
+    },
+    {
+      "id": "gap_disclosure_quality",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Eliminates orphaned tasks, ghost projects, and broken rollup cascades while maintaining 100% backward compatibility with Retail Banking seed dataset."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-001-Five-Tier-Immutable-Work-Breakdown-Structure-Metamodel.md#section-4",
+          "support": 0.97,
+          "confidence": 0.95
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-001-Five-Tier-Immutable-Work-Breakdown-Structure-Metamodel.md#section-5",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-001-Five-Tier-Immutable-Work-Breakdown-Structure-Metamodel.md#section-6",
+          "support": 0.93,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-001-Five-Tier-Immutable-Work-Breakdown-Structure-Metamodel.md#section-1-and-baseline-feedback",
+          "support": 0.96,
+          "confidence": 0.93
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-001-Five-Tier-Immutable-Work-Breakdown-Structure-Metamodel.md#section-4",
+          "support": 0.03,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-001-Five-Tier-Immutable-Work-Breakdown-Structure-Metamodel.md#section-5",
+          "support": 0.06,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-001-Five-Tier-Immutable-Work-Breakdown-Structure-Metamodel.md#section-6",
+          "support": 0.07,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-001-Five-Tier-Immutable-Work-Breakdown-Structure-Metamodel.md#section-1-and-baseline-feedback",
+          "support": 0.04,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-001-Five-Tier-Immutable-Work-Breakdown-Structure-Metamodel.md#section-4",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-001-Five-Tier-Immutable-Work-Breakdown-Structure-Metamodel.md#section-5",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-001-Five-Tier-Immutable-Work-Breakdown-Structure-Metamodel.md#section-6",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-001-Five-Tier-Immutable-Work-Breakdown-Structure-Metamodel.md#section-1-and-baseline-feedback",
+          "support": 0.06,
+          "confidence": 0.81
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

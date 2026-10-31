@@ -1,0 +1,133 @@
+{
+  "task": "FDD-005 (WBS Granularity Gating & Semantic Definition of Done (DoD) Verification): approve, reject, or request revision under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "traceable_to_brd_adr",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Functional design traces directly to BRD-005 rules (BRU-005-01..05) and ADR-005 totalItems >= 2 gating and 80/20 DoD accrual."
+    },
+    {
+      "id": "fix_location_correct",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Contracts correctly placed in database.js is_verification_gate column, rollupEngine.js staged EVM accrual, and task status transition middleware."
+    },
+    {
+      "id": "no_invented_implementation",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Validated against real task toggle logic, work package status state machine, and verification gate check constraints."
+    },
+    {
+      "id": "compatibility_preserved",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Eliminates single-item toggle volatility defect (HYP-ewh-007, SC-05) while preserving Retail Banking task seeds."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_fdd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "FDD-005-WBS-Granularity-Gating-and-Semantic-DoD.md#section-1",
+          "support": 0.97,
+          "confidence": 0.95
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "FDD-005-WBS-Granularity-Gating-and-Semantic-DoD.md#section-1-and-2",
+          "support": 0.96,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "FDD-005-WBS-Granularity-Gating-and-Semantic-DoD.md#section-2-and-4",
+          "support": 0.96,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "FDD-005-WBS-Granularity-Gating-and-Semantic-DoD.md#section-5",
+          "support": 0.96,
+          "confidence": 0.94
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_fdd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "FDD-005-WBS-Granularity-Gating-and-Semantic-DoD.md#section-1",
+          "support": 0.03,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "FDD-005-WBS-Granularity-Gating-and-Semantic-DoD.md#section-1-and-2",
+          "support": 0.04,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "FDD-005-WBS-Granularity-Gating-and-Semantic-DoD.md#section-2-and-4",
+          "support": 0.04,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "FDD-005-WBS-Granularity-Gating-and-Semantic-DoD.md#section-5",
+          "support": 0.04,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "FDD-005-WBS-Granularity-Gating-and-Semantic-DoD.md#section-1",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "FDD-005-WBS-Granularity-Gating-and-Semantic-DoD.md#section-1-and-2",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "FDD-005-WBS-Granularity-Gating-and-Semantic-DoD.md#section-2-and-4",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "FDD-005-WBS-Granularity-Gating-and-Semantic-DoD.md#section-5",
+          "support": 0.06,
+          "confidence": 0.8
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

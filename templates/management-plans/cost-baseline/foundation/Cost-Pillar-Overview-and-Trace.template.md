@@ -3,7 +3,7 @@ artifact_id: cost-foundation-pillar-overview-trace
 parent_plan_id: cost-management
 baseline_id: "{{BASELINE_ID}}"
 route: foundation_artifact
-governance_policy: approve-pmp
+governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 approval_status: pending
 substage: 6.D-0P

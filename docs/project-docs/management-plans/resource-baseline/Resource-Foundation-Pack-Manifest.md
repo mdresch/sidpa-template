@@ -3,7 +3,7 @@ artifact_id: resource-foundation-pack-manifest
 parent_plan_id: resource-management
 baseline_id: "PMP-BL-v1.0.0"
 route: foundation_pack
-governance_policy: approve-pmp
+governance_policy: approve-subsidiary-plan
 version: "1.0.0"
 owner_role: Project Manager
 depends_on:

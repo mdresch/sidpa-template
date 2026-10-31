@@ -1,0 +1,133 @@
+{
+  "task": "BRD-006 (Multi-Tier Governance Decision Logging & CCB State Machine): approve, reject, or request revision under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "traceable_to_adr",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Business rules trace directly to ADR-006's 4-tier governance logging model and formal CCB state machine."
+    },
+    {
+      "id": "honest_metrics",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Success metrics are concrete (100% decision attribution, 0 unlogged baseline changes) and verifiable via SQLite governance_logs."
+    },
+    {
+      "id": "out_of_scope_accurate",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Out-of-scope list correctly excludes unstructured Git commit audit trails and external SaaS synchronization."
+    },
+    {
+      "id": "rules_actionable",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Business rules BRU-006-01 through BRU-006-05 define state transitions, authority thresholds ($25k PM limit), and audit logging for FDD-006."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_brd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "source": "BRD-006-Multi-Tier-Governance-Decision-Logging-and-CCB-State-Machine.md#section-2",
+          "support": 0.96,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source": "BRD-006-Multi-Tier-Governance-Decision-Logging-and-CCB-State-Machine.md#section-3",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source": "BRD-006-Multi-Tier-Governance-Decision-Logging-and-CCB-State-Machine.md#section-5",
+          "support": 0.95,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source": "BRD-006-Multi-Tier-Governance-Decision-Logging-and-CCB-State-Machine.md#section-2",
+          "support": 0.95,
+          "confidence": 0.93
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_brd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "source": "BRD-006-Multi-Tier-Governance-Decision-Logging-and-CCB-State-Machine.md#section-2",
+          "support": 0.04,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source": "BRD-006-Multi-Tier-Governance-Decision-Logging-and-CCB-State-Machine.md#section-3",
+          "support": 0.06,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source": "BRD-006-Multi-Tier-Governance-Decision-Logging-and-CCB-State-Machine.md#section-5",
+          "support": 0.05,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source": "BRD-006-Multi-Tier-Governance-Decision-Logging-and-CCB-State-Machine.md#section-2",
+          "support": 0.05,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_adr",
+          "source": "BRD-006-Multi-Tier-Governance-Decision-Logging-and-CCB-State-Machine.md#section-2",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "honest_metrics",
+          "source": "BRD-006-Multi-Tier-Governance-Decision-Logging-and-CCB-State-Machine.md#section-3",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "out_of_scope_accurate",
+          "source": "BRD-006-Multi-Tier-Governance-Decision-Logging-and-CCB-State-Machine.md#section-5",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "rules_actionable",
+          "source": "BRD-006-Multi-Tier-Governance-Decision-Logging-and-CCB-State-Machine.md#section-2",
+          "support": 0.06,
+          "confidence": 0.8
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

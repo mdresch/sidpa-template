@@ -1,0 +1,133 @@
+{
+  "task": "ADR-005 (WBS Granularity Gating & Semantic Definition of Done (DoD) Verification): approve, reject, or request revision under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "architectural_soundness",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Eliminates single-item toggle volatility defect (HYP-ewh-007, SC-05) via structural gating (totalItems >= 2), and partitions task completion into 80% execution checklist completion and 20% independent verification gate (DoD)."
+    },
+    {
+      "id": "alternatives_considered",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Three real alternatives named and rejected: permitting single-item tasks with 0/100% binary toggles (causes wild EVM metric swings), purely time-based progress tracking (decouples progress from tangible deliverable verification), complex multi-stage approval workflow for every item (excessive developer friction on small tasks)."
+    },
+    {
+      "id": "consequences_honest",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Consequences accurately require decomposing monolithic deliverables into at least 2 distinct activities (execution + verification), increasing initial task decomposition effort."
+    },
+    {
+      "id": "gap_disclosure_quality",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Directly remedies empirical volatility identified in Technical Investigation Notes \u00a7 1 and satisfies Success Criteria SC-05."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-005-WBS-Granularity-Gating-and-Semantic-DoD-Verification.md#section-4",
+          "support": 0.96,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-005-WBS-Granularity-Gating-and-Semantic-DoD-Verification.md#section-5",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-005-WBS-Granularity-Gating-and-Semantic-DoD-Verification.md#section-6",
+          "support": 0.92,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-005-WBS-Granularity-Gating-and-Semantic-DoD-Verification.md#section-1-and-baseline-feedback",
+          "support": 0.97,
+          "confidence": 0.95
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-005-WBS-Granularity-Gating-and-Semantic-DoD-Verification.md#section-4",
+          "support": 0.04,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-005-WBS-Granularity-Gating-and-Semantic-DoD-Verification.md#section-5",
+          "support": 0.06,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-005-WBS-Granularity-Gating-and-Semantic-DoD-Verification.md#section-6",
+          "support": 0.08,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-005-WBS-Granularity-Gating-and-Semantic-DoD-Verification.md#section-1-and-baseline-feedback",
+          "support": 0.03,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-005-WBS-Granularity-Gating-and-Semantic-DoD-Verification.md#section-4",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-005-WBS-Granularity-Gating-and-Semantic-DoD-Verification.md#section-5",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-005-WBS-Granularity-Gating-and-Semantic-DoD-Verification.md#section-6",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-005-WBS-Granularity-Gating-and-Semantic-DoD-Verification.md#section-1-and-baseline-feedback",
+          "support": 0.06,
+          "confidence": 0.81
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

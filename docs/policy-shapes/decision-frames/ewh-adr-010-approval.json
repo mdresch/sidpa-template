@@ -1,0 +1,133 @@
+{
+  "task": "ADR-010 (Bidirectional Strategic Value Thread Lineage & Line-of-Sight Traceability): approve, reject, or request revision under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "architectural_soundness",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Establishes bidirectional traceability graph connecting every Task List Item through Tasks, Projects, and Programs up to Portfolio Strategic Objectives, with upstream impact propagation when lower-tier milestones breach variance thresholds."
+    },
+    {
+      "id": "alternatives_considered",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Three real alternatives named and rejected: manual traceability matrices maintained outside the system (quickly becomes out-of-sync and unmaintained), top-down read-only drilldown without reverse upward lineage (leaves executives blind to how technical task slippage impacts strategic OKRs), full hypergraph database (excessive abstraction and external dependencies)."
+    },
+    {
+      "id": "consequences_honest",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Consequences accurately require strict parent linkage validation during task creation and updates, preventing detached or rogue work packages."
+    },
+    {
+      "id": "gap_disclosure_quality",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Delivers Pillar 10 (Value Thread Visualization), unifying the entire 5-tier architecture into a cohesive, observable strategic feedback loop."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-4",
+          "support": 0.96,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-5",
+          "support": 0.93,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-6",
+          "support": 0.92,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-1-and-baseline-feedback",
+          "support": 0.95,
+          "confidence": 0.93
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-4",
+          "support": 0.04,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-5",
+          "support": 0.07,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-6",
+          "support": 0.08,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-1-and-baseline-feedback",
+          "support": 0.05,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-4",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-5",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-6",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-1-and-baseline-feedback",
+          "support": 0.06,
+          "confidence": 0.81
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

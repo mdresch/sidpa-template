@@ -1,0 +1,133 @@
+{
+  "task": "FDD-003 (Program Benefits Realization & Cross-Project Topology): approve, reject, or request revision under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "traceable_to_brd_adr",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Functional design traces directly to BRD-003 rules (BRU-003-01..05) and ADR-003 cross-project dependency DAG topology."
+    },
+    {
+      "id": "fix_location_correct",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Contracts correctly placed in database.js benefits schema, projectDependencyService.js topological sorting, and rollupEngine.js risk aggregation."
+    },
+    {
+      "id": "no_invented_implementation",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Validated against real Tarjan/Kahn cycle detection algorithms, foreign key constraints, and deliverable milestone status transitions."
+    },
+    {
+      "id": "compatibility_preserved",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Preserves independent single-project execution while enabling multi-project DAG rollups and delay escalation."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_fdd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "FDD-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-1",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "FDD-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-1-and-2",
+          "support": 0.95,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "FDD-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-2-and-4",
+          "support": 0.94,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "FDD-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-5",
+          "support": 0.95,
+          "confidence": 0.92
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_fdd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "FDD-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-1",
+          "support": 0.05,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "FDD-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-1-and-2",
+          "support": 0.05,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "FDD-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-2-and-4",
+          "support": 0.06,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "FDD-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-5",
+          "support": 0.05,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "FDD-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-1",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "FDD-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-1-and-2",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "FDD-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-2-and-4",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "FDD-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-5",
+          "support": 0.06,
+          "confidence": 0.8
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

@@ -3,7 +3,7 @@ pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.1 Scope Management Plan"
 lifecycle_stage: "Stage 6 (Project)"
-governance_policy: "approve-pmp"
+governance_policy: "approve-subsidiary-plan"
 inputs:
   - "Project-Charter.md"
 process: "Plan and formalize Scope Management Plan"
@@ -14,7 +14,7 @@ outputs:
 # Scope Management Plan — SIDPA Project
 
 > **PMBOK 8 Process:** `5.1 Scope Management Plan` (Planning)  
-> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 6 (Project)`  
+> **Governance Policy:** `approve-subsidiary-plan` | **Lifecycle Stage:** `Stage 6 (Project)`  
 > **Source:** [Project-Charter.md](../Project-Charter.md)
 
 ## 1. Purpose & Scope
@@ -45,4 +45,4 @@ This plan establishes the guidelines and processes for managing scope management
 Carry the manifest version, approved artifact registry, baseline identifier, unresolved constraints, and plan approval reference into this section. Do not copy pending values as approved evidence.
 
 ## 4. Review & Governance Invariant
-This subsidiary plan integrates directly into [Project-Management-Plan.md](../Project-Management-Plan.md) and is verified under `approve-pmp`.
+This subsidiary plan integrates directly into [Project-Management-Plan.md](../Project-Management-Plan.md) and is verified under `approve-subsidiary-plan`.
