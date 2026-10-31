@@ -1,16 +1,26 @@
 ---
 name: pmbok-planning
-description: Orchestrates PMBOK 8 subsidiary management plans and synthesizes the integrated Project Management Plan (PMP) with agent-learning decision validation gates.
+description: Orchestrates PMBOK 8 subsidiary management plans, architectural pillars, and synthesizes the integrated Project Management Plan (PMP) with agent-learning decision validation gates.
 ---
 
 # PMBOK Planning Skill
 
-This skill orchestrates the generation, synthesis, and adaptation of the 9 PMBOK 8 subsidiary management plans and the overarching Project Management Plan (PMP) for projects initialized from `sidpa-template`.
+This skill orchestrates the generation, synthesis, architectural framing, and adaptation of PMBOK 8 subsidiary management plans and the overarching Project Management Plan (PMP) for projects initialized from `sidpa-template`.
+
+---
 
 ## Supported Workflows
 
-### 1. Full Planning Orchestration
-Executed after `Project-Charter.md` is approved by `approve-charter`. Generates all 9 subsidiary management plans and integrates them into `Project-Management-Plan.md`.
+### 1. The Post-Charter Pillars Exercise & Architecture Sequence
+After `Project-Charter.md` is approved by `approve-charter`:
+1. Execute the **Pillars Exercise** ([`docs/07-architecture/PILLARS-TEMPLATE.md`](../../docs/07-architecture/PILLARS-TEMPLATE.md)) to identify 4–6 foundational project pillars.
+2. Draft foundational high-level ADRs covering **100% of identified pillars** (no pillar left unaddressed).
+3. Draft the **BRD** citing the ADRs.
+4. Draft the **FDD** citing the BRD.
+5. Decompose the FDD into concrete **User Stories** (Work Packages) with BDD acceptance criteria.
+
+### 2. Full Planning & Subsidiary Plan Orchestration
+Once User Stories (Work Packages) exist, they provide the real duration data, story points, and resource commitments needed to synthesize the Schedule (6.1), Cost (7.1), Scope (5.1), and Resource (9.1) plans into the integrated `Project-Management-Plan.md`:
 
 ```powershell
 python scripts/orchestrate_pmbok.py --mode full --charter docs/project-docs/Project-Charter.md
@@ -18,7 +28,7 @@ python scripts/orchestrate_pmbok.py --mode full --charter docs/project-docs/Proj
 
 *(Add `--mock` for offline / stub execution without external LLM keys).*
 
-### 2. Closed-Loop Adaptation Regeneration
+### 3. Closed-Loop Adaptation Regeneration
 Executed when an `Adaptation-Plan.md` (Stage 17) evaluates governance amendments via the **Governance Change Impact Matrix** and identifies specific subsidiary plans requiring revision after a Stage 16 Governance Change.
 
 ```powershell
@@ -38,14 +48,14 @@ This scans the checklist in `Adaptation-Plan.md`:
 
 It regenerates only the checked plans, updates `docs/project-docs/management-plans/`, archives prior baselines to `management-plans/history/{baseline_id}/`, and re-synthesizes `docs/project-docs/Project-Management-Plan.md`.
 
-### 3. Decision Validation Gate Verification
+### 4. Decision Validation Gate Verification
 After synthesis, the integrated PMP must be validated via `approve-pmp`:
 
 ```powershell
-agent-learn task-policy-decide --agent-id template-governance --task-id approve-pmp
+agent-learn task-policy-decide --agent-id <project-name>-governance --task-id approve-pmp
 ```
 
-### 4. PMP Baseline Versioning & Traceability Invariant (Invariant 6)
+### 5. PMP Baseline Versioning & Traceability Invariant (Invariant 6)
 Every approved PMP receives an immutable SemVer identifier (`PMP-BL-v1.0.0`, `PMP-BL-v1.1.0`). All downstream technical requirements (ADRs, BRDs, FDDs, Stories) must reference the active baseline:
 ```yaml
 ---
@@ -53,32 +63,22 @@ pmp_baseline: "PMP-BL-v1.0.0"
 ---
 ```
 
-### 5. Deterministic Rollback Protocol (Invariant 7)
+### 6. Deterministic Rollback Protocol (Invariant 7)
 If downstream execution triggers regressions, atomic rollback restores the prior approved baseline from archive and penalizes the escalation bandit:
 ```powershell
 python scripts/orchestrate_pmbok.py --mode rollback --to-baseline PMP-BL-v1.0.0
 ```
 
-### 6. Phase Next Evolutionary Seeding (Stage 18 -> Stage 1)
+### 7. Phase Next Evolutionary Seeding (Stage 18 -> Stage 1)
 When Stage 18 Intent Refinement completes with a disposition of `phase_handoff` and receives full Bayesian governance approval (`approve-intent-refinement`), run the orchestrator in `seed-next` mode to mechanically scaffold Phase $N+1$:
 
 ```powershell
 python scripts/orchestrate_pmbok.py --mode seed-next --refinement-proposal docs/project-docs/Intent-Refinement-Proposal.md
 ```
 
-This automatically:
-1. Parses `Intent-Refinement-Proposal.md` for governing baseline, validated invariants, and refined child hypotheses.
-2. Increments the major baseline (`PMP-BL-v1.0.0` -> `PMP-BL-v2.0.0`).
-3. Seeds `docs/project-docs/Spark-Capture.md` (Stage 1) referencing the governing refinement.
-4. Seeds `docs/project-docs/Ideation-Document.md` (Stage 1 Ideation) with carried-over child hypotheses ($d=1, 2$) and formal Bayes factor criteria.
-5. Directs the operator to evaluate `approve-ideation` under `template-governance`.
-
-### 7. Administrative Decommissioning (Stage 18 Project Termination)
+### 8. Administrative Decommissioning (Stage 18 Project Termination)
 If Stage 18 outcome evaluation concludes that the project's strategic intent is fully realized or non-viable (`disposition_type: project_termination`), run the orchestrator in `decommission` mode:
 
 ```powershell
 python scripts/orchestrate_pmbok.py --mode decommission --refinement-proposal docs/project-docs/Intent-Refinement-Proposal.md
 ```
-
-This generates `docs/archive/decommission_{timestamp}/DECOMMISSION-SUMMARY.md`, archives final baselines, and logs administrative teardown in full compliance with PMBOK 8 Phase Close guidelines.
-
