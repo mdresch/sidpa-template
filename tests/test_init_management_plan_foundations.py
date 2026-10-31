@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 
 from scripts.init_management_plan_foundations import initialize_foundation_packs
+from scripts.init_project import init_project
 
 
 TEMPLATE_ROOT = (
@@ -29,8 +30,9 @@ def test_initializes_all_packs_and_renders_project_tokens(tmp_path: Path) -> Non
     generated = list(
         (target_root / "docs" / "project-docs" / "management-plans").rglob("*.md")
     )
-    assert (created, skipped) == (31, 0)
-    assert len(generated) == 31
+    total_templates = len(list(TEMPLATE_ROOT.rglob("*.template.md")))
+    assert (created, skipped) == (total_templates, 0)
+    assert len(generated) == total_templates
     assert all("{{" not in path.read_text(encoding="utf-8") for path in generated)
     assert all(".template.md" not in path.read_text(encoding="utf-8") for path in generated)
     manifest = (
@@ -67,7 +69,8 @@ def test_preserves_existing_artifacts_and_is_idempotent(tmp_path: Path) -> None:
         template_root=TEMPLATE_ROOT,
     )
 
-    assert (created, skipped) == (0, 31)
+    total_templates = len(list(TEMPLATE_ROOT.rglob("*.template.md")))
+    assert (created, skipped) == (0, total_templates)
     assert manifest.read_text(encoding="utf-8") == "project-authored content\n"
 
 
@@ -81,7 +84,10 @@ def test_initializes_only_selected_pack(tmp_path: Path) -> None:
         template_root=TEMPLATE_ROOT,
     )
 
-    assert (created, skipped) == (7, 0)
+    scope_templates = len(
+        list((TEMPLATE_ROOT / "scope-baseline").rglob("*.template.md"))
+    )
+    assert (created, skipped) == (scope_templates, 0)
     assert len(
         list(
             (
@@ -92,7 +98,7 @@ def test_initializes_only_selected_pack(tmp_path: Path) -> None:
                 / "scope-baseline"
             ).rglob("*.md")
         )
-    ) == 7
+    ) == scope_templates
 
 
 def test_rejects_missing_docs_directory(tmp_path: Path) -> None:
@@ -110,3 +116,10 @@ def test_rejects_unknown_pack(tmp_path: Path) -> None:
             packs=("risk",),
             template_root=TEMPLATE_ROOT,
         )
+
+
+def test_init_project_rejects_empty_or_special_char_name() -> None:
+    with pytest.raises(ValueError, match="contains no valid characters"):
+        init_project("---", create_docs=False)
+    with pytest.raises(ValueError, match="contains no valid characters"):
+        init_project(" @#$ ", create_docs=False)
