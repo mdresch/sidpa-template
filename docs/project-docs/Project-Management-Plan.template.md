@@ -29,10 +29,23 @@ outputs:
 **This is the integrated Project Management Plan, formalized after the Project Charter is approved and before technical specifications (ADR, BRD, FDD, User Stories) are drafted.**
 
 ## 1. Executive Summary & Baselines
-- **Scope Baseline:** Approved scope boundary traced to Charter objectives.
-- **Schedule Baseline / Progressive Elaboration:** Milestones established; duration detailed progressively from empirical evidence.
-- **Cost Baseline / Progressive Elaboration:** Investment limits from Business Case; detailed cost tracked as resources are committed.
+- **Scope Baseline:** Pending; summarize the approved scope boundary and Charter trace after its plan gate.
+- **Schedule Baseline / Progressive Elaboration:** Pending; establish milestones and evidence-based durations after the Scope baseline is approved.
+- **Cost Baseline / Progressive Elaboration:** Pending; establish authorized funding after required scope, schedule, resource, and procurement inputs are approved.
 - **Baseline ID:** `PMP-BL-v1.0.0` (Invariant 6)
+
+### 1.1 Foundation Baseline Roll-up Register
+
+This register is the PMP-level roll-up of the Scope, Schedule, Resource, and Cost foundation packs. Keep each row pending until its foundation artifacts, pack roll-up, and parent management plan have their required human approvals.
+
+| Domain | Parent management plan | Foundation pack manifest | Baseline ID | Pack / plan status | Parent-plan approval reference |
+|---|---|---|---|---|---|
+| Scope | [Scope Management Plan](management-plans/Scope-Management-Plan.md) | [Scope Foundation Pack](management-plans/scope-baseline/Scope-Foundation-Pack-Manifest.md) | Pending | Pending | Pending |
+| Schedule | [Schedule Management Plan](management-plans/Schedule-Management-Plan.md) | [Schedule Foundation Pack](management-plans/schedule-baseline/Schedule-Foundation-Pack-Manifest.md) | Pending | Pending | Pending |
+| Resource | [Resource Management Plan](management-plans/Resource-Management-Plan.md) | [Resource Foundation Pack](management-plans/resource-baseline/Resource-Foundation-Pack-Manifest.md) | Pending | Pending | Pending |
+| Cost | [Cost Management Plan](management-plans/Cost-Management-Plan.md) | [Cost Foundation Pack](management-plans/cost-baseline/Cost-Foundation-Pack-Manifest.md) | Pending | Pending | Pending |
+
+For each approved row, record the baseline identifier, approved manifest/version and artifact-hash reference, parent-plan approval episode, and any accepted constraints. Pack generation or completion alone is not PMP approval evidence. Keep blocked or pending rows visible; do not infer approval.
 
 ## 2. Integrated Subsidiary Management Plans
 - **Scope Management Plan:** How requirements and scope changes are evaluated and controlled.
@@ -42,6 +55,8 @@ outputs:
 - **Resource Management Plan:** Roles, responsibilities, and agent authority tiers.
 - **Communications Management Plan:** Project transparency, PR reviews, and audit log cadence.
 - **Stakeholder Engagement Plan:** Human approval gates and escalation pathways.
+
+The four baseline rows above are integrated through their approved parent plans. Foundation manifests remain the detailed artifact registers; the PMP records the approved plan-level baseline and its approval evidence.
 
 ## 3. Feedback Loop from Adaptation
 When an **Adaptation Plan** (Stage 17) is approved, this PMP and its subsidiary plans are updated with tailored operational changes, which in turn trigger refined ADRs, BRDs, FDDs, and Stories for the next cycle.

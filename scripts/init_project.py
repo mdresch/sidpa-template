@@ -10,6 +10,7 @@ Actions performed:
 3. Updates agent_id: "template-governance" to "<name>-governance" in all policy JSONs.
 4. Leaves agent-learning-governance unchanged (shared global namespace).
 5. Copies *.template.md files to active *.md documents if they do not already exist.
+6. Initializes the four management-plan foundation packs without overwriting existing files.
 """
 
 from __future__ import annotations
@@ -18,6 +19,7 @@ import argparse
 import json
 import os
 import re
+import subprocess
 import shutil
 import sys
 from pathlib import Path
@@ -89,6 +91,17 @@ def init_project(project_name: str, create_docs: bool = True):
             else:
                 print(f"  [SKIP] Document already exists: {dest_file.relative_to(repo_root)}")
 
+        subprocess.run(
+            [
+                sys.executable,
+                str(repo_root / "scripts" / "init_management_plan_foundations.py"),
+                "--target-root",
+                str(repo_root),
+                "--project-name",
+                clean_name,
+            ],
+            check=True,
+        )
         print(f"  [OK] Generated {docs_created} initial project document(s) from templates.")
 
     print(f"\nProject initialization complete! You can now start with Step 2 (Spark & Ideation).")

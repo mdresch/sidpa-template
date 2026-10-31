@@ -27,5 +27,22 @@ This plan establishes the guidelines and processes for managing scope management
 }
 ```
 
-## 3. Review & Governance Invariant
+## 3. Scope Foundation Baseline Roll-up
+
+**Status:** Pending. Creating this template does not approve the Scope foundation pack or baseline.
+
+**Source pack:** [Scope Foundation Pack Manifest](scope-baseline/Scope-Foundation-Pack-Manifest.md).
+
+| Roll-up item | Record |
+|---|---|
+| Approved scope boundary and exclusions | Pending; summarize the approved scope statement |
+| WBS and deliverable acceptance basis | Pending; reference the approved WBS dictionary and validation evidence |
+| Foundation manifest and artifact hashes | Pending; verify the manifest registry after artifact approval |
+| Scope baseline identifier | Pending; record only after the pack and plan gates pass |
+| Scope plan approval | Pending; record the configured human approval reference |
+| PMP integration | Pending until this plan is approved |
+
+Carry the manifest version, approved artifact registry, baseline identifier, unresolved constraints, and plan approval reference into this section. Do not copy pending values as approved evidence.
+
+## 4. Review & Governance Invariant
 This subsidiary plan integrates directly into [Project-Management-Plan.md](../Project-Management-Plan.md) and is verified under `approve-pmp`.

@@ -27,5 +27,24 @@ This plan establishes the guidelines and processes for managing resource managem
 }
 ```
 
-## 3. Review & Governance Invariant
+## 3. Resource Foundation Baseline Roll-up
+
+**Status:** Pending. Resource planning depends on approved Scope and Schedule baselines.
+
+**Source pack:** [Resource Foundation Pack Manifest](resource-baseline/Resource-Foundation-Pack-Manifest.md).
+
+| Roll-up item | Record |
+|---|---|
+| Scope and Schedule baseline references | Pending; identify approved upstream baselines |
+| Roles, authority, and accountability | Pending; reference the approved role catalogue |
+| Capacity, assignments, and tooling | Pending; cite estimates, availability, and assignment evidence |
+| Utilization and team operating controls | Pending; record thresholds, review cadence, and escalation |
+| Foundation manifest and artifact hashes | Pending; verify the manifest registry after artifact approval |
+| Resource baseline identifier | Pending; record only after the pack and plan gates pass |
+| Resource plan approval | Pending; record the configured human approval reference |
+| PMP integration | Pending until this plan is approved |
+
+Carry the manifest version, approved artifact registry, resource baseline identifier, unresolved constraints, and plan approval reference into this section. Do not treat role or capacity assumptions as commitments until authorized.
+
+## 4. Review & Governance Invariant
 This subsidiary plan integrates directly into [Project-Management-Plan.md](../Project-Management-Plan.md) and is verified under `approve-pmp`.

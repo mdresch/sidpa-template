@@ -25,7 +25,8 @@ A complete, modular Python system enforcing PMBOK 8 and BABOK standards:
 
 ### 2. Automation & Orchestration Scripts (`scripts/`)
 Turnkey CLI tools automating setup and planning:
-- **`scripts/init_project.py`** — Initializes a new project from the template, renaming `template-governance` to `<name>-governance` in active policies while keeping `agent-learning-governance` intact, and instantiating `.template.md` document templates.
+- **`scripts/init_project.py`** — Initializes a new project from the template, renaming `template-governance` to `<name>-governance` in active policies while keeping `agent-learning-governance` intact, instantiating `.template.md` documents, and scaffolding the Scope, Schedule, Resource, and Cost foundation packs.
+- **`scripts/init_management_plan_foundations.py`** — Creates missing foundation-pack manifests and artifacts in an existing project without overwriting project-authored files. Supports selecting packs and a target project root.
 - **`scripts/orchestrate_pmbok.py`** — Automates subsidiary plan generation and PMP synthesis:
   - **Full Planning (`--mode full`)**: Ingests `Project-Charter.md`, generates all 9 subsidiary management plans, and integrates them into `Project-Management-Plan.md`.
   - **Closed-Loop Adaptation (`--mode adapt`)**: Parses checked items in `Adaptation-Plan.md` (Stage 17) and selectively regenerates only the impacted subsidiary management plans.
@@ -159,7 +160,7 @@ You can instantiate SIDPA for a new project in one of two ways:
    ```powershell
    python scripts/init_project.py --name my-awesome-project
    ```
-   *This automatically updates `data/agent-learning/store/` to `<my-project>-governance` (leaving `agent-learning-governance` intact) and instantiates all `*.template.md` documents.*
+   *This automatically updates `data/agent-learning/store/` to `<my-project>-governance` (leaving `agent-learning-governance` intact), instantiates all `*.template.md` documents, and creates the four pending foundation-pack folder trees.*
 
 #### Approach B: Embedding into an Existing Codebase (Scaffold Copy)
 If you are adding SIDPA into an established repository:
@@ -167,6 +168,14 @@ If you are adding SIDPA into an established repository:
 2. Copy `data/agent-learning/store/` into your project's store.
 3. Copy `docs/project-docs/`, `docs/07-architecture/`, `docs/registers/`, and `docs/user-stories/` into `docs/`.
 4. Run `python scripts/init_project.py --name <your-project-name>` to configure governance IDs and instantiate `.md` document files.
+
+To add only the management-plan foundation structure to an existing project without replacing existing files:
+
+```powershell
+python scripts/init_management_plan_foundations.py --target-root <project-root> --project-name <project-name>
+```
+
+The generated packs are pending templates, not approved baselines. Follow each manifest's prerequisites, review sequence, and separate plan-approval gate before marking artifacts approved or recording hashes.
 
 ---
 
@@ -177,7 +186,9 @@ If you are adding SIDPA into an established repository:
 4. Author `Project-Charter.md`. Run `approve-charter`.
 
 ### Step 3: Orchestrate PMBOK 8 Subsidiary Plans and PMP
-Generate all 9 subsidiary management plans and synthesize the baseline `Project-Management-Plan.md`:
+Use the initialized Stage 6 foundation packs before synthesizing the PMP. Draft and review Scope first; Schedule requires a Scope baseline and credible duration evidence; Resource requires Scope and Schedule baselines; Cost additionally requires the Resource/Procurement evidence stated in the Charter. The manifests define the review, roll-up, and separate plan-approval gates. Do not create schedule or cost placeholders that imply evidence or approval where prerequisites are missing.
+
+After required inputs and foundation reviews are ready, synthesize the subsidiary plans and baseline `Project-Management-Plan.md`:
 ```powershell
 python scripts/orchestrate_pmbok.py --mode full --charter docs/project-docs/Project-Charter.md
 ```
