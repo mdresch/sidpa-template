@@ -25,7 +25,8 @@ A complete, modular Python system enforcing PMBOK 8 and BABOK standards:
 
 ### 2. Automation & Orchestration Scripts (`scripts/`)
 Turnkey CLI tools automating setup and planning:
-- **`scripts/init_project.py`** — Initializes a new project from the template (either in-place or into an existing target codebase with `--target-dir`), renames `template-governance` to `<name>-governance` in active policies while keeping `agent-learning-governance` intact, instantiates project documents, and cleans up redundant `.template.md` files.
+- **`scripts/init_project.py`** — Initializes a new project from the template, renaming `template-governance` to `<name>-governance` in active policies while keeping `agent-learning-governance` intact, instantiating `.template.md` documents, and scaffolding the Scope, Schedule, Resource, and Cost foundation packs.
+- **`scripts/init_management_plan_foundations.py`** — Creates missing foundation-pack manifests and artifacts in an existing project without overwriting project-authored files. Supports selecting packs and a target project root.
 - **`scripts/orchestrate_pmbok.py`** — Automates subsidiary plan generation and PMP synthesis:
   - **Full Planning (`--mode full`)**: Ingests `Project-Charter.md` and User Story work packages, generates all 9 subsidiary management plans, and integrates them into `Project-Management-Plan.md`.
   - **Closed-Loop Adaptation (`--mode adapt`)**: Parses checked items in `Adaptation-Plan.md` (Stage 17) and selectively regenerates only the impacted subsidiary management plans.
@@ -73,7 +74,7 @@ Specialized agent instructions and skills driving the automated lifecycle:
 
 ### 6. Bayesian Governance Policies (`data/agent-learning/store/` & `docs/policy-shapes/`)
 Canonical action specifications, decision frames, and idle policy stores:
-- `docs/policy-shapes/` — Action definitions for all 15+ governance policies (`approve-ideation`, `approve-charter`, `approve-business-case`, `approve-pmp`, `approve-adr`, `approve-brd`, `approve-fdd`, `approve-user-stories`, `validate-intent-foundation`, `approve-audit-record`, `classify-diff-type`, `escalate-diff-response`, `approve-adaptation-plan`, `approve-intent-refinement`).
+- `docs/policy-shapes/` — Action definitions for all 15+ governance policies (`approve-ideation`, `approve-charter`, `approve-business-case`, `approve-subsidiary-plan`, `approve-pmp`, `approve-adr`, `approve-brd`, `approve-fdd`, `approve-user-stories`, `validate-intent-foundation`, `approve-audit-record`, `classify-diff-type`, `escalate-diff-response`, `approve-adaptation-plan`, `approve-intent-refinement`).
 - `docs/policy-shapes/decision-frames/` — Multi-criteria Bayesian decision frames (e.g. `pmp-approval.json`).
 - `data/agent-learning/store/` — Pre-initialized, idle policy instances.
 
@@ -133,6 +134,7 @@ flowchart TD
    ```powershell
    python scripts/init_project.py --name my-awesome-project
    ```
+   *This automatically updates `data/agent-learning/store/` to `<my-project>-governance` (leaving `agent-learning-governance` intact), instantiates all `*.template.md` documents, and creates the four pending foundation-pack folder trees.*
 
 ### Approach B: Embedding into an Existing Codebase (Target Directory)
 To scaffold SIDPA governance into an already existing codebase without clobbering existing files:
@@ -141,6 +143,14 @@ cd /path/to/sidpa-template
 python scripts/init_project.py --name <existing-project-name> --target-dir /path/to/existing-codebase
 ```
 *This automatically scaffolds `pmbok/`, `scripts/`, `docs/`, `data/agent-learning/store/`, and `.claude/skills/`, configures the project's Bayesian policy namespace, instantiates initial documents, and removes template clutter.*
+
+To add only the management-plan foundation structure to an existing project without replacing existing files:
+
+```powershell
+python scripts/init_management_plan_foundations.py --target-root <project-root> --project-name <project-name>
+```
+
+The generated packs are pending templates, not approved baselines. Follow each manifest's prerequisites, review sequence, and separate plan-approval gate before marking artifacts approved or recording hashes.
 
 ---
 
@@ -152,18 +162,10 @@ python scripts/init_project.py --name <existing-project-name> --target-dir /path
 3. Author `Business-Case.md` and `Benefits-Statement.md`. Run `approve-business-case`.
 4. Author `Project-Charter.md`. Run `approve-charter`.
 
-### Step 2: Pillars Exercise & High-Level ADRs (Stage 5)
-1. Execute the **Pillars Exercise** (`docs/07-architecture/PILLARS-TEMPLATE.md`) to decompose the Charter into 4–6 foundational capability pillars.
-2. Draft foundational high-level ADRs providing **100% full coverage** across all pillars. Run `approve-adr`.
+### Step 3: Orchestrate PMBOK 8 Subsidiary Plans and PMP
+Use the initialized Stage 6 foundation packs before synthesizing the PMP. Draft and review Scope first; Schedule requires a Scope baseline and credible duration evidence; Resource requires Scope and Schedule baselines; Cost additionally requires the Resource/Procurement evidence stated in the Charter. The manifests define the review, roll-up, and separate plan-approval gates. Do not create schedule or cost placeholders that imply evidence or approval where prerequisites are missing.
 
-### Step 3: Requirements, Design & Work Package Derivation (Stages 6–7)
-1. Draft the Business Requirements Document (`BRD-*.md`) citing the ADRs. Run `approve-brd`.
-2. Draft the Functional Design Document (`FDD-*.md`) citing the BRD. Run `approve-fdd`.
-3. Decompose into concrete **User Stories** (`user-stories/*.md`) with testable BDD acceptance criteria. Run `approve-user-stories`.  
-   *These User Stories are the Work Packages for the PMP.*
-
-### Step 4: Orchestrate PMBOK 8 Subsidiary Plans and PMP (Stage 8)
-Generate all 9 subsidiary management plans grounded in the User Story work packages:
+After required inputs and foundation reviews are ready, synthesize the subsidiary plans and baseline `Project-Management-Plan.md`:
 ```powershell
 python scripts/orchestrate_pmbok.py --mode full --charter docs/project-docs/Project-Charter.md
 ```

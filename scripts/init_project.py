@@ -17,7 +17,8 @@ Actions performed:
 4. Updates agent_id: "template-governance" to "<name>-governance" in all policy JSONs.
 5. Leaves agent-learning-governance unchanged (shared global namespace).
 6. Copies *.template.md files to active *.md documents if they do not already exist.
-7. Cleans up redundant *.template.md files to eliminate clutter (pass --keep-templates to preserve).
+7. Initializes the four management-plan foundation packs without overwriting existing files.
+8. Cleans up redundant *.template.md files to eliminate clutter (pass --keep-templates to preserve).
 """
 
 from __future__ import annotations
@@ -27,10 +28,12 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
 source_repo_root = Path(__file__).resolve().parent.parent
+
 
 def copy_tree_merge(src: Path, dst: Path, overwrite: bool = False):
     """Recursively copy directory tree merging into destination."""
@@ -45,15 +48,21 @@ def copy_tree_merge(src: Path, dst: Path, overwrite: bool = False):
             if not target.exists() or overwrite:
                 shutil.copy2(item, target)
 
+
 def init_project(
     project_name: str,
     target_dir: Path | None = None,
     create_docs: bool = True,
     force: bool = False,
-    cleanup_templates: bool = True
+    cleanup_templates: bool = True,
 ):
     # Sanitize project name
     clean_name = re.sub(r"[^a-zA-Z0-9_\-]", "-", project_name).lower().strip("-")
+    if not clean_name:
+        raise ValueError(
+            f"Project name {project_name!r} contains no valid characters. "
+            "Use at least one letter or digit."
+        )
     new_agent_id = f"{clean_name}-governance"
     old_agent_id = "template-governance"
 
@@ -70,7 +79,7 @@ def init_project(
     # Step A: If target_dir is different from template root, scaffold files
     if dest_root != source_repo_root:
         print("  [STEP 1/4] Scaffolding governance structure into target repository...")
-        
+
         # 1. PMBOK engine
         copy_tree_merge(source_repo_root / "pmbok", dest_root / "pmbok", overwrite=force)
         print("    [+] Scaffolding pmbok/ planning engine")
@@ -91,7 +100,7 @@ def init_project(
         copy_tree_merge(
             source_repo_root / "data" / "agent-learning",
             dest_root / "data" / "agent-learning",
-            overwrite=force
+            overwrite=force,
         )
         print("    [+] Scaffolding data/agent-learning/store/ (policy definitions)")
 
@@ -100,7 +109,7 @@ def init_project(
             copy_tree_merge(
                 source_repo_root / ".claude" / "skills",
                 dest_root / ".claude" / "skills",
-                overwrite=force
+                overwrite=force,
             )
             print("    [+] Merging .claude/skills/ (governance, pmbok-planning, intent-refinement)")
 
@@ -139,7 +148,7 @@ def init_project(
     for target_dir in [new_active, new_policies]:
         if not target_dir.exists():
             continue
-        for json_file in target_dir.glob("*.json"):
+        for json_file in target_dir.rglob("*.json"):
             try:
                 content = json_file.read_text(encoding="utf-8")
                 if old_agent_id in content:
@@ -167,6 +176,25 @@ def init_project(
 
         print(f"    [OK] Generated {docs_created} initial project document(s) from templates.")
 
+        # Foundation packs initialization
+        init_foundations_script = dest_root / "scripts" / "init_management_plan_foundations.py"
+        if init_foundations_script.exists():
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(init_foundations_script),
+                    "--target-root",
+                    str(dest_root),
+                    "--project-name",
+                    clean_name,
+                ],
+            )
+            if result.returncode != 0:
+                print(
+                    f"    [WARN] Foundation-pack initialization exited with code {result.returncode}. "
+                    "Run init_management_plan_foundations.py manually to complete setup."
+                )
+
         # Step E: Cleanup redundant .template.md files
         if cleanup_templates:
             cleaned = 0
@@ -186,6 +214,7 @@ def init_project(
     print(f"  Next Step: Author Spark-Capture.md and Ideation-Document.md")
     print(f"=======================================================\n")
 
+
 def main():
     parser = argparse.ArgumentParser(description="Initialize or scaffold a project with SIDPA governance")
     parser.add_argument("--name", required=True, help="Project name (e.g. 'enterprise-work-hierarchy')")
@@ -196,13 +225,18 @@ def main():
     args = parser.parse_args()
 
     target = Path(args.target_dir) if args.target_dir else None
-    init_project(
-        args.name,
-        target_dir=target,
-        create_docs=not args.skip_docs,
-        force=args.force,
-        cleanup_templates=not args.keep_templates
-    )
+    try:
+        init_project(
+            args.name,
+            target_dir=target,
+            create_docs=not args.skip_docs,
+            force=args.force,
+            cleanup_templates=not args.keep_templates,
+        )
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

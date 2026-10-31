@@ -1,0 +1,133 @@
+{
+  "task": "Epic 1 (Five-Tier Immutable Work Breakdown Structure (WBS) Metamodel): approve user stories under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "traceable_to_fdd_brd_adr",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Stories trace directly to approved FDD-001, BRD-001, and ADR-001 5-tier metamodel invariants."
+    },
+    {
+      "id": "testable_acceptance_criteria",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Acceptance criteria define concrete Given/When/Then testable conditions (AC-1.1..1.3) ready for contract testing."
+    },
+    {
+      "id": "code_shaped_scope_boundary",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Stories distinguish executable code deliverables from documentation items without forcing templates, respecting WBS granularity."
+    },
+    {
+      "id": "implementation_feasibility",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Implementation feasible against SQLite schema DDL, Express route middleware, and seed dataset verification tests."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_user_stories",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_fdd_brd_adr",
+          "source": "Epic-01-Five-Tier-Immutable-WBS-Metamodel.md#inputs",
+          "support": 0.97,
+          "confidence": 0.95
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source": "Epic-01-Five-Tier-Immutable-WBS-Metamodel.md#acceptance-criteria",
+          "support": 0.96,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "code_shaped_scope_boundary",
+          "source": "Epic-01-Five-Tier-Immutable-WBS-Metamodel.md#stories",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "implementation_feasibility",
+          "source": "Epic-01-Five-Tier-Immutable-WBS-Metamodel.md#stories",
+          "support": 0.96,
+          "confidence": 0.94
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_user_stories",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_fdd_brd_adr",
+          "source": "Epic-01-Five-Tier-Immutable-WBS-Metamodel.md#inputs",
+          "support": 0.03,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source": "Epic-01-Five-Tier-Immutable-WBS-Metamodel.md#acceptance-criteria",
+          "support": 0.04,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "code_shaped_scope_boundary",
+          "source": "Epic-01-Five-Tier-Immutable-WBS-Metamodel.md#stories",
+          "support": 0.05,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "implementation_feasibility",
+          "source": "Epic-01-Five-Tier-Immutable-WBS-Metamodel.md#stories",
+          "support": 0.04,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_fdd_brd_adr",
+          "source": "Epic-01-Five-Tier-Immutable-WBS-Metamodel.md#inputs",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source": "Epic-01-Five-Tier-Immutable-WBS-Metamodel.md#acceptance-criteria",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "code_shaped_scope_boundary",
+          "source": "Epic-01-Five-Tier-Immutable-WBS-Metamodel.md#stories",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "implementation_feasibility",
+          "source": "Epic-01-Five-Tier-Immutable-WBS-Metamodel.md#stories",
+          "support": 0.06,
+          "confidence": 0.8
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

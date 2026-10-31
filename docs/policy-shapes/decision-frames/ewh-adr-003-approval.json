@@ -1,0 +1,133 @@
+{
+  "task": "ADR-003 (Program Benefits Realization & Cross-Project Dependency Topology): approve, reject, or request revision under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "architectural_soundness",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Establishes program benefits realization ledger, cross-project dependency directed acyclic graph (DAG), critical dependency path resolution, and outcome KPI mapping."
+    },
+    {
+      "id": "alternatives_considered",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Three real alternatives named and rejected: siloed independent project tracking (ignores systemic cross-project blockers), ad-hoc tagging without topological ordering (fails circular dependency detection), external PPM tool delegation (violates local-first SQLite architecture)."
+    },
+    {
+      "id": "consequences_honest",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Consequences accurately acknowledge topological sorting overhead across multi-project graphs and requirement for formal inter-project deliverable sign-offs."
+    },
+    {
+      "id": "gap_disclosure_quality",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Bridges structural gap between strategic program outcomes and tactical project delivery, enabling automated delay propagation when an upstream project slips."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-4",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-5",
+          "support": 0.94,
+          "confidence": 0.91
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-6",
+          "support": 0.91,
+          "confidence": 0.88
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-1-and-baseline-feedback",
+          "support": 0.96,
+          "confidence": 0.93
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-4",
+          "support": 0.05,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-5",
+          "support": 0.06,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-6",
+          "support": 0.09,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-1-and-baseline-feedback",
+          "support": 0.04,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-4",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-5",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-6",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-003-Program-Benefits-Realization-and-Cross-Project-Topology.md#section-1-and-baseline-feedback",
+          "support": 0.06,
+          "confidence": 0.81
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

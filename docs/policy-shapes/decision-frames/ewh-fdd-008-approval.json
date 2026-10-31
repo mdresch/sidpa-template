@@ -1,0 +1,133 @@
+{
+  "task": "FDD-008 (Normalized Resource Competency Taxonomies & Leveling Invariants): approve, reject, or request revision under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "traceable_to_brd_adr",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Functional design traces directly to BRD-008 rules (BRU-008-01..05) and ADR-008 skills join tables and autoLevelTask invariants."
+    },
+    {
+      "id": "fix_location_correct",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Contracts correctly placed in database.js resource_skills table, resourceEngine.js milestone-safe auto-leveling, and stakeholder API endpoints."
+    },
+    {
+      "id": "no_invented_implementation",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Validated against Skills Match Score (SMS) formula, 25% burnout capacity buffer, and strict +1..+8w leveling heuristics bounds."
+    },
+    {
+      "id": "compatibility_preserved",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Eliminates unnormalized free-text strings while retaining full compatibility with Retail Banking resource capacities."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_fdd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "FDD-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-1",
+          "support": 0.96,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "FDD-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-1-and-2",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "FDD-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-2-and-4",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "FDD-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-5",
+          "support": 0.95,
+          "confidence": 0.93
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_fdd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "FDD-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-1",
+          "support": 0.04,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "FDD-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-1-and-2",
+          "support": 0.05,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "FDD-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-2-and-4",
+          "support": 0.05,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "FDD-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-5",
+          "support": 0.05,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "FDD-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-1",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "FDD-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-1-and-2",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "FDD-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-2-and-4",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "FDD-008-Normalized-Resource-Competency-Taxonomies-and-Leveling-Invariants.md#section-5",
+          "support": 0.06,
+          "confidence": 0.8
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

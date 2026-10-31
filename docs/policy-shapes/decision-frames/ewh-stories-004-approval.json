@@ -1,0 +1,133 @@
+{
+  "task": "Epic 4 (Earned Value Management (EVM) Baseline & Performance Index Contracts): approve user stories under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "traceable_to_fdd_brd_adr",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Stories trace directly to approved FDD-004, BRD-004, and ADR-004 ANSI/EIA-748 EVM metrics calculation engine."
+    },
+    {
+      "id": "testable_acceptance_criteria",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Acceptance criteria define concrete Given/When/Then testable conditions (AC-4.1..4.3) with BAC $85,392 EVM reconciliation."
+    },
+    {
+      "id": "code_shaped_scope_boundary",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Stories distinguish executable code deliverables from documentation items without forcing templates, respecting WBS granularity."
+    },
+    {
+      "id": "implementation_feasibility",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Implementation feasible against EVM formula engine, performance index threshold middleware, and snapshot test suites."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_user_stories",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_fdd_brd_adr",
+          "source": "Epic-04-Earned-Value-Management-Baseline-Contracts.md#inputs",
+          "support": 0.98,
+          "confidence": 0.96
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source": "Epic-04-Earned-Value-Management-Baseline-Contracts.md#acceptance-criteria",
+          "support": 0.97,
+          "confidence": 0.95
+        },
+        {
+          "criterion_id": "code_shaped_scope_boundary",
+          "source": "Epic-04-Earned-Value-Management-Baseline-Contracts.md#stories",
+          "support": 0.96,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "implementation_feasibility",
+          "source": "Epic-04-Earned-Value-Management-Baseline-Contracts.md#stories",
+          "support": 0.97,
+          "confidence": 0.95
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_user_stories",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_fdd_brd_adr",
+          "source": "Epic-04-Earned-Value-Management-Baseline-Contracts.md#inputs",
+          "support": 0.02,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source": "Epic-04-Earned-Value-Management-Baseline-Contracts.md#acceptance-criteria",
+          "support": 0.03,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "code_shaped_scope_boundary",
+          "source": "Epic-04-Earned-Value-Management-Baseline-Contracts.md#stories",
+          "support": 0.04,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "implementation_feasibility",
+          "source": "Epic-04-Earned-Value-Management-Baseline-Contracts.md#stories",
+          "support": 0.03,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_fdd_brd_adr",
+          "source": "Epic-04-Earned-Value-Management-Baseline-Contracts.md#inputs",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source": "Epic-04-Earned-Value-Management-Baseline-Contracts.md#acceptance-criteria",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "code_shaped_scope_boundary",
+          "source": "Epic-04-Earned-Value-Management-Baseline-Contracts.md#stories",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "implementation_feasibility",
+          "source": "Epic-04-Earned-Value-Management-Baseline-Contracts.md#stories",
+          "support": 0.06,
+          "confidence": 0.8
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

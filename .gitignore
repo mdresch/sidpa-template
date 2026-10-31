@@ -4,6 +4,7 @@ __pycache__/
 *.pyo
 data/pmbok_runtime/
 .pytest_cache/
+.hypothesis/
 
 # Ignore vscode AI rules
 .github\instructions\codacy.instructions.md

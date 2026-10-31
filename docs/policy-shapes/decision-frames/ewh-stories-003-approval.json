@@ -1,0 +1,133 @@
+{
+  "task": "Epic 3 (Program Benefits Realization & Cross-Project Dependency Topology): approve user stories under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "traceable_to_fdd_brd_adr",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Stories trace directly to approved FDD-003, BRD-003, and ADR-003 cross-project dependency DAG topology."
+    },
+    {
+      "id": "testable_acceptance_criteria",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Acceptance criteria define concrete Given/When/Then testable conditions (AC-3.1..3.3) ready for topological dependency testing."
+    },
+    {
+      "id": "code_shaped_scope_boundary",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Stories distinguish executable code deliverables from documentation items without forcing templates, respecting WBS granularity."
+    },
+    {
+      "id": "implementation_feasibility",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Implementation feasible against benefits ledger tables, DAG cycle detection middleware, and topological sorting service."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_user_stories",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_fdd_brd_adr",
+          "source": "Epic-03-Program-Benefits-Realization-and-Cross-Project-Topology.md#inputs",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source": "Epic-03-Program-Benefits-Realization-and-Cross-Project-Topology.md#acceptance-criteria",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "code_shaped_scope_boundary",
+          "source": "Epic-03-Program-Benefits-Realization-and-Cross-Project-Topology.md#stories",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "implementation_feasibility",
+          "source": "Epic-03-Program-Benefits-Realization-and-Cross-Project-Topology.md#stories",
+          "support": 0.94,
+          "confidence": 0.92
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_user_stories",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_fdd_brd_adr",
+          "source": "Epic-03-Program-Benefits-Realization-and-Cross-Project-Topology.md#inputs",
+          "support": 0.05,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source": "Epic-03-Program-Benefits-Realization-and-Cross-Project-Topology.md#acceptance-criteria",
+          "support": 0.06,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "code_shaped_scope_boundary",
+          "source": "Epic-03-Program-Benefits-Realization-and-Cross-Project-Topology.md#stories",
+          "support": 0.06,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "implementation_feasibility",
+          "source": "Epic-03-Program-Benefits-Realization-and-Cross-Project-Topology.md#stories",
+          "support": 0.06,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_fdd_brd_adr",
+          "source": "Epic-03-Program-Benefits-Realization-and-Cross-Project-Topology.md#inputs",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "testable_acceptance_criteria",
+          "source": "Epic-03-Program-Benefits-Realization-and-Cross-Project-Topology.md#acceptance-criteria",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "code_shaped_scope_boundary",
+          "source": "Epic-03-Program-Benefits-Realization-and-Cross-Project-Topology.md#stories",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "implementation_feasibility",
+          "source": "Epic-03-Program-Benefits-Realization-and-Cross-Project-Topology.md#stories",
+          "support": 0.06,
+          "confidence": 0.8
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

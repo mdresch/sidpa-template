@@ -1,0 +1,133 @@
+{
+  "task": "FDD-010 (Bidirectional Lineage & Strategic Impact Propagation): approve, reject, or request revision under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "traceable_to_brd_adr",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Functional design traces directly to BRD-010 rules (BRU-010-01..05) and ADR-010 bidirectional Value Thread architecture."
+    },
+    {
+      "id": "fix_location_correct",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Contracts correctly placed in database.js strategic linkage schema, server/routes/valueThread.js traversal API, and rollupEngine.js bottom-up impact simulation."
+    },
+    {
+      "id": "no_invented_implementation",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Validated against 5-tier recursive traversal queries, upward status degradation triggers, and strategic objective KPI health math."
+    },
+    {
+      "id": "compatibility_preserved",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Preserves core CRUD responsiveness while powering full line-of-sight visibility across all 5 WBS tiers."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_fdd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "FDD-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-1",
+          "support": 0.96,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "FDD-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-1-and-2",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "FDD-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-2-and-4",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "FDD-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-5",
+          "support": 0.95,
+          "confidence": 0.93
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_fdd",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "FDD-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-1",
+          "support": 0.04,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "FDD-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-1-and-2",
+          "support": 0.05,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "FDD-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-2-and-4",
+          "support": 0.05,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "FDD-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-5",
+          "support": 0.05,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "traceable_to_brd_adr",
+          "source": "FDD-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-1",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "fix_location_correct",
+          "source": "FDD-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-1-and-2",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "no_invented_implementation",
+          "source": "FDD-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-2-and-4",
+          "support": 0.06,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "compatibility_preserved",
+          "source": "FDD-010-Bidirectional-Lineage-and-Strategic-Impact-Propagation.md#section-5",
+          "support": 0.06,
+          "confidence": 0.8
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}

@@ -1,0 +1,134 @@
+{
+  "task": "Project Management Plan (Stage 6: PMP baseline synthesis): approve, reject, or request revision before authorizing technical specifications",
+  "criteria": [
+    {
+      "id": "subsidiary_plan_completeness",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Comprehensive integration across all 9 PMBOK subsidiary management plans (Scope 5.1, Schedule 6.1, Cost 7.1, Quality 8.1, Resource 9.1, Communications 10.1, Risk 11.1, Procurement 12.1, Stakeholder 13.2) plus WBS Task List and RACI Matrix in Enterprise Work Hierarchy"
+    },
+    {
+      "id": "baseline_coherence",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Coherent mathematical alignment across Scope (38 WBS items, 711.6h), Schedule (16 weeks, 8 sprints, CPM zero-float critical path), Cost ($85,392 BAC, $120/hr, 15% contingency), Quality (5 contract test suites), and Risk (10-strategy taxonomy)"
+    },
+    {
+      "id": "delegated_authority_and_governance",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Codified Lead PM delegated authority (Menno Drescher, $25,000 limit, autoLevelTask bounded +1..+8 weeks), CCB state machine, and binding PRB escalation thresholds"
+    },
+    {
+      "id": "governance_traceability",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Unbroken bidirectional traceability back to approved Project Charter (EWH-CHARTER-0001), Business Case, and Benefits Statement under PMP-BL-v1.0.0"
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_pmp",
+      "evidence": [
+        {
+          "criterion_id": "subsidiary_plan_completeness",
+          "source": "wiki/Projects/EnterpriseWorkHierarchy/05 Project Governance & Plans/*-Management-Plan.md",
+          "support": 0.97,
+          "confidence": 0.95
+        },
+        {
+          "criterion_id": "baseline_coherence",
+          "source": "wiki/Projects/EnterpriseWorkHierarchy/05 Project Governance & Plans/Project-Management-Plan.md",
+          "support": 0.96,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "delegated_authority_and_governance",
+          "source": "wiki/Projects/EnterpriseWorkHierarchy/05 Project Governance & Plans/Project-Management-Plan.md",
+          "support": 0.95,
+          "confidence": 0.93
+        },
+        {
+          "criterion_id": "governance_traceability",
+          "source": "wiki/Projects/EnterpriseWorkHierarchy/00 Intent & Charter/Project-Charter.md",
+          "support": 0.97,
+          "confidence": 0.95
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_pmp",
+      "evidence": [
+        {
+          "criterion_id": "subsidiary_plan_completeness",
+          "source": "wiki/Projects/EnterpriseWorkHierarchy/05 Project Governance & Plans/*-Management-Plan.md",
+          "support": 0.03,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "baseline_coherence",
+          "source": "wiki/Projects/EnterpriseWorkHierarchy/05 Project Governance & Plans/Project-Management-Plan.md",
+          "support": 0.04,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "delegated_authority_and_governance",
+          "source": "wiki/Projects/EnterpriseWorkHierarchy/05 Project Governance & Plans/Project-Management-Plan.md",
+          "support": 0.03,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "governance_traceability",
+          "source": "wiki/Projects/EnterpriseWorkHierarchy/00 Intent & Charter/Project-Charter.md",
+          "support": 0.04,
+          "confidence": 0.85
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "subsidiary_plan_completeness",
+          "source": "wiki/Projects/EnterpriseWorkHierarchy/05 Project Governance & Plans/*-Management-Plan.md",
+          "support": 0.06,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "baseline_coherence",
+          "source": "wiki/Projects/EnterpriseWorkHierarchy/05 Project Governance & Plans/Project-Management-Plan.md",
+          "support": 0.07,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "delegated_authority_and_governance",
+          "source": "wiki/Projects/EnterpriseWorkHierarchy/05 Project Governance & Plans/Project-Management-Plan.md",
+          "support": 0.06,
+          "confidence": 0.80
+        },
+        {
+          "criterion_id": "governance_traceability",
+          "source": "wiki/Projects/EnterpriseWorkHierarchy/00 Intent & Charter/Project-Charter.md",
+          "support": 0.05,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.10,
+  "max_uncertainty": 1.0
+}
+

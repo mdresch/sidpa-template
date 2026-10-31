@@ -1,0 +1,133 @@
+{
+  "task": "ADR-009 (Time-Series Metric Snapshotting & Predictive Baseline Telemetry): approve, reject, or request revision under PMP-BL-v1.0.0",
+  "criteria": [
+    {
+      "id": "architectural_soundness",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Establishes project_metric_snapshots schema for persistent weekly and milestone telemetry (PV, EV, AC, SPI, CPI), enabling historical velocity tracking, linear regression burnup forecasting, and completion probability estimates."
+    },
+    {
+      "id": "alternatives_considered",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Three real alternatives named and rejected: on-the-fly ephemeral recalculation from current state (destroys historical trajectory and makes trend detection impossible), external time-series database (unnecessary infrastructure overhead for SQLite stack), event sourcing for every atomic state change (excessive storage overhead and complex projection rebuilding)."
+    },
+    {
+      "id": "consequences_honest",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Consequences accurately introduce scheduled snapshot cron/hook discipline and incremental disk storage growth for snapshot tables."
+    },
+    {
+      "id": "gap_disclosure_quality",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Unblocks HYP-ewh-002 and SC-02 by transitioning the platform from point-in-time static snapshots to dynamic predictive forecasting."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-009-Time-Series-Metric-Snapshotting-and-Predictive-Baseline-Telemetry.md#section-4",
+          "support": 0.97,
+          "confidence": 0.95
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-009-Time-Series-Metric-Snapshotting-and-Predictive-Baseline-Telemetry.md#section-5",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-009-Time-Series-Metric-Snapshotting-and-Predictive-Baseline-Telemetry.md#section-6",
+          "support": 0.93,
+          "confidence": 0.9
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-009-Time-Series-Metric-Snapshotting-and-Predictive-Baseline-Telemetry.md#section-1-and-baseline-feedback",
+          "support": 0.96,
+          "confidence": 0.94
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-009-Time-Series-Metric-Snapshotting-and-Predictive-Baseline-Telemetry.md#section-4",
+          "support": 0.03,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-009-Time-Series-Metric-Snapshotting-and-Predictive-Baseline-Telemetry.md#section-5",
+          "support": 0.06,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-009-Time-Series-Metric-Snapshotting-and-Predictive-Baseline-Telemetry.md#section-6",
+          "support": 0.07,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-009-Time-Series-Metric-Snapshotting-and-Predictive-Baseline-Telemetry.md#section-1-and-baseline-feedback",
+          "support": 0.04,
+          "confidence": 0.82
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-009-Time-Series-Metric-Snapshotting-and-Predictive-Baseline-Telemetry.md#section-4",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-009-Time-Series-Metric-Snapshotting-and-Predictive-Baseline-Telemetry.md#section-5",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-009-Time-Series-Metric-Snapshotting-and-Predictive-Baseline-Telemetry.md#section-6",
+          "support": 0.06,
+          "confidence": 0.81
+        },
+        {
+          "criterion_id": "gap_disclosure_quality",
+          "source": "ADR-009-Time-Series-Metric-Snapshotting-and-Predictive-Baseline-Telemetry.md#section-1-and-baseline-feedback",
+          "support": 0.06,
+          "confidence": 0.81
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}
