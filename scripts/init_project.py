@@ -113,6 +113,15 @@ def init_project(
             )
             print("    [+] Merging .claude/skills/ (governance, pmbok-planning, intent-refinement)")
 
+        # 6. Templates (management plans)
+        if (source_repo_root / "templates").exists():
+            copy_tree_merge(
+                source_repo_root / "templates",
+                dest_root / "templates",
+                overwrite=force,
+            )
+            print("    [+] Merging templates/ (management-plan foundation templates)")
+
     else:
         print("  [STEP 1/4] Operating in-place on template repository.")
 
@@ -126,9 +135,14 @@ def init_project(
     new_active = active_dir / new_agent_id
     if old_active.exists():
         if new_active.exists() and new_active != old_active:
-            shutil.rmtree(new_active)
-        old_active.rename(new_active)
-        print(f"    [OK] Renamed active policies directory: {new_active.relative_to(dest_root)}")
+            for item in old_active.iterdir():
+                target = new_active / item.name
+                if not target.exists() or force:
+                    shutil.copy2(item, target)
+            shutil.rmtree(old_active)
+        else:
+            old_active.rename(new_active)
+        print(f"    [OK] Configured active policies directory: {new_active.relative_to(dest_root)}")
     elif new_active.exists():
         print(f"    [OK] Active policies directory already configured: {new_active.relative_to(dest_root)}")
 
@@ -136,9 +150,14 @@ def init_project(
     new_policies = policies_dir / new_agent_id
     if old_policies.exists():
         if new_policies.exists() and new_policies != old_policies:
-            shutil.rmtree(new_policies)
-        old_policies.rename(new_policies)
-        print(f"    [OK] Renamed policy definitions directory: {new_policies.relative_to(dest_root)}")
+            for item in old_policies.iterdir():
+                target = new_policies / item.name
+                if not target.exists() or force:
+                    shutil.copy2(item, target)
+            shutil.rmtree(old_policies)
+        else:
+            old_policies.rename(new_policies)
+        print(f"    [OK] Configured policy definitions directory: {new_policies.relative_to(dest_root)}")
     elif new_policies.exists():
         print(f"    [OK] Policy definitions directory already configured: {new_policies.relative_to(dest_root)}")
 
