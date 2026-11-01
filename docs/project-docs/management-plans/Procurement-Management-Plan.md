@@ -2,7 +2,7 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "12.1 Procurement Management Plan"
-lifecycle_stage: "Stage 6 (Project)"
+lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"
 governance_policy: "approve-pmp"
 inputs:
   - "Project-Charter.md"
@@ -14,7 +14,7 @@ outputs:
 # Procurement Management Plan — SIDPA Project
 
 > **PMBOK 8 Process:** `12.1 Procurement Management Plan` (Planning)  
-> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 6 (Project)`  
+> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 7 (Planning: Integrated PMP & Baselines)`  
 > **Source:** [Project-Charter.md](../Project-Charter.md)
 
 ## 1. Purpose & Scope

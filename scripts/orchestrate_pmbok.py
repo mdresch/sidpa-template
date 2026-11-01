@@ -90,7 +90,7 @@ def synthesize_pmp_markdown(project_context: dict, generated_plans: dict[str, st
         'pmbok_process_group: "Planning"',
         'pmbok_process: "4.2 Develop Project Management Plan"',
         f'pmp_baseline: "{baseline_id}"',
-        'lifecycle_stage: "Stage 6 (Project)"',
+        'lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"',
         'governance_policy: "approve-pmp"',
         "inputs:",
         '  - "Project-Charter.md"',
@@ -103,7 +103,7 @@ def synthesize_pmp_markdown(project_context: dict, generated_plans: dict[str, st
         f"# Project Management Plan (PMP) — {clean_title}",
         "",
         "> **PMBOK 8 Process:** `4.2 Develop Project Management Plan` (Planning)  ",
-        "> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 6 (Project)`  ",
+        "> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 7 (Planning: Integrated PMP & Baselines)`  ",
         f"> **Baseline Identifier:** `{baseline_id}`  ",
         "> **Inputs:** Project-Charter.md, Subsidiary Management Plans  ",
         "> **Process:** Integrate subsidiary management plans, establish baselines, define governance gates  ",
@@ -267,7 +267,7 @@ This subsidiary plan integrates directly into [Project-Management-Plan.md](../Pr
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "{pid} {meta['title']}"
-lifecycle_stage: "Stage 6 (Project)"
+lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"
 governance_policy: "approve-subsidiary-plan"
 inputs:
   - "Project-Charter.md"
@@ -279,7 +279,7 @@ outputs:
 # {meta['title']} — {project_context['title']}
 
 > **PMBOK 8 Process:** `{pid} {meta['title']}` (Planning)  
-> **Governance Policy:** `approve-subsidiary-plan` | **Lifecycle Stage:** `Stage 6 (Project)`  
+> **Governance Policy:** `approve-subsidiary-plan` | **Lifecycle Stage:** `Stage 7 (Planning: Integrated PMP & Baselines)`  
 > **Source:** [Project-Charter.md](../Project-Charter.md)
 
 ## 1. Purpose & Scope

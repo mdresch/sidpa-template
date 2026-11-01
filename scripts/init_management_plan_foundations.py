@@ -76,6 +76,12 @@ def main() -> None:
         help="Existing project root (defaults to the SIDPA template repository).",
     )
     parser.add_argument(
+        "--template-root",
+        type=Path,
+        default=None,
+        help="Custom root directory holding management-plans templates.",
+    )
+    parser.add_argument(
         "--project-name",
         default=None,
         help="Display name used in generated documents (defaults to the target folder name).",
@@ -93,6 +99,7 @@ def main() -> None:
         args.target_root,
         project_name,
         tuple(args.packs),
+        template_root=args.template_root,
     )
     print(f"Foundation-pack documents created: {created}; already present and preserved: {skipped}.")
 

@@ -3,7 +3,7 @@ pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "4.2 Develop Project Management Plan"
 pmp_baseline: "PMP-BL-v1.0.0"
-lifecycle_stage: "Stage 6 (Project)"
+lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"
 governance_policy: "approve-pmp"
 inputs:
   - "Project-Charter.md"
@@ -16,7 +16,7 @@ outputs:
 # Project Management Plan (PMP)
 
 > **PMBOK 8 Process:** `4.2 Develop Project Management Plan` (Planning)  
-> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 6 (Project)`  
+> **Governance Policy:** `approve-pmp` | **Lifecycle Stage:** `Stage 7 (Planning: Integrated PMP & Baselines)`  
 > **Baseline Identifier:** `PMP-BL-v1.0.0`  
 > **Inputs:** Project-Charter.md, Subsidiary management plans (Scope, Risk, Quality, etc.)  
 > **Process:** Integrate subsidiary management plans, establish baselines, define governance gates  
@@ -26,7 +26,7 @@ outputs:
 **Source:** [Project-Charter.md](Project-Charter.md)
 **Governance Policy:** `approve-pmp`
 
-**This is the integrated Project Management Plan, formalized after the Project Charter is approved and before technical specifications (ADR, BRD, FDD, User Stories) are drafted.**
+**This is the integrated Project Management Plan, formalized after technical specifications (ADR, BRD, FDD, User Stories) are approved (Stage 6) to ground duration, story points, resources, and cost into the subsidiary plans and triple baselines.**
 
 ## 1. Executive Summary & Baselines
 - **Scope Baseline:** Pending; summarize the approved scope boundary and Charter trace after its plan gate.

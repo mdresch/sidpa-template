@@ -4,7 +4,7 @@
 
 A reusable, production-grade scaffold for the closed-loop governance-and-build methodology developed across `agent-learning`, `ADPA`, and `SocialEngage`. SIDPA establishes a formal, verifiable trace from strategic motivation through delivery, quality auditing, governance evolution, behavioral adaptation, and refined intent:
 
-$$\text{Spark} \longrightarrow \text{Ideation} \longrightarrow \text{Business Case} \longrightarrow \text{Benefits Statement} \longrightarrow \text{Charter} \longrightarrow \text{Pillars Exercise} \longrightarrow \text{High-Level ADRs} \longrightarrow \text{BRD} \longrightarrow \text{FDD} \longrightarrow \text{User Stories (Work Packages)} \longrightarrow \text{Subsidiary Plans \& PMP} \dots$$
+$$\text{Spark} \longrightarrow \text{Ideation} \longrightarrow \text{Business Case} \longrightarrow \text{Benefits Statement} \longrightarrow \text{Charter} \longrightarrow \text{Pillars Exercise} \longrightarrow \text{Requirements (ADR, BRD, FDD, Stories)} \longrightarrow \text{Subsidiary Plans \& PMP Baselines} \longrightarrow \text{Implementation Readiness Gate} \longrightarrow \text{Deliverables} \dots$$
 
 Every artifact-producing stage is gated by real, Bayesian `agent_learning` TaskPolicies operating under `DecisionAuthority.FULL` and multi-criteria `DecisionFrame` structures.
 
@@ -35,7 +35,7 @@ Turnkey CLI tools automating setup and planning:
 
 ### 3. Integrated Project Management Plan & Subsidiary Plans (`docs/project-docs/`)
 Structured templates and synthesized markdown documents mapping all 9 PMBOK knowledge areas:
-- `docs/project-docs/Project-Management-Plan.md` (and `.template.md`) — Stage 8 integrated PMP.
+- `docs/project-docs/Project-Management-Plan.md` (and `.template.md`) — Stage 7 integrated PMP & triple baselines.
 - `docs/project-docs/management-plans/` — Individual subsidiary plans:
   - `Scope-Management-Plan.md` (PMBOK 5.1)
   - `Schedule-Management-Plan.md` (PMBOK 6.1)
@@ -55,10 +55,12 @@ All document templates are annotated with PMBOK 8 Process Groups, process number
 - `Business-Case.template.md` & `Benefits-Statement.template.md` (Stage 4: Benefit)
 - `Project-Charter.template.md` (Stage 2: Objective — PMBOK 4.1)
 - `07-architecture/PILLARS-TEMPLATE.md` (Stage 5: Pillars Exercise — PMBOK 5.3)
-- `07-architecture/ADR-TEMPLATE.md` (Stage 5: High-Level Architecture — PMBOK 5.3)
+- `07-architecture/ADR-TEMPLATE.md` (Stage 6: Architectural Decision Records — PMBOK 5.3)
 - `project-docs/Business-Requirements/BRD-TEMPLATE.md` (Stage 6: Requirement — PMBOK 5.2)
 - `project-docs/Functional-Design/FDD-TEMPLATE.md` (Stage 6: Functional Design — PMBOK 5.3)
-- `user-stories/EPIC-TEMPLATE.md` (Stage 7: Work Packages — PMBOK 5.4)
+- `user-stories/EPIC-TEMPLATE.md` (Stage 6: Work Packages & User Stories — PMBOK 5.4)
+- `project-docs/Project-Management-Plan.template.md` (Stage 7: Integrated PMP & Baselines — PMBOK 4.2)
+- `project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice.template.md` (Stage 8: Implementation Readiness Gate & Execution Authorization)
 - `Adaptation-Plan.template.md` (Stage 18: Adaptation — PMBOK 4.6 Tailoring)
 - `Intent-Refinement-Proposal.template.md` (Stage 18: Refinement — PMBOK 4.7 Closing)
 - `registers/Audit-Register.template.md` (Stage 12: Audit Record — PMBOK 8.2)
@@ -89,13 +91,14 @@ Canonical action specifications, decision frames, and idle policy stores:
 
 The template enforces 7 fundamental governance invariants across the lifecycle:
 
-1. **PMP Precedes Technical Specifications (Invariant 1):** No ADR, BRD, FDD, or User Story may be considered baseline-approved without an active, approved `Project-Management-Plan.md` in place.
+1. **Requirements Ground Baselines (Invariant 1):** Technical Requirements (Stage 6: ADRs, BRDs, FDDs, User Stories) must be formulated and approved to define scope and work packages before the integrated Project Management Plan (Stage 7) and its triple baselines (Scope, Schedule, Cost) can be formally baselined (`PMP-BL-v1.0.0`).
 2. **Pillars Full-Coverage Invariant (Invariant 2):** High-level foundational ADRs drafted immediately after the Pillars Exercise must provide 100% full coverage across all identified pillars before moving to detailed requirements.
-3. **User Stories ARE Work Packages (Invariant 3):** User Stories derived from FDDs with BDD acceptance criteria constitute the concrete work packages that ground the Scope (5.1), Schedule (6.1), Cost (7.1), and Resource (9.1) subsidiary plans into the integrated PMP.
-4. **Governance Change Impact Matrix (Invariant 4):** Every Adaptation Plan must formally evaluate accepted Stage 17 amendments across all 9 subsidiary management plans using a structured Impact Matrix before selective re-orchestration.
+3. **User Stories ARE Work Packages (Invariant 3):** User Stories derived from FDDs with BDD acceptance criteria constitute the concrete work packages that ground the Scope (5.1/7.A), Schedule (6.1/7.B), Cost (7.1/7.D), and Resource (9.1/7.C) subsidiary plans into the integrated PMP.
+4. **Governance Change Impact Matrix (Invariant 4):** Every Adaptation Plan must formally evaluate accepted Stage 16 amendments across all 9 subsidiary management plans using a structured Impact Matrix before selective re-orchestration.
 5. **PMP Baseline Versioning & History Archival (Invariant 5):** Every approved PMP receives an immutable SemVer identifier (`PMP-BL-v1.0.0`, `PMP-BL-v1.1.0`). Prior baselines are atomically archived to `docs/project-docs/management-plans/history/{baseline_id}/`.
 6. **Baseline Traceability Invariant (Invariant 6):** Every approved PMP, ADR, BRD, FDD, User Story, and Adaptation Plan must record its governing PMP baseline identifier (`pmp_baseline: "PMP-BL-vX.Y.Z"`).
-7. **Deterministic Rollback Protocol (Invariant 7):** If downstream execution reveals regressions or operational failure (detected via ADR-005 `compare_decision_results()`), atomic rollback restores the prior approved baseline from archive and penalizes the escalation bandit.
+7. **Implementation Authorization Prerequisite (Invariant 7):** No developer may commence implementation work (Stage 9) until the Stage 8 Implementation Readiness Gate formally issues an Execution Authorization Notice reconciling all Stage 6 requirements approvals and the Stage 7 PMP baseline.
+8. **Deterministic Rollback Protocol (Invariant 8):** If downstream execution reveals regressions or operational failure (detected via ADR-005 `compare_decision_results()`), atomic rollback restores the prior approved baseline from archive and penalizes the escalation bandit.
 
 ---
 
@@ -105,17 +108,18 @@ The template enforces 7 fundamental governance invariants across the lifecycle:
 flowchart TD
     SPARK["Stage 1: Intent (Spark Capture & Ideation)<br/>approve-ideation"] --> CHARTER["Stage 2 & 4: Objectives & Benefits (Business Case & Charter)<br/>approve-business-case & approve-charter"]
     CHARTER --> PIL["Stage 5: Pillars Exercise<br/>PILLARS-EXERCISE.md"]
-    PIL --> ADR["Stage 5: High-Level ADRs (100% Pillar Coverage)<br/>approve-adr"]
-    ADR --> REQ["Stage 6: Requirements & Design (BRD & FDD)<br/>approve-brd & approve-fdd"]
-    REQ --> US["Stage 7: User Stories (Work Packages)<br/>approve-user-stories"]
-    US -->|"Grounds duration, story points, resources, cost"| PMP["Stage 8: Subsidiary Plans & Integrated PMP<br/>orchestrate_pmbok.py & approve-pmp"]
-    PMP --> WP["Stage 9: Work Package Entry Gate<br/>validate-intent-foundation"]
-    WP --> EXEC["Stage 10-11: Deliverables & Verification Evidence<br/>implement-story & test suite"]
-    EXEC --> AUDIT["Stage 12: Audit Record<br/>approve-audit-record"]
-    AUDIT --> OUTCOME["Stage 13-16: Outcomes, Observations & Lessons Learned<br/>resolve-kb-conflict"]
-    OUTCOME --> GOV["Stage 17: Governance Change<br/>classify-diff-type & escalate-diff-response"]
-    GOV --> ADAPT["Stage 18: Adaptation Plan<br/>approve-adaptation-plan"]
-    ADAPT -->|"Tailored updates to 9 subsidiary plans"| PMP
+    PIL --> ADR["Stage 6a: High-Level ADRs (100% Pillar Coverage)<br/>approve-adr"]
+    ADR --> REQ["Stage 6b: Requirements & Design (BRD & FDD)<br/>approve-brd & approve-fdd"]
+    REQ --> US["Stage 6c: User Stories (Work Packages)<br/>approve-user-stories"]
+    US -->|"Grounds duration, story points, resources, cost"| SUB["Stage 7a: Subsidiary Plans & Foundation Packs<br/>Scope (7.A), Schedule (7.B), Resource (7.C), Cost (7.D)<br/>approve-subsidiary-plan"]
+    SUB -->|"Integrates triple baselines"| PMP["Stage 7b: Integrated PMP<br/>Project-Management-Plan.md (PMP-BL-v1.0.0)<br/>approve-pmp"]
+    PMP --> WP["Stage 8: Implementation Readiness Gate<br/>(Implementation Authorization Notice)<br/>validate-intent-foundation"]
+    WP --> EXEC["Stage 9-10: Deliverables & Verification Evidence<br/>implement-story & test suite"]
+    EXEC --> AUDIT["Stage 11: Audit Record<br/>approve-audit-record"]
+    AUDIT --> OUTCOME["Stage 12-15: Outcomes, Insights & Lessons Learned<br/>resolve-kb-conflict"]
+    OUTCOME --> GOV["Stage 16: Governance Change<br/>classify-diff-type & escalate-diff-response"]
+    GOV --> ADAPT["Stage 17: Adaptation Plan<br/>approve-adaptation-plan"]
+    ADAPT -->|"Tailored updates to 9 subsidiary plans"| SUB
     ADAPT --> REFINE["Stage 18: Intent Refinement<br/>approve-intent-refinement"]
     REFINE -->|"Feeds next Spark Capture"| SPARK
 ```
@@ -163,7 +167,7 @@ The generated packs are pending templates, not approved baselines. Follow each m
 4. Author `Project-Charter.md`. Run `approve-charter`.
 
 ### Step 3: Orchestrate PMBOK 8 Subsidiary Plans and PMP
-Use the initialized Stage 6 foundation packs before synthesizing the PMP. Draft and review Scope first; Schedule requires a Scope baseline and credible duration evidence; Resource requires Scope and Schedule baselines; Cost additionally requires the Resource/Procurement evidence stated in the Charter. The manifests define the review, roll-up, and separate plan-approval gates. Do not create schedule or cost placeholders that imply evidence or approval where prerequisites are missing.
+Use the initialized Stage 7 foundation packs before synthesizing the PMP. Draft and review Scope first; Schedule requires a Scope baseline and credible duration evidence; Resource requires Scope and Schedule baselines; Cost additionally requires the Resource/Procurement evidence stated in the Charter. The manifests define the review, roll-up, and separate plan-approval gates. Do not create schedule or cost placeholders that imply evidence or approval where prerequisites are missing.
 
 After required inputs and foundation reviews are ready, synthesize the subsidiary plans and baseline `Project-Management-Plan.md`:
 ```powershell

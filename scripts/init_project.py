@@ -96,6 +96,11 @@ def init_project(
         copy_tree_merge(source_repo_root / "docs", dest_root / "docs", overwrite=force)
         print("    [+] Scaffolding docs/ (governance chain, templates, policy-shapes)")
 
+        # 3b. Source templates
+        if (source_repo_root / "templates").exists():
+            copy_tree_merge(source_repo_root / "templates", dest_root / "templates", overwrite=force)
+            print("    [+] Scaffolding templates/ (foundation pack source templates)")
+
         # 4. Agent Learning policies
         copy_tree_merge(
             source_repo_root / "data" / "agent-learning",
@@ -198,16 +203,22 @@ def init_project(
         # Foundation packs initialization
         init_foundations_script = dest_root / "scripts" / "init_management_plan_foundations.py"
         if init_foundations_script.exists():
-            result = subprocess.run(
-                [
-                    sys.executable,
-                    str(init_foundations_script),
-                    "--target-root",
-                    str(dest_root),
-                    "--project-name",
-                    clean_name,
-                ],
+            templates_dir = (
+                dest_root / "templates" / "management-plans"
+                if (dest_root / "templates" / "management-plans").exists()
+                else source_repo_root / "templates" / "management-plans"
             )
+            cmd = [
+                sys.executable,
+                str(init_foundations_script),
+                "--target-root",
+                str(dest_root),
+                "--project-name",
+                clean_name,
+            ]
+            if templates_dir.exists():
+                cmd.extend(["--template-root", str(templates_dir)])
+            result = subprocess.run(cmd)
             if result.returncode != 0:
                 print(
                     f"    [WARN] Foundation-pack initialization exited with code {result.returncode}. "
