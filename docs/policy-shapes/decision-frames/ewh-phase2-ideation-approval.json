@@ -1,0 +1,133 @@
+{
+  "task": "Phase 2 Intent & Ideation (Stage 1: Autonomous Multi-Agent Swarm & Cryptographic Provenance Catalyst): approve, reject, or request revision under PMP-BL-v2.0.0",
+  "criteria": [
+    {
+      "id": "strategic_problem_definition",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Crisp evolutionary problem statement in Spark-Capture.vNext.md elevating from deterministic telemetry to autonomous swarms, cryptographic provenance, and stochastic risk."
+    },
+    {
+      "id": "hypothesis_falsifiability",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Falsifiable hypothesis formulation in Ideation-Document.md (HYP-EWH-004 through HYP-EWH-007) with explicit empirical validation metrics, thresholds, and terminality criteria."
+    },
+    {
+      "id": "benefits_realization_quantification",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Rigorous quantitative benefit thresholds in Benefits-Statement.md (BEN-EWH-06 through BEN-EWH-09) with explicit realization windows and owners."
+    },
+    {
+      "id": "scientific_lineage_and_toil_reduction",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Unbroken cybernetic double-loop lineage from Stage 18 IR-PROP-v1.1.0 to SPARK-EWH-v2.0.0 with administrative toil elimination via IMP-EWH-031."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_ideation",
+      "evidence": [
+        {
+          "criterion_id": "strategic_problem_definition",
+          "source": "docs/project-docs/Spark-Capture.vNext.md",
+          "support": 0.99,
+          "confidence": 0.98
+        },
+        {
+          "criterion_id": "hypothesis_falsifiability",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.99,
+          "confidence": 0.98
+        },
+        {
+          "criterion_id": "benefits_realization_quantification",
+          "source": "docs/project-docs/Benefits-Statement.md",
+          "support": 0.98,
+          "confidence": 0.97
+        },
+        {
+          "criterion_id": "scientific_lineage_and_toil_reduction",
+          "source": "docs/project-docs/Intent-Refinement-Proposal.md",
+          "support": 0.99,
+          "confidence": 0.98
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_ideation",
+      "evidence": [
+        {
+          "criterion_id": "strategic_problem_definition",
+          "source": "docs/project-docs/Spark-Capture.vNext.md",
+          "support": 0.01,
+          "confidence": 0.85
+        },
+        {
+          "criterion_id": "hypothesis_falsifiability",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.02,
+          "confidence": 0.82
+        },
+        {
+          "criterion_id": "benefits_realization_quantification",
+          "source": "docs/project-docs/Benefits-Statement.md",
+          "support": 0.01,
+          "confidence": 0.84
+        },
+        {
+          "criterion_id": "scientific_lineage_and_toil_reduction",
+          "source": "docs/project-docs/Intent-Refinement-Proposal.md",
+          "support": 0.02,
+          "confidence": 0.85
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "strategic_problem_definition",
+          "source": "docs/project-docs/Spark-Capture.vNext.md",
+          "support": 0.05,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "hypothesis_falsifiability",
+          "source": "docs/project-docs/Ideation-Document.md",
+          "support": 0.05,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "benefits_realization_quantification",
+          "source": "docs/project-docs/Benefits-Statement.md",
+          "support": 0.05,
+          "confidence": 0.8
+        },
+        {
+          "criterion_id": "scientific_lineage_and_toil_reduction",
+          "source": "docs/project-docs/Intent-Refinement-Proposal.md",
+          "support": 0.05,
+          "confidence": 0.8
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ],
+  "constraints": [
+    "no_unfixed_critical_flaw"
+  ],
+  "minimum_margin": 0.05,
+  "uncertainty_penalty": 0.1,
+  "max_uncertainty": 1.0
+}
