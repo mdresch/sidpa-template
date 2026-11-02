@@ -57,3 +57,4 @@ export function resolveWikiRoot(vaultRoot = resolveVaultRoot()) {
   const wiki = path.join(vaultRoot, 'wiki');
   return fs.existsSync(wiki) ? wiki : path.join(vaultRoot, 'docs');
 }
+

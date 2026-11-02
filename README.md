@@ -44,6 +44,11 @@ Turnkey Node.js (zero-dependency ES module) toolchain managing cross-project kno
 - **`npm run brain:canvas`** / **`build-18-stage-canvas.mjs`** — Generates the visual 2D interactive Obsidian canvas (`18-Stage-Closed-Loop-Lifecycle.canvas`).
 - **`npm run brain:ground`** / **`ground-adrs-to-concepts.mjs`** — Automatically maps ADR decisions into foundational DMBOK2/BABOK ontological concepts.
 - **`npm run brain:query`** / **`query-knowledge-graph.mjs`** — High-speed CLI graph query engine tracing bidirectional lineages and cybernetic cascades in <15ms.
+- **`npm run brain:enrich:queue`** / **`discover-enrichment-gaps.mjs`** — Discovers missing or stub concepts across the vault, scores centrality, and writes the priority queue (`raw/enrichment-queue.json`).
+- **`npm run brain:enrich:topic`** / **`enrich-brain-topics.mjs`** — Master orchestrator for ontological topic enrichment: executes 5-facet web research, schema validation, ADR conflict checks, and vault ingestion.
+- **`npm run brain:enrich:list`** / **`list-enrichment-topics.mjs`** — Real-time CLI inspector viewing upcoming candidate queues, enriched concept counts, and DMBOK/BABOK framework taxonomy coverage.
+- **`npm run brain:enrich:audit`** / **`quarantine-pseudo-concepts.mjs`** — Audits existing concept notes against Topic Admission Guardrails, detecting and quarantining commit hashes, syntax tokens, or stopwords.
+- **`npm run brain:enrich:promote`** / **`promote-concept-authority.mjs`** — Human-in-the-loop authority promotion upgrading machine-generated notes (`authority_level: 1`) to verified architectural standards (`authority_level: 2`).
 
 ### 3. Integrated Project Management Plan & Subsidiary Plans (`docs/project-docs/`)
 Structured templates and synthesized markdown documents mapping all 9 PMBOK knowledge areas:

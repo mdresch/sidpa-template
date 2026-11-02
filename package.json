@@ -15,6 +15,13 @@
     "brain:drift": "node scripts/brain/brain-drift-detection.mjs",
     "brain:canvas": "node scripts/brain/build-18-stage-canvas.mjs",
     "brain:ground": "node scripts/brain/ground-adrs-to-concepts.mjs",
-    "brain:query": "node scripts/brain/query-knowledge-graph.mjs"
+    "brain:query": "node scripts/brain/query-knowledge-graph.mjs",
+    "brain:research": "node scripts/brain/research-engine.mjs",
+    "brain:enrich:queue": "node scripts/brain/discover-enrichment-gaps.mjs",
+    "brain:enrich:topic": "node scripts/brain/enrich-brain-topics.mjs",
+    "brain:enrich:list": "node scripts/brain/list-enrichment-topics.mjs",
+    "brain:enrich:audit": "node scripts/brain/quarantine-pseudo-concepts.mjs",
+    "brain:enrich:quarantine": "node scripts/brain/quarantine-pseudo-concepts.mjs --execute",
+    "brain:enrich:promote": "node scripts/brain/promote-concept-authority.mjs"
   }
 }

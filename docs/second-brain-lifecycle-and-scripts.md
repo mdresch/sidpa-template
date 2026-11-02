@@ -202,6 +202,48 @@ All Second Brain scripts in `scripts/brain/` run out of the box with zero extern
 | `npm run brain:canvas` | Generates 2D visual Obsidian canvas | For spatial visualization in Obsidian | `18-Stage-Closed-Loop-Lifecycle.canvas` |
 | `npm run brain:ground` | ADR to ontology concept grounder | After accepting new ADRs | Bidirectional ADR-to-concept links |
 | `npm run brain:query` | High-speed knowledge graph query CLI | For researching prior architectural decisions | Instant trace and relationship queries |
+| `npm run brain:enrich:queue` | Priority topic discovery & queue builder | When new ungrounded concepts enter the vault | `raw/enrichment-queue.json` |
+| `npm run brain:enrich:topic` | Master ontological topic enrichment runner | To synthesize web evidence into Concept notes | Generated `Concept-*.md` notes & MOCs |
+| `npm run brain:enrich:list` | Topic directory & queue inspector | To view pending candidates & taxonomy status | CLI topic directory & queue overview |
+| `npm run brain:enrich:audit` | Topic admission guardrail audit | To detect noise or pseudo-concept notes | Audit report of invalid concepts |
+| `npm run brain:enrich:quarantine` | Quarantines noise notes & commit hashes | When pseudo-concepts are discovered | Moves noise notes to `raw/quarantined/` |
+| `npm run brain:enrich:promote` | Human-in-the-loop authority promotion | To promote machine concepts (L1) to reviewed (L2) | Upgraded note `authority_level: 2` |
+| `npm run brain:research` | Standalone 5-facet research engine | When evaluating standards alignment | Tier-1/Tier-2 evidence battery |
+
+---
+
+### 3.1 The 4-Phase Cognitive Topic Enrichment Pipeline
+
+The **Topic Enrichment Engine** powers **Stage 2 (Feature Research & Cybernetic Flow Loop)** and **Stage 15 (Diagnostic Findings & Causal Insights)**. It ensures that no architectural pattern, protocol, or concept remains an undocumented stub or ungrounded buzzword:
+
+```
+1. Discovery & Queueing (Phase 1)
+   └── discover-enrichment-gaps.mjs
+       Scans all wiki/ markdown notes, parses unresolved wikilinks, ranks candidates by graph centrality,
+       filters commit SHAs/stopwords via topic-guardrails.mjs, and writes raw/enrichment-queue.json.
+            │
+2. 5-Facet Web Research & Authority Scoring (Phase 2)
+   └── research-engine.mjs
+       Generates 5 ontologically grounded query facets (Definitions, Core Principles, Best Practices,
+       Anti-Patterns, and Operational KPIs). Whitelists Tier-1 authority domains (ISO/IEC, NIST, DAMA,
+       W3C, RFC, TOGAF) and Tier-2 engineering portals (IEEE, ACM, Martin Fowler, Netflix TechBlog).
+            │
+3. Cognitive Synthesis & Dual-Validation Guardrails (Phase 3)
+   └── synthesis-validator.mjs
+       Gate A: Enforces strict JSON Schema compliance against ONTOLOGY.json (v1.1.0-LOCKED).
+       Gate B: Runs Adversarial ADR Decision Inversion tests to verify that the proposed concept
+       does not contradict accepted project architectural boundaries.
+            │
+4. Vault Ingestion & MOC Hub Recompilation (Phase 4)
+   └── vault-ingestion.mjs & enrich-brain-topics.mjs
+       Constructs canonical Concept-<slug>.md notes, classifies taxonomy via taxonomy-router.mjs,
+       wires bidirectional semantic edges, and dynamically updates Map of Content (MOC) hubs.
+            │
+5. Curation & Lifecycle Evolution (Phase 5)
+   ├── quarantine-pseudo-concepts.mjs: Quarantines syntax fragments, commits, or stopwords.
+   ├── promote-concept-authority.mjs: Promotes machine-generated notes (Level 1) to human-ratified (Level 2).
+   └── list-enrichment-topics.mjs: Real-time CLI cockpit monitoring topic queues and DMBOK coverage.
+```
 
 ---
 
@@ -240,3 +282,4 @@ When developing a project bootstrapped from `sidpa-template`:
    npm run lifecycle
    ```
    Confirm all 18 stages pass with 100% verification and 0 open cognition loops.
+
