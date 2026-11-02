@@ -66,3 +66,4 @@ Upon verification of the final story of each Epic (Stage 10, Step 9):
 ## 4. Phase Close Synthesis (Stage 18 Closed-Loop Link)
 
 All improvement ideas designated as `Rolled into Phase Next Intent Refinement` are systematically harvested during **Stage 18** by `Intent-Refinement-Proposal.md` and mapped directly into the **Phase 2 Work Breakdown Structure** of `SPARK-{PROJECT_PREFIX}-vNext.md`.
+

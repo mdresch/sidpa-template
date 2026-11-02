@@ -48,8 +48,8 @@ Minimal code only — no speculative generalization.
 ### 6. Validate
 Run the story's contract, then its epic's contract suite.
 
-### 7. Commit & log
-`implementation-log.md`: one entry per completed story, append-only, never edited. If the implementation and its own log entry must be committed together before the commit's hash is known, use a `pending` placeholder, backfilled by whichever commit runs next (or by a pre-commit hook that resolves it automatically, if one exists — confirmed real in at least one of the two source projects).
+### 7. Commit & log (Automated via CLI)
+Run `npm run story:done <STORY-ID>` (e.g. `npm run story:done US-01.1`). The CLI automatically executes the story's contract test suite, verifies database referential integrity, stamps the audit row in `docs/registers/Story-Execution-Register.md`, and creates a single atomic Git commit (`feat(US-X.Y): ...`). Manual two-phase commit logging is deprecated, eliminating commit hash drift.
 
 ### 8. Open a PR, don't merge directly
 Direct-push-to-default-branch was tried once (ADPA's real Story 1.2) and found to bypass real branch-protection value, not just a compliance checkbox — PR review triggers scrutiny no local check can provide. Push the branch, open the PR, tear down the worktree only after it actually merges upstream.

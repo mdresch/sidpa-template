@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "node scripts/run-contracts.mjs",
+    "story:done": "node scripts/complete-story.mjs",
+    "story:verify": "node scripts/complete-story.mjs --dry-run",
     "lifecycle": "node scripts/brain/run-lifecycle-pipeline.mjs --local",
     "lifecycle:repo": "node scripts/brain/run-lifecycle-pipeline.mjs --local",
     "lifecycle:vault": "node scripts/brain/run-lifecycle-pipeline.mjs",
