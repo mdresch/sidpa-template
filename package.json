@@ -4,6 +4,7 @@
   "description": "Synthetic Intent-Driven Process Architecture (SIDPA) - 18-Stage Closed-Loop Governance & Second Brain Scaffold",
   "type": "module",
   "scripts": {
+    "test": "node scripts/run-contracts.mjs",
     "lifecycle": "node scripts/brain/run-lifecycle-pipeline.mjs --local",
     "lifecycle:repo": "node scripts/brain/run-lifecycle-pipeline.mjs --local",
     "lifecycle:vault": "node scripts/brain/run-lifecycle-pipeline.mjs",
