@@ -92,6 +92,22 @@ def init_project(
                 shutil.copy2(s, target_script)
         print("    [+] Scaffolding scripts/ (init_project.py, orchestrate_pmbok.py)")
 
+        # 2b. Second Brain suite (18-stage runner, healing, compiler)
+        if (source_repo_root / "scripts" / "brain").exists():
+            copy_tree_merge(
+                source_repo_root / "scripts" / "brain",
+                dest_root / "scripts" / "brain",
+                overwrite=force,
+            )
+            print("    [+] Scaffolding scripts/brain/ (Second Brain 18-stage runner, healing & compiler)")
+
+        # 2c. package.json for lifecycle scripts
+        target_pkg = dest_root / "package.json"
+        source_pkg = source_repo_root / "package.json"
+        if source_pkg.exists() and (not target_pkg.exists() or force):
+            shutil.copy2(source_pkg, target_pkg)
+            print("    [+] Scaffolding package.json (npm lifecycle and brain:* scripts)")
+
         # 3. Docs & templates
         copy_tree_merge(source_repo_root / "docs", dest_root / "docs", overwrite=force)
         print("    [+] Scaffolding docs/ (governance chain, templates, policy-shapes)")

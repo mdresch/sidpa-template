@@ -25,13 +25,25 @@ A complete, modular Python system enforcing PMBOK 8 and BABOK standards:
 
 ### 2. Automation & Orchestration Scripts (`scripts/`)
 Turnkey CLI tools automating setup and planning:
-- **`scripts/init_project.py`** — Initializes a new project from the template, renaming `template-governance` to `<name>-governance` in active policies while keeping `agent-learning-governance` intact, instantiating `.template.md` documents, and scaffolding the Scope, Schedule, Resource, and Cost foundation packs.
+- **`scripts/init_project.py`** — Initializes a new project from the template, renaming `template-governance` to `<name>-governance` in active policies while keeping `agent-learning-governance` intact, instantiating `.template.md` documents, scaffolding the Scope, Schedule, Resource, and Cost foundation packs, and provisioning the Second Brain toolchain.
 - **`scripts/init_management_plan_foundations.py`** — Creates missing foundation-pack manifests and artifacts in an existing project without overwriting project-authored files. Supports selecting packs and a target project root.
 - **`scripts/orchestrate_pmbok.py`** — Automates subsidiary plan generation and PMP synthesis:
   - **Full Planning (`--mode full`)**: Ingests `Project-Charter.md` and User Story work packages, generates all 9 subsidiary management plans, and integrates them into `Project-Management-Plan.md`.
   - **Closed-Loop Adaptation (`--mode adapt`)**: Parses checked items in `Adaptation-Plan.md` (Stage 17) and selectively regenerates only the impacted subsidiary management plans.
   - **Deterministic Rollback (`--mode rollback`)**: Restores prior baselines from history archives in the event of downstream operational regression.
   - **Offline Mode (`--mock`)**: Supports deterministic local execution without external API keys.
+
+### 2.1 Second Brain 18-Stage Automation & Healing Toolchain (`scripts/brain/`)
+Turnkey Node.js (zero-dependency ES module) toolchain managing cross-project knowledge synthesis, link healing, and cybernetic loop verification (see [docs/second-brain-lifecycle-and-scripts.md](docs/second-brain-lifecycle-and-scripts.md)):
+- **`npm run lifecycle`** / **`run-lifecycle-pipeline.mjs`** — Unified 18-stage pipeline runner; verifies that every governed stage from Stage 1 (Spark) to Stage 18 (Intent Refinement) has valid artifacts and 100% closed cybernetic return loops.
+- **`npm run brain:heal`** / **`heal-brain.mjs`** — Automated wikilink and alias healing engine; scans all notes, discovers canonical targets, and auto-repairs broken wikilinks.
+- **`npm run brain:diagnose`** / **`diagnose-broken-links.mjs`** — Diagnostic scanner identifying broken targets and unresolved cross-project links.
+- **`npm run brain:compile`** / **`compile-ontology-graph.mjs`** — Compiles the concept adjacency matrix, audits closed vs open cognition loops, and enforces the zero-orphan-concept invariant.
+- **`npm run brain:validate`** / **`synthesis-validator.mjs`** — Schema conformance and adversarial decision inversion validator for cognitive synthesis.
+- **`npm run brain:drift`** / **`brain-drift-detection.mjs`** — Detects drift between codebase deliverables, test suites, and Second Brain ontological specifications.
+- **`npm run brain:canvas`** / **`build-18-stage-canvas.mjs`** — Generates the visual 2D interactive Obsidian canvas (`18-Stage-Closed-Loop-Lifecycle.canvas`).
+- **`npm run brain:ground`** / **`ground-adrs-to-concepts.mjs`** — Automatically maps ADR decisions into foundational DMBOK2/BABOK ontological concepts.
+- **`npm run brain:query`** / **`query-knowledge-graph.mjs`** — High-speed CLI graph query engine tracing bidirectional lineages and cybernetic cascades in <15ms.
 
 ### 3. Integrated Project Management Plan & Subsidiary Plans (`docs/project-docs/`)
 Structured templates and synthesized markdown documents mapping all 9 PMBOK knowledge areas:

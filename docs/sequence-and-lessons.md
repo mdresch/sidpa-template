@@ -71,7 +71,8 @@ When AI agents or subagents generate any governance document, they must adhere t
 
 ---
 
-## 7. The chain's known, real, open ends
+## 7. The chain's closed loop & empirical precedents
 
 21. **Observation → Insight → Lesson Learned is a cross-project concern, not a per-project one to rebuild.** SocialEngage's own `resolve-kb-conflict` lives under a shared knowledge-base-ingestor agent, not under the project's own governance namespace. If a project has access to a shared knowledge base, integrate with it; don't build a project-local copy of this stage without evidence the shared one doesn't fit.
-22. **Adaptation → Intent Refinement remains uncovered everywhere, including in the most mature real precedent.** No project in this methodology's real history has a working shape for "did an accepted change actually change behavior, and should that refine the original Intent/Hypothesis." Don't invent one here — watch for a real first case, the same discipline every other policy in this chain was built by.
+22. **Adaptation → Intent Refinement loop resolved and proven in Enterprise Work Hierarchy.** Historically open across ADPA and SocialEngage, the complete closing loop from Stage 13 raw telemetry observations through Stage 17 Adaptation Plans and Stage 18 Intent Refinements was formally achieved and codified in Enterprise Work Hierarchy (Epic 10 completion, 13 empirical observations ingested, LL-041 crystallized). The loop formally closes when refined intent feeds the subsequent Phase Spark and amends originating ADRs via fast-path governance.
+23. **Second Brain Ingestion & Healing Toolchain Protocol.** Knowledge synthesis requires dual-locus discipline: local code repository registers (`Audit-Register.md`, test suites) must be ingested into the central Obsidian Second Brain (`06 Synthesis & Lessons Learned/OBS-*.md`, `LL-*.md`). Running `scripts/brain/heal-brain.mjs` immediately after observation authoring resolves wikilink ambiguities and prevents broken cross-project reference rot. Always run `npm run lifecycle` to mathematically verify that all 18 stages maintain 100% vertical traceability and 0 open cognition loops.
