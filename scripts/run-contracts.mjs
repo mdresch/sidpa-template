@@ -20,3 +20,4 @@ if (testFiles.length === 0) {
 console.log(`Running ${testFiles.length} contract test suites with node:test...`);
 const res = spawnSync('node', ['--test', ...testFiles], { stdio: 'inherit' });
 process.exit(res.status ?? 0);
+

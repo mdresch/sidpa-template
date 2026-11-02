@@ -54,6 +54,19 @@ Run the story's contract, then its epic's contract suite.
 ### 8. Open a PR, don't merge directly
 Direct-push-to-default-branch was tried once (ADPA's real Story 1.2) and found to bypass real branch-protection value, not just a compliance checkbox — PR review triggers scrutiny no local check can provide. Push the branch, open the PR, tear down the worktree only after it actually merges upstream.
 
+### 9. Breakout & recap (last story of the epic only)
+After contracts are verified and the PR merges on the epic's final story, hold the light breakout recap defined in ADR-010 / PMBOK Quality. Evaluate two distinct, complementary postures:
+
+- **Defensive Posture (Traps & Defects):**
+  Review unexpected traps, subtle defects, review findings, or test quirks. Record each lesson as an `LL-###` entry in `docs/registers/Lessons-Learned-Register.md` (or Second Brain project lessons folder), or record a short no-new-lessons sign-off entry.
+
+- **Positive & Generative Posture (Improvement & Value-Add Cadence):**
+  Ask the mandatory cadence question:
+  > *"What improvement ideas, architectural simplifications, developer-experience boosts, or product opportunities emerged during this Epic that could add value to upcoming Epics or roll into the Intent Refinement Proposal for the next phase?"*
+  - **If ideas emerged:** Record each as an `IMP-###` entry in `docs/registers/Continuous-Improvement-Register.md` (fields: ID, Originating Epic, Title, Description, Benefit / Value Potential, and Disposition: `In-Flight Candidate` for immediate CCB adaptation vs `Rolled into Phase Next Intent Refinement`).
+  - **If no new ideas emerged:** Record a brief sign-off entry: *"Epic [N] Recap: No new improvement ideas identified."*
+  - **Cybernetic Return Loop:** During Stage 18 (Intent Refinement & Phase Close), all ideas marked `Rolled into Phase Next Intent Refinement` are systematically harvested into `Intent-Refinement-Proposal.md` to synthesize the catalyst backlog for the subsequent cycle phase (`SPARK-vNext`).
+
 ## When Step 1 fails outright — not every "story" is code-shaped
 
 Confirmed twice, independently, by actually running this loop rather than assuming: a story can turn out to have no code deliverable at all (an operational/data-verification exercise), or an *epic* can turn out to have zero story-shaped entries in it at all (every real decision in its source ADR was a convention for future work, not a current build target). Neither is a flaw in the loop — it's the loop correctly refusing to force a template onto work that doesn't have that shape. **Reclassify, don't force**: if the project has a Governance-Exercise-style register for "a real-world prerequisite check with no code deliverable," use it. If it doesn't yet, that absence is itself worth naming before inventing a lighter-weight story variant for a category of one.
@@ -75,4 +88,4 @@ Also: install this skill into the new project's `.claude/skills/` **before** its
 
 ## Definition of done
 
-Contract exists and passes; epic's contract suite still passes; `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `implementation-log.md` entry exists, hash `pending` or resolved; contract fixtures are committed and the contract passes on a clean clone.
+Contract exists and passes; epic's contract suite still passes; `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `implementation-log.md` entry exists, hash `pending` or resolved; contract fixtures are committed and the contract passes on a clean clone; for the epic's last story only, the breakout recap is held and recorded in both `Lessons-Learned-Register.md` (an `LL-###` entry or no-new-lessons sign-off) and `Continuous-Improvement-Register.md` (an `IMP-###` entry or no-new-ideas sign-off).

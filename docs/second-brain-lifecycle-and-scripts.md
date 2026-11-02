@@ -128,7 +128,11 @@ flowchart LR
   - **Class**: `Deliverable`
   - **Process**: PMBOK 4.3 Direct & Manage Project Work; contract-first test-driven development (TDD).
   - **Tooling**: `.claude/skills/implement-story`
-  - **Exit Gate**: Clean compilation, zero lint errors, all unit tests passing.
+  - **Per-Epic Micro-Cadence (Dual Posture Recap)**:
+    At the conclusion of each Epic (Step 9):
+    1. *Defensive Posture (Traps & Defects)*: Review subtle defects, traps, or test gotchas $\rightarrow$ `LL-###` in `Lessons-Learned-Register.md`.
+    2. *Positive Posture (Continuous Improvement & Ideas)*: Mandatory prompt: *"What improvement ideas, architectural simplifications, developer-experience boosts, or product opportunities emerged that could add value to upcoming Epics or roll into the Intent Refinement Proposal for the next phase?"* $\rightarrow$ Logged as `IMP-###` in `docs/registers/Continuous-Improvement-Register.md` (or sign off if no new ideas).
+  - **Exit Gate**: Clean compilation, zero lint errors, all unit tests passing, dual breakout recap recorded.
 
 * **Stage 11: Verification Evidence & Executable Test Suites (`tests/`)**
   - **Class**: `VerificationEvidence` / `QualityGate`
@@ -180,6 +184,7 @@ flowchart LR
   - **Class**: `Capability` / `IntentRefinement`
   - **Process**: PMBOK 4.7 Close Project or Phase; evaluate whether realized outcomes alter original strategic motivations.
   - **Policy**: `approve-intent-refinement` (`DecisionAuthority.FULL`)
+  - **Continuous Improvement Feed**: Automatically harvests all deferred improvement ideas (`Rolled into Phase Next Intent Refinement`) from `docs/registers/Continuous-Improvement-Register.md` directly into the Phase Next Work Breakdown Structure.
   - **Loop Closure (Step 19)**: Refined intent seeds the **Stage 1 Spark** for Phase N+1; fast-path amends originating Stage 5 ADRs.
   - **Exit Gate**: 100% closed cybernetic return loop. Zero unclosed cognition loops.
 
