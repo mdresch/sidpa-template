@@ -1,0 +1,127 @@
+{
+  "task": "ADR-013 (Stochastic Monte Carlo Simulation, CPM Slack Analytics, LP Optimization & Lipke's Earned Schedule): approve, reject, or request revision under PMP-BL-v2.0.0",
+  "criteria": [
+    {
+      "id": "architectural_soundness",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Formulates 10,000-iteration Latin Hypercube Sampling (LHS), stochastic CPM Total/Free float, Criticality Index (CI), LP portfolio budget rebalancing, and Lipke's Earned Schedule (ES, SV_t, SPI_t, EAC_t) bounded to OBJ-P2-03 (<= +-5% delivery variance at P80 confidence)."
+    },
+    {
+      "id": "alternatives_considered",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Evaluates and rejects deterministic single-point PERT on static Gantt charts, standard pseudo-random Monte Carlo, traditional degenerate EVM only, and heavy external Python daemon bindings."
+    },
+    {
+      "id": "consequences_honest",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Accurately discloses 3-point estimation requirement and ~2.5s simulation CPU consumption as explicit engineering trade-offs."
+    },
+    {
+      "id": "non_technical_executive_justification",
+      "weight": 1.0,
+      "minimum_sources": 1,
+      "description": "Provides clear non-technical business justification, Flaw of Averages mitigation, defensible P80 commitments, and explicit linkage to upcoming Risk, Schedule, and Cost management plan updates under PMP-BL-v2.0.0."
+    }
+  ],
+  "options": [
+    {
+      "action_id": "approve_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-013-Stochastic-Monte-Carlo-Simulation-and-CPM-Slack-Analytics.md#section-5",
+          "support": 0.98,
+          "confidence": 0.96
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-013-Stochastic-Monte-Carlo-Simulation-and-CPM-Slack-Analytics.md#section-6",
+          "support": 0.95,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-013-Stochastic-Monte-Carlo-Simulation-and-CPM-Slack-Analytics.md#section-7",
+          "support": 0.94,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "non_technical_executive_justification",
+          "source": "ADR-013-Stochastic-Monte-Carlo-Simulation-and-CPM-Slack-Analytics.md#section-1",
+          "support": 0.97,
+          "confidence": 0.95
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    },
+    {
+      "action_id": "reject_adr",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-013-Stochastic-Monte-Carlo-Simulation-and-CPM-Slack-Analytics.md#section-5",
+          "support": 0.02,
+          "confidence": 0.95
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-013-Stochastic-Monte-Carlo-Simulation-and-CPM-Slack-Analytics.md#section-6",
+          "support": 0.03,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-013-Stochastic-Monte-Carlo-Simulation-and-CPM-Slack-Analytics.md#section-7",
+          "support": 0.03,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "non_technical_executive_justification",
+          "source": "ADR-013-Stochastic-Monte-Carlo-Simulation-and-CPM-Slack-Analytics.md#section-1",
+          "support": 0.02,
+          "confidence": 0.95
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": false
+      }
+    },
+    {
+      "action_id": "request_revision_before_decision",
+      "evidence": [
+        {
+          "criterion_id": "architectural_soundness",
+          "source": "ADR-013-Stochastic-Monte-Carlo-Simulation-and-CPM-Slack-Analytics.md#section-5",
+          "support": 0.04,
+          "confidence": 0.95
+        },
+        {
+          "criterion_id": "alternatives_considered",
+          "source": "ADR-013-Stochastic-Monte-Carlo-Simulation-and-CPM-Slack-Analytics.md#section-6",
+          "support": 0.04,
+          "confidence": 0.94
+        },
+        {
+          "criterion_id": "consequences_honest",
+          "source": "ADR-013-Stochastic-Monte-Carlo-Simulation-and-CPM-Slack-Analytics.md#section-7",
+          "support": 0.05,
+          "confidence": 0.92
+        },
+        {
+          "criterion_id": "non_technical_executive_justification",
+          "source": "ADR-013-Stochastic-Monte-Carlo-Simulation-and-CPM-Slack-Analytics.md#section-1",
+          "support": 0.03,
+          "confidence": 0.95
+        }
+      ],
+      "constraint_results": {
+        "no_unfixed_critical_flaw": true
+      }
+    }
+  ]
+}
