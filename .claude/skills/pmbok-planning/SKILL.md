@@ -73,6 +73,9 @@ python scripts/orchestrate_pmbok.py --mode rollback --to-baseline PMP-BL-v1.0.0
 ```
 
 ### 7. Phase Next Evolutionary Seeding (Stage 18 -> Stage 1)
+
+**Planning-round size is a hybrid agile/waterfall tailoring decision, scaled to uncertainty — not a fixed batch size.** Don't try to fix every problem in one go, especially the genuinely unknown, high-uncertainty ones. Well-understood, already-evidenced work can be safely batch-planned further ahead; genuinely novel, unevidenced work should not be pre-committed into the same upfront batch as its well-understood neighbors. If a phase's own batch turns out to contain an epic like that, an already-approved Epic can simply be marked `Deferred` to the next phase (the Epic itself stays `Approved` — only its execution window moves) rather than forcing it to execute before its own unknowns are ready to be tackled; close the current phase around its remaining, lower-uncertainty scope instead.
+
 When Stage 18 Intent Refinement completes with a disposition of `phase_handoff` and receives full Bayesian governance approval (`approve-intent-refinement`), run the orchestrator in `seed-next` mode to mechanically scaffold Phase $N+1$:
 
 ```powershell
