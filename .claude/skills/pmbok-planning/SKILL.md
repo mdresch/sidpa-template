@@ -20,6 +20,9 @@ After `Project-Charter.md` is approved by `approve-charter`:
 5. Decompose the FDD into concrete **User Stories** (Work Packages) with BDD acceptance criteria.
 
 ### 2. Full Planning & Subsidiary Plan Orchestration
+
+**Foundation Pack tailoring — a project-size decision, not a universal requirement.** Before drafting any subsidiary plan, decide whether it actually needs a Foundation Pack (`docs/project-docs/management-plans/<domain>-baseline/foundation/` — e.g. `Schedule-Basis-of-Estimates.md`, `Schedule-Network-Phase1.md`, each gated through its own Stage 6.B sequence) populated as a pre-commit step first. Only drop into that granular tier when the subsidiary plan document itself cannot hold the level of detail the project genuinely needs — e.g. a complex multi-team schedule that needs a real CPM network and basis-of-estimates before the plan's own prose can be written responsibly, not drafted around. A small project can rely on the subsidiary plan (or even the integrated PMP alone) to carry every required answer directly, with **no Foundation Pack at all** — do not populate one "for completeness" when the plan's own prose already answers everything required of it. (Known gap: `scripts/orchestrate_pmbok.py` currently generates a "Foundation Baseline Roll-up" section referencing a pending Foundation Pack for every subsidiary plan regardless of whether one is actually warranted — if a project skips the Foundation Pack tier for a plan, that generated section needs manual removal, not left as a dangling "Pending" reference.)
+
 Once User Stories (Work Packages) exist, they provide the real duration data, story points, and resource commitments needed to synthesize the Schedule (6.1), Cost (7.1), Scope (5.1), and Resource (9.1) plans into the integrated `Project-Management-Plan.md`:
 
 ```powershell
