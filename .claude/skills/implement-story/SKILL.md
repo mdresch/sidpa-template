@@ -20,11 +20,15 @@ cd ../<project>-story-<X.Y>
 ```
 If the worktree doesn't inherit dependencies automatically (confirmed real issue: `git worktree add` doesn't install `node_modules`), fix that before Step 5, not after a confusing test-runner failure.
 
+**If the branch or worktree already exists, a run was already started.** Do not adopt it and do not implement again. Stop here, inspect it read-only (`git worktree list`, `git status --short`, `git log <base>..feat/story-<X.Y>`, the story's entry in the project log), tell the human what is there, and continue with `heal-contract-failure` from its Step 1 (Intent). Leftover tests and code are evidence, not a verified contract: re-walk ADR, BRD, FDD and story to the contract, the component skill and the code, and show the contract able to fail (RED) before relying on it. Never commit uncommitted leftovers as this run's own without that walk, and never change a test or code only to turn a failing check green. Use a fresh heal branch and worktree named for the story.
+
 ### 1. Ingest the specification pyramid & check scope
 - **User Story** (wherever this project's epics live): confirm `Status: Ready`, never `Blocked`. Note Acceptance Criteria.
 - **Source ADR**: read in full, including any amendment.
 - **BRD**: business rules.
 - **FDD**: technical schemas, error codes, prerequisite gates.
+
+*Named data sources:* for every path or data source a story names as committed, run `git ls-files <path>` (and `git check-ignore <path>` if that is empty) now, not at Step 5. If it is not tracked (for example it sits in a git-ignored data directory that only exists in the author's working tree), amend the story's wording and record the gap as an open question in the FDD before building. A clean CI checkout will not have the author's local files.
 
 *Hierarchy rule:* ADR > BRD/FDD > User Story. If a story has **no** entry at this level at all — not even a Blocked one — that is itself a real finding (see "When Step 1 fails outright" below), not a reason to skip ahead.
 
@@ -56,6 +60,8 @@ Direct-push-to-default-branch was tried once (ADPA's real Story 1.2) and found t
 
 ### 9. Breakout & recap (last story of the epic only)
 After contracts are verified and the PR merges on the epic's final story, hold the light breakout recap defined in ADR-010 / PMBOK Quality. Evaluate two distinct, complementary postures:
+
+- **Propagation check (before closing the recap):** a lesson that names a Tier 2 skill file as its propagation target is applied in that file in the same PR as the register entry, citing the `LL-###` id in the changed step. Check that every Tier 2 target named by the previous epic's entries contains its LL id (`grep -c "LL-0xx" <file>`); a missing id is a finding, because a lesson that is only in the register recurs.
 
 - **Defensive Posture (Traps & Defects):**
   Review unexpected traps, subtle defects, review findings, or test quirks. Record each lesson as an `LL-###` entry in `docs/registers/Lessons-Learned-Register.md` (or Second Brain project lessons folder), or record a short no-new-lessons sign-off entry.
