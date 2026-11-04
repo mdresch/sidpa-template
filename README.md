@@ -80,7 +80,7 @@ All document templates are annotated with PMBOK 8 Process Groups, process number
 - `project-docs/Status-Reports/Stage-8-Implementation-Authorization-Notice.template.md` (Stage 8: Implementation Readiness Gate & Execution Authorization)
 - `Adaptation-Plan.template.md` (Stage 18: Adaptation — PMBOK 4.6 Tailoring)
 - `Intent-Refinement-Proposal.template.md` (Stage 18: Refinement — PMBOK 4.7 Closing)
-- `registers/Audit-Register.template.md` (Stage 12: Audit Record — PMBOK 8.2)
+- `registers/Audit-Register.template.md` (Stage 11: Audit Record — PMBOK 8.2)
 - `registers/Story-Execution-Register.template.md` (Deliverable Tracking — PMBOK 4.3)
 - `registers/Project-Status-Register.template.md` (Cross-Cutting Orientation Snapshot — current Phase/Stage/Epic in one place, maintained more often than per-Epic; see `docs/sequence-and-lessons.md` §8)
 
