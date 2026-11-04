@@ -7,7 +7,7 @@ Generalized from two independently-converged real implementations (SocialEngage'
 - **Base branch name** for worktrees. (ADPA's real default branch was not `main` — confirmed the hard way, via a failed `git worktree add`.)
 - **Isolation mechanism.** SocialEngage used per-run ephemeral database clones; ADPA used two persistent Docker containers instead (`*-test` ephemeral, `*-dev` persistent). Confirm what this project actually has before assuming either shape.
 - **Contract file location convention.** SocialEngage used `contracts/epic-<N>/`; ADPA's real convention turned out to be `server/src/__tests__/modules/<module>/`. Check for an existing convention before inventing one.
-- **Language and test runner.** The loop below is written Node/Jest-first (SocialEngage, ADPA). A Python/pytest project (agent-learning) uses a flat `tests/test_<module>.py`, runs through its own venv, and needs that venv set up in each new worktree.
+- **Language and test runner — not one fixed ecosystem, confirm which one this project actually uses.** Real variants already confirmed across source projects, given equal weight (none of these is "the default" the others are exceptions to): **Jest** (SocialEngage, ADPA); Node's native **`node:test`** runner (Enterprise Work Hierarchy — a distinct real variant from Jest, not interchangeable in syntax); and **Python/`pytest`** (agent-learning), using a flat `tests/test_<module>.py`, run through its own venv that needs setting up in each new worktree (see Step 0). **Rust is not yet evidenced by a real case anywhere in this methodology.** If a project turns out to use Rust, do not assume `cargo test` conventions carry over from either shape above without confirming them fresh on that project's own first story — contract location, fixture/mock conventions, and worktree dependency provisioning all need the same "confirmed the hard way" treatment ADPA's base branch got, not an assumption borrowed from this file.
 - **Where contract fixtures live.** If contracts test against real artifacts (result files, sample documents), they must be **committed** under a stable path such as `tests/fixtures/<module>/`. Never the repo root, never untracked.
 - **Whether a mechanical enforcement layer exists** (a pre-commit hook, a CI gate tying code changes to a contract). If none exists yet, say so explicitly in this file's own copy for the new project — it changes how load-bearing Step 3 below is (see `heal-contract-failure`'s own note on this).
 - **Whether this project's own documents overload stage numbers.** Confirmed in Enterprise Work Hierarchy: BRDs, FDDs, Epics, and the PMP each independently stamped the same number (`Stage 7`) with a different meaning. If that's true here too, note it in `docs/registers/Project-Status-Register.md` §1 so nobody resolves "what stage are we at" from a single document's own `lifecycle_stage` frontmatter (see `docs/sequence-and-lessons.md` §8).
@@ -19,7 +19,7 @@ Generalized from two independently-converged real implementations (SocialEngage'
 git worktree add ../<project>-story-<X.Y> -b feat/story-<X.Y> <confirmed-base-branch>
 cd ../<project>-story-<X.Y>
 ```
-If the worktree doesn't inherit dependencies automatically (confirmed real issue: `git worktree add` doesn't install `node_modules`), fix that before Step 5, not after a confusing test-runner failure.
+If the worktree doesn't inherit dependencies automatically (confirmed real issue: `git worktree add` doesn't install `node_modules`), fix that before Step 5, not after a confusing test-runner failure. The same applies whatever this project's ecosystem turns out to be (see "Language and test runner" above): a Python project needs its venv created and populated in the new worktree before Step 3; an unevidenced Rust project would need its own equivalent (`cargo build`/`cargo fetch`) confirmed, not assumed to "just work" because the files are there.
 
 **If the branch or worktree already exists, a run was already started.** Do not adopt it and do not implement again. Stop here, inspect it read-only (`git worktree list`, `git status --short`, `git log <base>..feat/story-<X.Y>`, the story's entry in the project log), tell the human what is there, and continue with `heal-contract-failure` from its Step 1 (Intent). Leftover tests and code are evidence, not a verified contract: re-walk ADR, BRD, FDD and story to the contract, the component skill and the code, and show the contract able to fail (RED) before relying on it. Never commit uncommitted leftovers as this run's own without that walk, and never change a test or code only to turn a failing check green. Use a fresh heal branch and worktree named for the story.
 
@@ -42,7 +42,35 @@ Explicitly out of scope: <named adjacent work NOT touched this pass>
 ```
 
 ### 3. Write the contract (RED)
-One test per Acceptance Criterion, header comment naming its Story and ADR. Confirm the project's real contract-location convention (see "Before first use" above) before writing the first one.
+One test per Acceptance Criterion, header comment naming its Story and ADR. Confirm the project's real contract-location convention (see "Before first use" above) before writing the first one. The skeleton differs by ecosystem — write whichever this project's confirmed language/test runner actually calls for, not necessarily the first one listed:
+
+**JS/TS — Jest or `node:test` (confirm which; they are not interchangeable syntax):**
+```js
+// Story <X.Y> — <title> (ADR-<NNN>)
+describe('<AC-id>: <paraphrase>', () => {
+  it('<expected behavior>', () => {
+    // arrange / act / assert — must fail (RED) before Step 5
+  });
+});
+```
+
+**Python — `pytest`:**
+```python
+# Story <X.Y> — <title> (ADR-<NNN>)
+def test_<ac_id>_<paraphrase>():
+    # arrange / act / assert — must fail (RED) before Step 5
+    ...
+```
+
+**Rust — `cargo test` (unevidenced; treat as a starting guess, not a confirmed convention):**
+```rust
+// Story <X.Y> — <title> (ADR-<NNN>)
+#[test]
+fn <ac_id>_<paraphrase>() {
+    // arrange / act / assert — must fail (RED) before Step 5
+}
+```
+No real project in this methodology has run this loop in Rust yet. Confirm fixture location, mock/test-harness conventions, and worktree dependency provisioning on this project's own first story, then correct this file's own copy for the project — the same way ADPA corrected the base-branch assumption.
 
 ### 4. Derive or update the component `SKILL.md`
 Governing ADRs/Stories, contract files, load-bearing constraints, real call-site relationships.
@@ -51,7 +79,7 @@ Governing ADRs/Stories, contract files, load-bearing constraints, real call-site
 Minimal code only — no speculative generalization.
 
 ### 6. Validate
-Run the story's contract, then its epic's contract suite.
+Run the story's own contract first, then the **whole project's accumulated contract suite** — every area built so far, not just this story's epic. The point of contracts accumulating over time is to let one story's change be checked against every other area at once; stopping at "this epic's suite" misses a regression this change caused somewhere else, and is exactly what `heal-contract-failure`'s "Cross-epic regression (a foreign contract breaks)" section exists to catch when this step is skipped. Whatever this project's confirmed language/test runner (see "Before first use") is, run its own equivalent of "everything": `node --test tests/contracts/**/*.test.js` or `jest` with no path filter (JS/TS — both run everything by default when given the project's test root), `pytest` with no path filter (Python — runs the whole `tests/` tree by default), or `cargo test` (Rust, unevidenced — runs the whole crate's tests by default; confirm this holds for the real project before relying on it).
 
 ### 7. Commit & log (Automated via CLI)
 Run `npm run story:done <STORY-ID>` (e.g. `npm run story:done US-01.1`). The CLI automatically executes the story's contract test suite, verifies database referential integrity, stamps the audit row in `docs/registers/Story-Execution-Register.md`, and creates a single atomic Git commit (`feat(US-X.Y): ...`). Manual two-phase commit logging is deprecated, eliminating commit hash drift.
@@ -99,4 +127,4 @@ Also: install this skill into the new project's `.claude/skills/` **before** its
 
 ## Definition of done
 
-Contract exists and passes; epic's contract suite still passes; `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `implementation-log.md` entry exists, hash `pending` or resolved; contract fixtures are committed and the contract passes on a clean clone; `docs/registers/Project-Status-Register.md` §1 reflects the real current state (see the session-boundary note above — check this even when the story is not the epic's last); for the epic's last story only, the breakout recap is held and recorded in both `Lessons-Learned-Register.md` (an `LL-###` entry or no-new-lessons sign-off) and `Continuous-Improvement-Register.md` (an `IMP-###` entry or no-new-ideas sign-off).
+Contract exists and passes; the whole project's accumulated contract suite still passes, not just the current epic's (see Step 6); `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `implementation-log.md` entry exists, hash `pending` or resolved; contract fixtures are committed and the contract passes on a clean clone; `docs/registers/Project-Status-Register.md` §1 reflects the real current state (see the session-boundary note above — check this even when the story is not the epic's last); for the epic's last story only, the breakout recap is held and recorded in both `Lessons-Learned-Register.md` (an `LL-###` entry or no-new-lessons sign-off) and `Continuous-Improvement-Register.md` (an `IMP-###` entry or no-new-ideas sign-off).
