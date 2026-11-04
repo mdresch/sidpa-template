@@ -82,6 +82,7 @@ All document templates are annotated with PMBOK 8 Process Groups, process number
 - `Intent-Refinement-Proposal.template.md` (Stage 18: Refinement — PMBOK 4.7 Closing)
 - `registers/Audit-Register.template.md` (Stage 12: Audit Record — PMBOK 8.2)
 - `registers/Story-Execution-Register.template.md` (Deliverable Tracking — PMBOK 4.3)
+- `registers/Project-Status-Register.template.md` (Cross-Cutting Orientation Snapshot — current Phase/Stage/Epic in one place, maintained more often than per-Epic; see `docs/sequence-and-lessons.md` §8)
 
 ### 5. Universal Agent QA Directives & Agent Skills (`.github/instructions/` & `.claude/skills/`)
 Specialized agent instructions and skills driving the automated lifecycle:

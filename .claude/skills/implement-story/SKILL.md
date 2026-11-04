@@ -10,6 +10,7 @@ Generalized from two independently-converged real implementations (SocialEngage'
 - **Language and test runner.** The loop below is written Node/Jest-first (SocialEngage, ADPA). A Python/pytest project (agent-learning) uses a flat `tests/test_<module>.py`, runs through its own venv, and needs that venv set up in each new worktree.
 - **Where contract fixtures live.** If contracts test against real artifacts (result files, sample documents), they must be **committed** under a stable path such as `tests/fixtures/<module>/`. Never the repo root, never untracked.
 - **Whether a mechanical enforcement layer exists** (a pre-commit hook, a CI gate tying code changes to a contract). If none exists yet, say so explicitly in this file's own copy for the new project — it changes how load-bearing Step 3 below is (see `heal-contract-failure`'s own note on this).
+- **Whether this project's own documents overload stage numbers.** Confirmed in Enterprise Work Hierarchy: BRDs, FDDs, Epics, and the PMP each independently stamped the same number (`Stage 7`) with a different meaning. If that's true here too, note it in `docs/registers/Project-Status-Register.md` §1 so nobody resolves "what stage are we at" from a single document's own `lifecycle_stage` frontmatter (see `docs/sequence-and-lessons.md` §8).
 
 ## The loop — mandatory, in order, for every story
 
@@ -67,6 +68,10 @@ After contracts are verified and the PR merges on the epic's final story, hold t
   - **If no new ideas emerged:** Record a brief sign-off entry: *"Epic [N] Recap: No new improvement ideas identified."*
   - **Cybernetic Return Loop:** During Stage 18 (Intent Refinement & Phase Close), all ideas marked `Rolled into Phase Next Intent Refinement` are systematically harvested into `Intent-Refinement-Proposal.md` to synthesize the catalyst backlog for the subsequent cycle phase (`SPARK-vNext`).
 
+  After committing, update `docs/registers/Project-Status-Register.md` §1 ("Last … completed" / "Next … to implement" / "Session close-off checkpoint") to match.
+
+**Session-boundary note (not step-gated):** Model/session cutoffs can happen abruptly, without a clean announcement, at any point mid-story — not only at Step 9 epic boundaries. Whenever work reaches a natural pause (a decision made, a correction applied, before starting something that will take many steps), update `docs/registers/Project-Status-Register.md` §1's "Session close-off checkpoint" row with the current real state, cited against `Audit-Register.md`'s `GOV-EX-###` gate-closure records rather than any single document's own authoring-time `lifecycle_stage` frontmatter (see `docs/sequence-and-lessons.md` §8, rule 24, for why that field can lag behind the project's actual position). Treat this as cheap, frequent insurance, not a formal gate.
+
 ## When Step 1 fails outright — not every "story" is code-shaped
 
 Confirmed twice, independently, by actually running this loop rather than assuming: a story can turn out to have no code deliverable at all (an operational/data-verification exercise), or an *epic* can turn out to have zero story-shaped entries in it at all (every real decision in its source ADR was a convention for future work, not a current build target). Neither is a flaw in the loop — it's the loop correctly refusing to force a template onto work that doesn't have that shape. **Reclassify, don't force**: if the project has a Governance-Exercise-style register for "a real-world prerequisite check with no code deliverable," use it. If it doesn't yet, that absence is itself worth naming before inventing a lighter-weight story variant for a category of one.
@@ -84,8 +89,8 @@ Story 5.1 ran this loop without the skill installed in the repo and drifted in f
 3. **Step 4 (component `SKILL.md`) skipped.** With no mechanical layer, nothing caught it; it was backfilled later. Treat it as a Definition-of-done item, not a nicety.
 4. **Log hash went stale after `git commit --amend`.** The `pending` backfill covers a *later* commit, not an amend. After any amend, re-read `git log -1` and fix the entry's hash.
 
-Also: install this skill into the new project's `.claude/skills/` **before** its first story, not after.
+Also: install this skill into the new project's `.claude/skills/` **before** its first story, not after. Instantiate `docs/registers/Project-Status-Register.template.md` into `docs/registers/Project-Status-Register.md` at the same time — before the first story, not backfilled after several Epics have already passed.
 
 ## Definition of done
 
-Contract exists and passes; epic's contract suite still passes; `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `implementation-log.md` entry exists, hash `pending` or resolved; contract fixtures are committed and the contract passes on a clean clone; for the epic's last story only, the breakout recap is held and recorded in both `Lessons-Learned-Register.md` (an `LL-###` entry or no-new-lessons sign-off) and `Continuous-Improvement-Register.md` (an `IMP-###` entry or no-new-ideas sign-off).
+Contract exists and passes; epic's contract suite still passes; `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `implementation-log.md` entry exists, hash `pending` or resolved; contract fixtures are committed and the contract passes on a clean clone; `docs/registers/Project-Status-Register.md` §1 reflects the real current state (see the session-boundary note above — check this even when the story is not the epic's last); for the epic's last story only, the breakout recap is held and recorded in both `Lessons-Learned-Register.md` (an `LL-###` entry or no-new-lessons sign-off) and `Continuous-Improvement-Register.md` (an `IMP-###` entry or no-new-ideas sign-off).
