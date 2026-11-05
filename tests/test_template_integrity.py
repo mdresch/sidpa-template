@@ -30,27 +30,39 @@ NINE_PLANS = [
 ]
 
 
-def test_there_are_nine_subsidiary_plans() -> None:
+def test_nine_subsidiary_plans_are_generated_not_shipped() -> None:
+    """The 9 subsidiary plans are Stage 7 outputs of orchestrate_pmbok.py --mode full
+    against a real project's own Charter -- they must never ship pre-filled in the
+    template itself (that was a real regression: self-hosted "SIDPA Project" plans
+    leaking into every project scaffolded from this template)."""
     plans_dir = REPO_ROOT / "docs" / "project-docs" / "management-plans"
-    assert plans_dir.is_dir()
     for plan_name in NINE_PLANS:
         plan_path = plans_dir / plan_name
-        assert plan_path.is_file(), f"Missing subsidiary plan: {plan_name}"
-        content = plan_path.read_text(encoding="utf-8")
-        assert 'lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"' in content, (
-            f"{plan_name} does not reflect Stage 7 lifecycle stage"
+        assert not plan_path.exists(), (
+            f"{plan_name} must not be pre-shipped in the template -- it is a generated "
+            "Stage 7 output. Delete it and let orchestrate_pmbok.py produce it per project."
+        )
+
+    orchestrator_src = (REPO_ROOT / "scripts" / "orchestrate_pmbok.py").read_text(encoding="utf-8")
+    for plan_name in NINE_PLANS:
+        plan_stem = plan_name.removesuffix(".md")
+        assert plan_stem in orchestrator_src, (
+            f"orchestrate_pmbok.py no longer appears to generate {plan_name}"
         )
 
 
-def test_project_management_plan_has_stage_7_frontmatter() -> None:
-    for filename in ["Project-Management-Plan.template.md", "Project-Management-Plan.md"]:
-        path = REPO_ROOT / "docs" / "project-docs" / filename
-        assert path.is_file(), f"Missing {filename}"
-        content = path.read_text(encoding="utf-8")
-        assert 'lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"' in content, (
-            f"{filename} does not reflect Stage 7 lifecycle stage"
-        )
-        assert 'pmbok_process: "4.2 Develop Project Management Plan"' in content
+def test_project_management_plan_template_has_stage_7_frontmatter() -> None:
+    template_path = REPO_ROOT / "docs" / "project-docs" / "Project-Management-Plan.template.md"
+    assert template_path.is_file(), "Missing Project-Management-Plan.template.md"
+    content = template_path.read_text(encoding="utf-8")
+    assert 'lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"' in content
+    assert 'pmbok_process: "4.2 Develop Project Management Plan"' in content
+
+    active_path = REPO_ROOT / "docs" / "project-docs" / "Project-Management-Plan.md"
+    assert not active_path.exists(), (
+        "Project-Management-Plan.md must not be pre-shipped in the template -- it is a "
+        "generated Stage 7 output, approved per project, not template content."
+    )
 
 
 def test_requirements_templates_have_stage_6_frontmatter() -> None:
@@ -68,7 +80,7 @@ def test_requirements_templates_have_stage_6_frontmatter() -> None:
         )
 
 
-def test_stage_8_authorization_notice_templates_exist() -> None:
+def test_stage_8_authorization_notice_template_exists_but_not_pre_authorized() -> None:
     reports_dir = REPO_ROOT / "docs" / "project-docs" / "Status-Reports"
     assert reports_dir.is_dir()
 
@@ -76,13 +88,20 @@ def test_stage_8_authorization_notice_templates_exist() -> None:
     active_notice = reports_dir / "Stage-8-Implementation-Authorization-Notice.md"
 
     assert template_notice.is_file(), "Missing Stage 8 notice template"
-    assert active_notice.is_file(), "Missing Stage 8 active notice document"
+    content = template_notice.read_text(encoding="utf-8")
+    assert 'artifact_type: "execution_authorization_notice"' in content
+    assert "Stage 8 (Implementation Readiness Gate" in content
+    assert "AUTHORIZED_TO_EXECUTE" in content
 
-    for path in [template_notice, active_notice]:
-        content = path.read_text(encoding="utf-8")
-        assert 'artifact_type: "execution_authorization_notice"' in content
-        assert "Stage 8 (Implementation Readiness Gate" in content
-        assert "AUTHORIZED_TO_EXECUTE" in content
+    # The active notice certifies that a real project has actually completed every
+    # upstream gate and been authorized to execute. The template itself has not --
+    # shipping this pre-filled was a real regression (a false execution-authorization
+    # claim for whatever project got scaffolded from this template).
+    assert not active_notice.exists(), (
+        "Stage-8-Implementation-Authorization-Notice.md must not be pre-shipped in the "
+        "template -- it asserts real execution authorization that only a real project's "
+        "own Stage 8 gate can grant."
+    )
 
 
 def test_foundation_packs_have_stage_7_manifests() -> None:
@@ -99,6 +118,32 @@ def test_foundation_packs_have_stage_7_manifests() -> None:
         assert f"## {expected_stage} process" in content, (
             f"{manifest_name} does not reference {expected_stage}"
         )
+
+
+def test_continuous_improvement_register_not_pre_shipped() -> None:
+    template_path = REPO_ROOT / "docs" / "registers" / "Continuous-Improvement-Register.template.md"
+    active_path = REPO_ROOT / "docs" / "registers" / "Continuous-Improvement-Register.md"
+    assert template_path.is_file(), "Missing Continuous-Improvement-Register.template.md"
+    assert not active_path.exists(), (
+        "Continuous-Improvement-Register.md must not be pre-shipped in the template -- "
+        "a real project's register starts empty and is populated per Epic, not seeded "
+        "with another project's worked example rows."
+    )
+
+
+def test_policy_shapes_contain_no_project_specific_identifiers() -> None:
+    """Regression guard: decision-frames/episodes shipped in the template must be
+    either generic (no real project name/codebase baked in) or explicitly marked
+    illustrative_example. Real project governance history does not belong here."""
+    policy_dir = REPO_ROOT / "docs" / "policy-shapes"
+    banned_substrings = ["enterprise-work-hierarchy", "EWH-", "Menno Drescher", "wiki/Projects/"]
+    for jf in policy_dir.rglob("*.json"):
+        content = jf.read_text(encoding="utf-8")
+        data = json.loads(content)
+        if isinstance(data, dict) and data.get("illustrative_example"):
+            continue
+        for banned in banned_substrings:
+            assert banned not in content, f"{jf.relative_to(REPO_ROOT)} contains project-specific identifier {banned!r}"
 
 
 def test_policy_shapes_and_frames_are_valid_json() -> None:
