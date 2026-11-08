@@ -39,6 +39,16 @@ If the worktree doesn't inherit dependencies automatically (confirmed real issue
 
 *Hierarchy rule:* ADR > BRD/FDD > User Story. If a story has **no** entry at this level at all — not even a Blocked one — that is itself a real finding (see "When Step 1 fails outright" below), not a reason to skip ahead.
 
+### 1b. Pre-flight specification & contract readiness gate
+```bash
+python scripts/spec_gate.py <X.Y>
+```
+The spec gate audits the story's acceptance criteria against adversarial checks (specification completeness, None-safety, boundary behavior, empty collections, non-finite domain checks, testability, precision tolerances, and architectural boundaries), applies Epic 14 critique deltas, and resolves a calibrated Bayesian readiness decision.
+
+- **Gate Result:** Must exit `PASSED / SPEC READY FOR CONTRACTS` with robust utility margin $\ge +0.05$.
+- **Adversarial Findings:** If the gate halts (`HALTED / SPECIFICATION INCOMPLETE`), do **not** proceed to contract drafting. Amend the story's acceptance criteria in the source markdown file to explicitly address the missing contracts (e.g., adding explicit empty collection return contracts or defensive None handling), then re-run `scripts/spec_gate.py <X.Y>` until it passes.
+- **Contract Interpretations:** The spec gate outputs recommended contract interpretations ($I_1, I_2, \dots$). These interpretations **must** be documented in the RED contract test file docstring (Step 3) to preserve specification intent across implementation.
+
 ### 2. State intent
 ```
 Intent: Story <X.Y> — <title> (ADR-<NNN>)
@@ -48,7 +58,7 @@ Explicitly out of scope: <named adjacent work NOT touched this pass>
 ```
 
 ### 3. Write the contract (RED)
-One test per Acceptance Criterion, header comment naming its Story and ADR. Confirm the project's real contract-location convention (see "Before first use" above) before writing the first one. The skeleton differs by ecosystem — write whichever this project's confirmed language/test runner actually calls for, not necessarily the first one listed:
+One test per Acceptance Criterion, header comment naming its Story and ADR. The contract test file's top-level docstring **must** document the recommended contract interpretations ($I_1, I_2, \dots$) derived in Step 1b by `scripts/spec_gate.py`. Confirm the project's real contract-location convention (see "Before first use" above) before writing the first one. The skeleton differs by ecosystem — write whichever this project's confirmed language/test runner actually calls for, not necessarily the first one listed:
 
 **JS/TS — Jest or `node:test` (confirm which; they are not interchangeable syntax):**
 ```js
@@ -93,6 +103,19 @@ Run `npm run story:done <STORY-ID>` (e.g. `npm run story:done US-01.1`). The CLI
 ### 8. Open a PR, don't merge directly
 Direct-push-to-default-branch was tried once (ADPA's real Story 1.2) and found to bypass real branch-protection value, not just a compliance checkbox — PR review triggers scrutiny no local check can provide. Push the branch, open the PR, tear down the worktree only after it actually merges upstream.
 
+### 8.1. Bayesian PR review gatekeeper
+```bash
+python scripts/pr_gate.py <pr_number>
+```
+The PR review gatekeeper evaluates CI checks, architectural boundaries, ingests reviewer critiques (Amazon Q, Cursor Bugbot, Claude, human markdown) into log-odds support shifts and doubt adjustments via Epic 14, and evaluates robust Bayesian utility margin.
+
+- **Gate Result:** Must exit `PASSED / APPROVED TO MERGE` with robust utility margin $\ge +0.05$.
+- **Adjudicating Findings:** If the gate halts (`HALTED / REVISIONS REQUIRED`), review the critical issues and open items, address the defects, and push updates to the branch until `pr_gate.py` passes.
+- **Automated Merge:** When ready to merge:
+  ```bash
+  python scripts/pr_gate.py <pr_number> --merge
+  ```
+
 ### 9. Breakout & recap (last story of the epic only)
 After contracts are verified and the PR merges on the epic's final story, hold the light breakout recap defined in ADR-010 / PMBOK Quality. Evaluate two distinct, complementary postures:
 
@@ -133,4 +156,4 @@ Also: install this skill into the new project's `.claude/skills/` **before** its
 
 ## Definition of done
 
-Contract exists and passes; the whole project's accumulated contract suite still passes, not just the current epic's (see Step 6); `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `implementation-log.md` entry exists, hash `pending` or resolved; contract fixtures are committed and the contract passes on a clean clone; `docs/registers/Project-Status-Register.md` §1 reflects the real current state (see the session-boundary note above — check this even when the story is not the epic's last); for the epic's last story only, the breakout recap is held and recorded in both `Lessons-Learned-Register.md` (an `LL-###` entry or no-new-lessons sign-off) and `Continuous-Improvement-Register.md` (an `IMP-###` entry or no-new-ideas sign-off).
+Pre-flight specification gate passed (`python scripts/spec_gate.py <X.Y>`) with margin $\ge +0.05$; contract interpretations ($I_1, I_2, \dots$) documented in contract test docstring; contract exists and passes; the whole project's accumulated contract suite still passes, not just the current epic's (see Step 6); `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `implementation-log.md` entry exists, hash `pending` or resolved; contract fixtures are committed and the contract passes on a clean clone; Bayesian PR gate passed (`python scripts/pr_gate.py <pr_number>`) with positive utility margin before merge; `docs/registers/Project-Status-Register.md` §1 reflects the real current state (see the session-boundary note above — check this even when the story is not the epic's last); for the epic's last story only, the breakout recap is held and recorded in both `Lessons-Learned-Register.md` (an `LL-###` entry or no-new-lessons sign-off) and `Continuous-Improvement-Register.md` (an `IMP-###` entry or no-new-ideas sign-off).
