@@ -79,14 +79,17 @@ There is an important distinction between the abstract conceptual trace and the 
 | 13 | **Observation** | **Monitoring & Controlling** | Telemetry Logs & Gotchas (`OBS-*.md`) | Second Brain Ingestion | `heal-brain.mjs`<br>`diagnose-broken-links.mjs` | Raw Input | Inputs: Runtime telemetry & review findings. Process: Record raw telemetry. Output: Unfiltered observation log. |
 | 14 | **Insight** | **Monitoring & Controlling** | Synthesized Technical Findings (`INSIGHT-*.md`) | `synthesis-validator.mjs` | `synthesis-validator.mjs` | `FULL` (trust existing, supersede, flag) | Inputs: Observation logs. Process: Synthesize causal significance. Output: Resolved insight node. |
 | 15 | **Lesson Learned** | **Monitoring & Controlling** | Formalized Knowledge (`LL-*.md`, Register) | `resolve-kb-conflict` | `heal-brain.mjs` | `FULL` (trust existing, supersede, flag) | Inputs: Verified insights. Process: Crystallize actionable knowledge. Output: Formalized Lessons Learned register. |
-| 16 | **Governance Change** | **Monitoring & Controlling** | Governance Amendments & Diffs (`GC-*.md`) | • `classify-diff-type`<br>• `escalate-diff-response` | `compile-ontology-graph.mjs` | Paired Pipeline: `FULL` / `LOW` | Inputs: Lessons learned & proposed diffs. Process: Semantic classification & escalation bandit. Output: Governed baseline update. |
-| 17 | **Adaptation Plan** | **Closing / Adaptive Feedback** | `Adaptation-Plan.md` | `approve-adaptation-plan` | `orchestrate_pmbok.py --mode adapt` | `FULL` (3 actions) | Inputs: Validated Stage 16 governance change & realized outcomes. Process: Tailor PMP subsidiary plans via Governance Change Impact Matrix. Output: Impacted plan list. |
+| 16 | **Governance Change** | **Monitoring & Controlling** | Governance Amendments & Diffs (`GC-*.md`) | • `classify-diff-type`<br>• `escalate-diff-response` | `compile-ontology-graph.mjs` | Paired Pipeline: `FULL` / `LOW` | Inputs: Lessons learned (`evidence_basis: execution`) or Stage 7-8 baseline findings (`evidence_basis: design_time`, §3.1) & proposed diffs. Process: Semantic classification & escalation bandit. Output: Governed baseline update. |
+| 17 | **Adaptation Plan** | **Closing / Adaptive Feedback** | `Adaptation-Plan.md` | `approve-adaptation-plan` | `orchestrate_pmbok.py --mode adapt` | `FULL` (3 actions) | Inputs: Validated Stage 16 governance change & realized outcomes from executed work (design-time changes go Stage 16 → Stage 6 directly, §3.1). Process: Tailor PMP subsidiary plans via Governance Change Impact Matrix. Output: Impacted plan list. |
 | 18 | **Intent Refinement** | **Closing / Strategic Feedback** | `Intent-Refinement-Proposal.md` | `approve-intent-refinement` | `build-18-stage-canvas.mjs`<br>`run-lifecycle-pipeline.mjs` | `FULL` (3 actions) | Inputs: Accepted Stage 17 adaptations & phase review. Process: Strategic review of original Intent. Output: **Catalyst for Phase N+1 Spark Capture**. |
 
 ---
 
 ## 3. The Continuous Adaptation & PMP Feedback Cycle
 
+The approved baseline has **two** routes back, kept apart. This section is the **execution loop**: the trigger is evidence from executed work (Stage 9-15 deliverables, tests, audits, observed outcomes, insights and lessons learned) and the route is Stage 16 → Stage 17 → Stage 6. Section 3.1 is the **design-time loop**, for defects found before anything is built.
+
+When an operational gap, audit finding, or governance amendment occurs:
 ```mermaid
 flowchart TD
     SPARK["Stage 1: Intent<br/>Spark-Capture.md & Ideation-Document.md"] --> CHARTER["Stage 2: Objective & Charter<br/>Project-Charter.md"]
@@ -107,6 +110,41 @@ flowchart TD
     ADAPT --> REFINE["Stage 18: Intent Refinement<br/>approve-intent-refinement"]
     REFINE -->|"Seeds Phase N+1"| SPARK
 ```
+
+### 3.1 The design-time loop (Stages 7-8 → Stage 16 → Stage 6)
+
+Writing and reviewing Stage 7 requirements, or checking Stage 8 readiness, can turn up defects in the *approved baseline* before anything is built: a critical path that contradicts a directive, a circular gate, a lapsed milestone, accepted ADRs that imply plan updates the plans lack, ADRs that conflict with each other. The execution loop above is the wrong route for these: there is no Stage 9-15 evidence yet, so there is nothing for a Stage 17 Adaptation Plan to adapt. They take a second route, **alongside the execution loop and not replacing it**:
+
+```mermaid
+flowchart TD
+    R["Stage 7 review / Stage 8 readiness check"] -->|"finding cites the documents"| B["BFI-NNN logged<br/>(internal working item, PMP §3.3)"]
+    B --> C["Stage 16: classify-diff-type<br/>evidence_basis = design_time"]
+    C --> E["escalate-diff-response<br/>(Charter approval-limit thresholds)"]
+    E -->|"editorial"| ED["Apply and log"]
+    E -->|"upstream ADR / BRD / FDD"| UP["Amend, then re-confirm with that document's own policy"]
+    E -->|"within PM authority"| PM["PM revises the plan; the plan's own policy re-approves"]
+    E -->|"Steering Committee"| BRP["PM produces a Baseline Revision Package<br/>Steering Committee approves<br/>approve-pmp records PMP-BL-v1.0.x"]
+    ED --> X["Cascade check of downstream Stage 7 documents"]
+    UP --> X
+    PM --> X
+    BRP --> X
+    X -->|"re-enter the chain where the finding was raised"| R
+```
+
+**What the loop does**
+1. **Capture** each baseline defect found at Stage 7 or 8 as a `BFI-NNN`, citing the documents it concerns directly. Log it in the PMP's Pending Baseline Feedback table (PMP template §3.3), not in an Adaptation Plan.
+2. **Classify and route** it through the existing Stage 16 policies: `classify-diff-type` with `evidence_basis = design_time`, then `escalate-diff-response`. Editorial fixes, upstream document amendments, PM-level plan fixes and Steering-Committee-level changes are told apart there.
+3. **Submit a baseline, not an amendment.** For a Steering-Committee-level item the PM produces a **Baseline Revision Package**, and the Steering Committee approves a complete revised baseline: always the revised PMP and the changed plans plus the standard set (Spark, Ideation, Business Case, Benefits Statement, Stakeholder Register); the Charter only if it is amended. `approve-pmp` records the new baseline.
+4. **Cascade back.** After a change, re-check the downstream Stage 7 documents and re-enter the chain where the finding was raised.
+
+**Guardrails**
+- It fixes logic and records variance only. It adds no new durations, costs or estimated dates (`sequence-and-lessons.md` Rule #3) and invents no evidence (Rule #17).
+- Human approval throughout.
+- It stays separate from the execution loop: a design-time fix is never a lesson learned, never touches Stage 17, and never refines Intent (Stage 18).
+- It needs no new TaskPolicy while the existing ones fit (Rule #16).
+- Change-control episodes carry `evidence_basis: design_time | execution`, so policies that later learn from them do not mix the two kinds.
+
+**Versioning.** Design-time revisions are patch increments (`PMP-BL-v1.0.x`). Minor increments (`PMP-BL-v1.1.0`) are reserved for Stage 17 adaptations from executed work. The case that surfaced the loop is in `sequence-and-lessons.md` Rule #21.
 
 ---
 
@@ -193,3 +231,4 @@ sidpa-template/
 6. **Baseline Traceability Invariant (Invariant 6):** Every approved PMP, ADR, BRD, FDD, User Story, and Adaptation Plan must record its governing PMP baseline identifier (`pmp_baseline: "PMP-BL-vX.Y.Z"`).
 7. **Implementation Authorization Prerequisite (Invariant 7):** No developer may commence implementation work (Stage 9) until the Stage 8 Implementation Readiness Gate formally issues an Execution Authorization Notice reconciling all Stage 6 requirements approvals and the Stage 7 PMP baseline.
 8. **Deterministic Rollback Protocol (Invariant 8):** If downstream execution reveals regressions or operational failure (detected via ADR-005 `compare_decision_results()`), atomic rollback restores the prior approved baseline from archive and penalizes the escalation bandit.
+9. **Design-Time Revisions Are Patches (Invariant 9):** A baseline revision approved through the design-time loop (§3.1) is a patch increment (`PMP-BL-v1.0.x`); minor increments (`PMP-BL-v1.1.0`) are reserved for Stage 17 adaptations from executed work. The Steering Committee approves a complete revised baseline (a Baseline Revision Package), never an amendment.

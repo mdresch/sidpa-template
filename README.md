@@ -99,8 +99,8 @@ Canonical action specifications, decision frames, and idle policy stores:
 - `data/agent-learning/store/` — Pre-initialized, idle policy instances.
 
 ### 7. Governance Principles & Empirical Lessons
-- **`docs/chain-coverage.md`** — Comprehensive mapping of the closed-loop lifecycle, process mappings, and directory layouts.
-- **`docs/sequence-and-lessons.md`** — The battle-tested ordering rules, cited against the real projects (ADPA, SocialEngage, Enterprise Work Hierarchy) that surfaced them.
+- **`docs/chain-coverage.md`** — Comprehensive mapping of the 18-stage closed-loop lifecycle, process mappings, and directory layouts.
+- **`docs/sequence-and-lessons.md`** — The battle-tested ordering rules, cited against the real projects (ADPA, SocialEngage, Enterprise Work Hierarchy, Kairos Bay) that surfaced them.
 - **`docs/root-cause-log.md`** — Explanations for why each policy was built and where real projects diverged.
 
 ---

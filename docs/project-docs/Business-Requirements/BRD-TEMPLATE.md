@@ -40,5 +40,12 @@ outputs:
 | Metric | Current state |
 |---|---|
 
+## Baseline Feedback (Stage 7-8 → 6)
+<While writing or reviewing this document, did you find that it contradicts, or cannot be satisfied by, the approved baseline (the PMP, a subsidiary plan, the Charter, or an upstream document)? Raise each contradiction as a BFI-NNN in the PMP's Pending Baseline Feedback table (PMP §3.3) and cite it here by id and by the documents it concerns. Do not fix the baseline inside this document, and do not open an Adaptation Plan: that is the Stage 17 route and needs evidence from executed work. "None found" is a valid entry.>
+
+| BFI | Contradiction (cite the documents) | Status |
+|---|---|---|
+| None found | | |
+
 ## Out of Scope
 <What the source ADR itself already excludes — don't introduce a new exclusion here that the ADR didn't name.>
