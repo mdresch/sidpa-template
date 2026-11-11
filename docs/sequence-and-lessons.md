@@ -1,6 +1,6 @@
 # Sequence & Lessons — order that actually mattered, confirmed the hard way
 
-Every rule below was learned by hitting it, not derived in the abstract. Cited against the real projects (ADPA, SocialEngage, Enterprise Work Hierarchy, Kairos Bay) that surfaced it, so a future reader can go check the primary source rather than trust this summary alone.
+Every rule below was learned by hitting it, not derived in the abstract. Cited against the real projects (ADPA, SocialEngage, Enterprise Work Hierarchy, Kairos Bay, Kayros Bay) that surfaced it, so a future reader can go check the primary source rather than trust this summary alone.
 
 ## 1. Governance-document order
 
