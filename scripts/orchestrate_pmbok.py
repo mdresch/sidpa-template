@@ -79,7 +79,7 @@ def extract_project_identity(charter_path: Path) -> dict[str, str]:
         ]
     }
 
-def synthesize_pmp_markdown(project_context: dict, generated_plans: dict[str, str], baseline_id: str = "PMP-BL-v1.0.0") -> str:
+def synthesize_pmp_markdown(project_context: dict, generated_plans: dict[str, str], baseline_id: str = "PMP-BL-v1.0.0", existing_bfi_section: str | None = None) -> str:
     """Synthesize integrated Project-Management-Plan.md from subsidiary plans."""
     clean_title = project_context["title"].strip()
     for _ch in [":", "-", "\u2014"]:
@@ -128,6 +128,18 @@ def synthesize_pmp_markdown(project_context: dict, generated_plans: dict[str, st
         lines.append(f"- **Summary:** {summary[:300]}...")
         lines.append("")
 
+    if existing_bfi_section:
+        feedback_lines = [existing_bfi_section]
+    else:
+        feedback_lines = [
+            "### 3.3 Pending Baseline Feedback",
+            "Internal working items raised by the design-time loop. \"None\" is a valid entry.",
+            "",
+            "| BFI | Raised at (stage, document) | Finding (cite the documents) | Classification (`classify-diff-type`) | Route (`escalate-diff-response`) | Status |",
+            "|---|---|---|---|---|---|",
+            "| None | | | | | |",
+        ]
+
     lines.extend([
         "## 3. Feedback Loops",
         "The approved baseline has two routes back, kept apart. Both end at this PMP; they differ in what triggers them and in how the baseline is versioned.",
@@ -138,15 +150,10 @@ def synthesize_pmp_markdown(project_context: dict, generated_plans: dict[str, st
         "### 3.2 Design-time loop (Stages 7-8 → 16 → 6)",
         "When writing or reviewing Stage 7 requirements, or checking Stage 8 readiness, finds a defect in the approved baseline, it is logged as a **BFI-NNN** (baseline feedback item) in section 3.3 and routed through Stage 16 (`classify-diff-type` with `evidence_basis = design_time`, then `escalate-diff-response`), never through an Adaptation Plan. A Steering-Committee-level item is submitted as a **Baseline Revision Package**: the revised PMP and the changed plans, plus Spark, Ideation, Business Case, Benefits Statement and Stakeholder Register, and the Charter only if it is amended. The Steering Committee approves the revised baseline and `approve-pmp` records it as a patch increment (`PMP-BL-v1.0.x`). The loop fixes logic and records variance only, adds no new durations, costs or estimated dates, and invents no evidence. See `docs/chain-coverage.md` section 3.1.",
         "",
-        "### 3.3 Pending Baseline Feedback",
-        "Internal working items raised by the design-time loop. \"None\" is a valid entry.",
-        "",
-        "| BFI | Raised at (stage, document) | Finding (cite the documents) | Classification (`classify-diff-type`) | Route (`escalate-diff-response`) | Status |",
-        "|---|---|---|---|---|---|",
-        "| None | | | | | |",
+        *feedback_lines,
         "",
         "## 4. Governance Authorization",
-        f"This integrated PMP must be formally evaluated and approved via `approve-pmp` (`FULL` Bayesian authority, `requires_human_approval: true`) before technical specifications (ADR, BRD, FDD, Stories) are finalized. All downstream technical requirements must record `pmp_baseline: '{baseline_id}'` (Invariant 6). Prior baselines remain recoverable from history archives (Invariant 7)."
+        f"This integrated PMP must be formally evaluated and approved via `approve-pmp` (`FULL` Bayesian authority, `requires_human_approval: true`) before technical specifications (ADR, BRD, FDD, Stories) are finalized. All downstream technical requirements must record `pmp_baseline: '{baseline_id}'` (Invariant 6). Prior baselines remain recoverable from history archives (Invariant 5)."
     ])
     return "\n".join(lines) + "\n"
 
@@ -312,7 +319,18 @@ This plan establishes the guidelines and processes for managing {meta['title'].l
     # Synthesize PMP
     print("\n  >>> Synthesizing integrated Project Management Plan (4.2)...")
     pmp_file = repo_root / "docs" / "project-docs" / "Project-Management-Plan.md"
-    pmp_markdown = synthesize_pmp_markdown(project_context, generated_summaries)
+    current_baseline_id = "PMP-BL-v1.0.0"
+    existing_bfi = None
+    if pmp_file.exists():
+        existing_text = pmp_file.read_text(encoding="utf-8")
+        base_match = re.search(r"pmp_baseline:\s*['\"]?([^'\"\r\n]+)['\"]?", existing_text)
+        if base_match:
+            current_baseline_id = base_match.group(1).strip()
+        bfi_match = re.search(r"(### 3\.3\s+Pending Baseline Feedback.*?)(?=\n## 4\.|\Z)", existing_text, re.DOTALL)
+        if bfi_match:
+            existing_bfi = bfi_match.group(1).strip()
+
+    pmp_markdown = synthesize_pmp_markdown(project_context, generated_summaries, baseline_id=current_baseline_id, existing_bfi_section=existing_bfi)
     pmp_file.write_text(pmp_markdown, encoding="utf-8")
     print(f"  [OK] Project Management Plan written to {pmp_file.relative_to(repo_root)}")
 
