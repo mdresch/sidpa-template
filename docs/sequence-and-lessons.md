@@ -1,6 +1,6 @@
 # Sequence & Lessons — order that actually mattered, confirmed the hard way
 
-Every rule below was learned by hitting it, not derived in the abstract. Cited against the real projects (ADPA, SocialEngage, Enterprise Work Hierarchy, Kairos Bay) that surfaced it, so a future reader can go check the primary source rather than trust this summary alone.
+Every rule below was learned by hitting it, not derived in the abstract. Cited against the real projects (ADPA, SocialEngage, Enterprise Work Hierarchy, Kairos Bay, Kayros Bay) that surfaced it, so a future reader can go check the primary source rather than trust this summary alone.
 
 ## 1. Governance-document order
 
@@ -71,7 +71,7 @@ When AI agents or subagents generate any governance document, they must adhere t
 
 ## 7. The chain's closed loop & empirical precedents
 
-21. **Observation → Insight → Lesson Learned is a cross-project concern, not a per-project one to rebuild.** SocialEngage's own `resolve-kb-conflict` lives under a shared knowledge-base-ingestor agent, not under the project's own governance namespace. If a project has access to a shared knowledge base, integrate with it; don't build a project-local copy of this stage without evidence the shared one doesn't fit.
+21. **Observation → Insight → Lesson Learned is a cross-project concern, not a per-project one to rebuild.** SocialEngage's own `resolve-kb-conflict` lives under a shared knowledge-base-ingestor agent, not under the project's own governance namespace. If a project has access to a shared knowledge base, integrate with it; don't build a project-local copy of this stage without evidence the shared one doesn't fit. **First real case and the path (Kayros Bay, 2026-10-27, PROP-002):** running the shared pipeline on real work produced the first observations, and the path from Observation to Lesson to Stage 16 is now written in `docs/chain-coverage.md` §3.2. It adds three rules. (1) Capture records only what was seen; no interpretation and no fix. (2) The knowledge base cannot supersede an accepted project document: a note that contradicts one is corrected (`trust_existing`) or flagged (`flag`). (3) Projects sharing a vault allocate id ranges per node type so the duplicate-id audit stays clean. `resolve-kb-conflict` still has no recorded decision anywhere, so its shape stays reference-only until a real one exists (Rule #17).
 22. **Adaptation → Intent Refinement loop resolved and proven in Enterprise Work Hierarchy.** Historically open across ADPA and SocialEngage, the complete closing loop from Stage 13 raw telemetry observations through Stage 17 Adaptation Plans and Stage 18 Intent Refinements was formally achieved and codified in Enterprise Work Hierarchy (Epic 10 completion, 13 empirical observations ingested, LL-041 crystallized). The loop formally closes when refined intent feeds the subsequent Phase Spark and amends originating ADRs via fast-path governance.
 
 ---
