@@ -7,9 +7,10 @@ Generalized from two independently-converged real implementations (SocialEngage'
 - **Base branch name** for worktrees. (ADPA's real default branch was not `main` — confirmed the hard way, via a failed `git worktree add`.)
 - **Isolation mechanism.** SocialEngage used per-run ephemeral database clones; ADPA used two persistent Docker containers instead (`*-test` ephemeral, `*-dev` persistent). Confirm what this project actually has before assuming either shape.
 - **Contract file location convention.** SocialEngage used `contracts/epic-<N>/`; ADPA's real convention turned out to be `server/src/__tests__/modules/<module>/`. Check for an existing convention before inventing one.
-- **Language and test runner.** The loop below is written Node/Jest-first (SocialEngage, ADPA). A Python/pytest project (agent-learning) uses a flat `tests/test_<module>.py`, runs through its own venv, and needs that venv set up in each new worktree.
+- **Language and test runner — not one fixed ecosystem, confirm which one(s) this project actually uses.** The specific framework is never the point; what's load-bearing is that whatever runs actually covers the project's contracts and reliably surfaces a regression or contract break. A polyglot project may legitimately use more than one framework at once (e.g. `pytest` for a Python backend, Jest for its TypeScript frontend) — that's fine, not a thing to converge on a single tool for; Step 6 below just means running *every* ecosystem's own "everything," not picking one. Real variants already confirmed across source projects, given equal weight (none of these is "the default" the others are exceptions to): **Jest** (SocialEngage, ADPA); Node's native **`node:test`** runner (Enterprise Work Hierarchy — a distinct real variant from Jest, not interchangeable in syntax); and **Python/`pytest`** (agent-learning), using a flat `tests/test_<module>.py`, run through its own venv that needs setting up in each new worktree (see Step 0). **Rust and C# are not yet evidenced by a real case anywhere in this methodology** (likely candidates: `cargo test` for Rust; xUnit, NUnit, or MSTest via `dotnet test` for C#, which itself has no single default either). If a project turns out to use either, do not assume these candidate conventions carry over from the evidenced shapes above without confirming them fresh on that project's own first story — contract location, fixture/mock conventions, and worktree dependency provisioning all need the same "confirmed the hard way" treatment ADPA's base branch got, not an assumption borrowed from this file.
 - **Where contract fixtures live.** If contracts test against real artifacts (result files, sample documents), they must be **committed** under a stable path such as `tests/fixtures/<module>/`. Never the repo root, never untracked.
 - **Whether a mechanical enforcement layer exists** (a pre-commit hook, a CI gate tying code changes to a contract). If none exists yet, say so explicitly in this file's own copy for the new project — it changes how load-bearing Step 3 below is (see `heal-contract-failure`'s own note on this).
+- **Whether this project's own documents overload stage numbers.** Confirmed in Enterprise Work Hierarchy: BRDs, FDDs, Epics, and the PMP each independently stamped the same number (`Stage 7`) with a different meaning. If that's true here too, note it in `docs/registers/Project-Status-Register.md` §1 so nobody resolves "what stage are we at" from a single document's own `lifecycle_stage` frontmatter (see `docs/sequence-and-lessons.md` §8).
 
 ## The loop — mandatory, in order, for every story
 
@@ -18,7 +19,15 @@ Generalized from two independently-converged real implementations (SocialEngage'
 git worktree add ../<project>-story-<X.Y> -b feat/story-<X.Y> <confirmed-base-branch>
 cd ../<project>-story-<X.Y>
 ```
-If the worktree doesn't inherit dependencies automatically (confirmed real issue: `git worktree add` doesn't install `node_modules`), fix that before Step 5, not after a confusing test-runner failure.
+If the worktree doesn't inherit dependencies automatically (confirmed real issue: `git worktree add` doesn't install `node_modules`), fix that before Step 5, not after a confusing test-runner failure. The same applies whatever this project's ecosystem turns out to be (see "Language and test runner" above): a Python project needs its venv created and populated in the new worktree before Step 3; an unevidenced Rust project would need its own equivalent (`cargo build`/`cargo fetch`) confirmed, not assumed to "just work" because the files are there.
+
+**If the branch or worktree already exists, do not assume it is abandoned.** Do not adopt it and do not implement again regardless of which case below applies — but which thing to do next depends on whether that run is still live, and that must be checked, not guessed:
+1. **Stop here and inspect read-only first** (`git worktree list`, `git status --short`, `git log <base>..feat/story-<X.Y>`, the story's entry in the project log).
+2. **Check whether another agent is still actively working it.** There is no reliable mechanical liveness signal yet in this methodology: an agent mid-step may have made zero commits so far (a quiet `git log` is not proof of abandonment), and a recent commit is not proof the agent is still running either. When there is any ambiguity, **ask the human directly** rather than infer it from timestamps alone.
+3. **If it is still active:** stop and do not touch it — not with a new `implement-story` run, and not with `heal-contract-failure` either. Treating a live run as abandoned and starting to "heal" it is exactly the kind of interference the multi-agent collision rule below exists to prevent.
+4. **Only once abandonment is actually confirmed** does the handoff apply: continue with `heal-contract-failure` from its Step 1 (Intent). Leftover tests and code are evidence, not a verified contract: re-walk ADR, BRD, FDD and story to the contract, the component skill and the code, and show the contract able to fail (RED) before relying on it. Never commit uncommitted leftovers as this run's own without that walk, and never change a test or code only to turn a failing check green. Use a fresh heal branch and worktree named for the story.
+
+**Multiple agents working this loop at once must not collide or interfere with each other's path to success.** For *sequential, deterministic* multi-agent work (several agents each running this loop, not a bidding swarm — that is a distinct, separate problem, see below), each agent picks up the next story strictly in the pre-approved document sequence: ADR → BRD → FDD → Story, Epics and Stories consumed in their existing numeric order, never an arbitrary or freely-chosen item. This removes the contested set entirely — there is only one unambiguous "next" at any moment, not several agents choosing among options. Collision safety itself then comes from `git worktree add -b feat/story-<X.Y>` directly, not a separate pre-check: because all worktrees share one local repo's ref namespace, git's own ref creation is atomic — if two agents attempt this near-simultaneously, only one succeeds, and the other's failure *is* the authoritative "already claimed" signal, more reliable than a `git worktree list` check moments earlier that could itself be stale by the time the create runs. No claim/lock database is needed for this case, and none should be built ahead of evidence it's actually needed. **This does not solve free-for-all task bidding** (multiple agents independently proposing to take *different*, not predetermined, work) — that is Epic/Pillar `PIL-11`'s own subject (Autonomous Multi-Agent Swarm Orchestration & Competency Bidding) and remains a distinct, still-unbuilt problem; don't assume this rule covers it.
 
 ### 1. Ingest the specification pyramid & check scope
 - **User Story** (wherever this project's epics live): confirm `Status: Ready`, never `Blocked`. Note Acceptance Criteria.
@@ -26,7 +35,19 @@ If the worktree doesn't inherit dependencies automatically (confirmed real issue
 - **BRD**: business rules.
 - **FDD**: technical schemas, error codes, prerequisite gates.
 
+*Named data sources:* for every path or data source a story names as committed, run `git ls-files <path>` (and `git check-ignore <path>` if that is empty) now, not at Step 5. If it is not tracked (for example it sits in a git-ignored data directory that only exists in the author's working tree), amend the story's wording and record the gap as an open question in the FDD before building. A clean CI checkout will not have the author's local files.
+
 *Hierarchy rule:* ADR > BRD/FDD > User Story. If a story has **no** entry at this level at all — not even a Blocked one — that is itself a real finding (see "When Step 1 fails outright" below), not a reason to skip ahead.
+
+### 1b. Pre-flight specification & contract readiness gate
+```bash
+python scripts/spec_gate.py <X.Y>
+```
+The spec gate audits the story's acceptance criteria against adversarial checks (specification completeness, None-safety, boundary behavior, empty collections, non-finite domain checks, testability, precision tolerances, and architectural boundaries), applies Epic 14 critique deltas, and resolves a calibrated Bayesian readiness decision.
+
+- **Gate Result:** Must exit `PASSED / SPEC READY FOR CONTRACTS` with robust utility margin $\ge +0.05$.
+- **Adversarial Findings:** If the gate halts (`HALTED / SPECIFICATION INCOMPLETE`), do **not** proceed to contract drafting. Amend the story's acceptance criteria in the source markdown file to explicitly address the missing contracts (e.g., adding explicit empty collection return contracts or defensive None handling), then re-run `scripts/spec_gate.py <X.Y>` until it passes.
+- **Contract Interpretations:** The spec gate outputs recommended contract interpretations ($I_1, I_2, \dots$). These interpretations **must** be documented in the RED contract test file docstring (Step 3) to preserve specification intent across implementation.
 
 ### 2. State intent
 ```
@@ -37,7 +58,35 @@ Explicitly out of scope: <named adjacent work NOT touched this pass>
 ```
 
 ### 3. Write the contract (RED)
-One test per Acceptance Criterion, header comment naming its Story and ADR. Confirm the project's real contract-location convention (see "Before first use" above) before writing the first one.
+One test per Acceptance Criterion, header comment naming its Story and ADR. The contract test file's top-level docstring **must** document the recommended contract interpretations ($I_1, I_2, \dots$) derived in Step 1b by `scripts/spec_gate.py`. Confirm the project's real contract-location convention (see "Before first use" above) before writing the first one. The skeleton differs by ecosystem — write whichever this project's confirmed language/test runner actually calls for, not necessarily the first one listed:
+
+**JS/TS — Jest or `node:test` (confirm which; they are not interchangeable syntax):**
+```js
+// Story <X.Y> — <title> (ADR-<NNN>)
+describe('<AC-id>: <paraphrase>', () => {
+  it('<expected behavior>', () => {
+    // arrange / act / assert — must fail (RED) before Step 5
+  });
+});
+```
+
+**Python — `pytest`:**
+```python
+# Story <X.Y> — <title> (ADR-<NNN>)
+def test_<ac_id>_<paraphrase>():
+    # arrange / act / assert — must fail (RED) before Step 5
+    ...
+```
+
+**Rust — `cargo test` (unevidenced; treat as a starting guess, not a confirmed convention):**
+```rust
+// Story <X.Y> — <title> (ADR-<NNN>)
+#[test]
+fn <ac_id>_<paraphrase>() {
+    // arrange / act / assert — must fail (RED) before Step 5
+}
+```
+No real project in this methodology has run this loop in Rust yet. Confirm fixture location, mock/test-harness conventions, and worktree dependency provisioning on this project's own first story, then correct this file's own copy for the project — the same way ADPA corrected the base-branch assumption.
 
 ### 4. Derive or update the component `SKILL.md`
 Governing ADRs/Stories, contract files, load-bearing constraints, real call-site relationships.
@@ -46,22 +95,45 @@ Governing ADRs/Stories, contract files, load-bearing constraints, real call-site
 Minimal code only — no speculative generalization.
 
 ### 6. Validate
-Run the story's contract, then its epic's contract suite.
+Run the story's own contract first, then the **whole project's accumulated contract suite** — every area built so far, not just this story's epic. The point of contracts accumulating over time is to let one story's change be checked against every other area at once; stopping at "this epic's suite" misses a regression this change caused somewhere else, and is exactly what `heal-contract-failure`'s "Cross-epic regression (a foreign contract breaks)" section exists to catch when this step is skipped. Whatever this project's confirmed language/test runner(s) (see "Before first use") are, run each one's own equivalent of "everything": `node --test tests/contracts/**/*.test.js` or `jest` with no path filter (JS/TS — both run everything by default when given the project's test root), `pytest` with no path filter (Python — runs the whole `tests/` tree by default), `dotnet test` (C#, unevidenced — runs every test project in the solution by default), or `cargo test` (Rust, unevidenced — runs the whole crate's tests by default; confirm this holds for the real project before relying on it). **A polyglot project runs all of its ecosystems' full suites, every time** — "the whole project" means every contract across every language it has, not whichever one this story happened to touch.
 
-### 7. Commit & log
-`docs/registers/Implementation-Log.md`: one entry per completed story, append-only, never edited. If the implementation and its own log entry must be committed together before the commit's hash is known, use a `pending` placeholder, backfilled by whichever commit runs next (or by a pre-commit hook that resolves it automatically, if one exists — confirmed real in at least one of the two source projects).
+### 7. Commit & log (Automated via CLI)
+Run `npm run story:done <STORY-ID>` (e.g. `npm run story:done US-01.1`). The CLI automatically executes the story's contract test suite, verifies database referential integrity, stamps the audit row in `docs/registers/Story-Execution-Register.md`, and creates a single atomic Git commit (`feat(US-X.Y): ...`). Manual two-phase commit logging is deprecated, eliminating commit hash drift.
 
-### 8. Open a PR, get the automated review to a clean state, amend, then merge
-Direct-push-to-default-branch was tried once (ADPA's real Story 1.2) and found to bypass real branch-protection value, not just a compliance checkbox: PR review triggers scrutiny no local check can provide. The story ends on the base branch only after the automated reviewer has nothing further to add. The examples use Amazon Q (`/q review`); substitute your project's reviewer.
+### 8. Open a PR, don't merge directly
+Direct-push-to-default-branch was tried once (ADPA's real Story 1.2) and found to bypass real branch-protection value, not just a compliance checkbox — PR review triggers scrutiny no local check can provide. Push the branch, open the PR, tear down the worktree only after it actually merges upstream.
 
-1. **Open the PR** from `feat/story-<X.Y>`. The description lists the summary, every interpretation that needs confirming, and the test plan, naming any paths excluded from the suite and why.
-2. **Request the review** by commenting `/q review` on the PR, and again after each push.
-3. **Read the result:** the review summary and the inline comments, noting which commit each is on. Many reviewers only comment and never approve.
-4. **Triage every finding against the repository before acting.** Accept what the code or the spec supports. Decline what it does not, with a one-line reason in the PR. A reviewer's claim is not evidence.
-5. **Amend** in new commits on the story branch. Do not amend or force-push the implementation commit, because the log cites its hash. Re-run the contract and the full suite, push, and request the review again.
-6. **Repeat until the reviewer has no further additions**: its latest review is on the current head commit, it reports no blocking defect or new finding, and no inline comment on the head is unaddressed. Silence is not a clean review. After three rounds, or if a declined finding is repeated, stop and ask the human.
-7. **Record the review** in the story's log entry before merging: the rounds, the findings accepted, and the findings declined with reasons.
-8. **Merge** when the reviewer is clean on the head commit, the PR is mergeable, and the full suite passed on the head commit. Then pull the base branch and remove the worktree. The human can withhold the merge at any point.
+### 8.1. Bayesian PR review gatekeeper
+```bash
+python scripts/pr_gate.py <pr_number>
+```
+The PR review gatekeeper evaluates CI checks, architectural boundaries, ingests reviewer critiques (Amazon Q, Cursor Bugbot, Claude, human markdown) into log-odds support shifts and doubt adjustments via Epic 14, and evaluates robust Bayesian utility margin.
+
+- **Gate Result:** Must exit `PASSED / APPROVED TO MERGE` with robust utility margin $\ge +0.05$.
+- **Adjudicating Findings:** If the gate halts (`HALTED / REVISIONS REQUIRED`), review the critical issues and open items, address the defects, and push updates to the branch until `pr_gate.py` passes.
+- **Automated Merge:** When ready to merge:
+  ```bash
+  python scripts/pr_gate.py <pr_number> --merge
+  ```
+
+### 9. Breakout & recap (last story of the epic only)
+After contracts are verified and the PR merges on the epic's final story, hold the light breakout recap defined in ADR-010 / PMBOK Quality. Evaluate two distinct, complementary postures:
+
+- **Propagation check (before closing the recap):** a lesson that names a Tier 2 skill file as its propagation target is applied in that file in the same PR as the register entry, citing the `LL-###` id in the changed step. Check that every Tier 2 target named by the previous epic's entries contains its LL id (`grep -c "LL-0xx" <file>`); a missing id is a finding, because a lesson that is only in the register recurs.
+
+- **Defensive Posture (Traps & Defects):**
+  Review unexpected traps, subtle defects, review findings, or test quirks. Record each lesson as an `LL-###` entry in `docs/registers/Lessons-Learned-Register.md` (or Second Brain project lessons folder), or record a short no-new-lessons sign-off entry.
+
+- **Positive & Generative Posture (Improvement & Value-Add Cadence):**
+  Ask the mandatory cadence question:
+  > *"What improvement ideas, architectural simplifications, developer-experience boosts, or product opportunities emerged during this Epic that could add value to upcoming Epics or roll into the Intent Refinement Proposal for the next phase?"*
+  - **If ideas emerged:** Record each as an `IMP-###` entry in `docs/registers/Continuous-Improvement-Register.md` (fields: ID, Originating Epic, Title, Description, Benefit / Value Potential, and Disposition: `In-Flight Candidate` for immediate CCB adaptation vs `Rolled into Phase Next Intent Refinement`).
+  - **If no new ideas emerged:** Record a brief sign-off entry: *"Epic [N] Recap: No new improvement ideas identified."*
+  - **Cybernetic Return Loop:** During Stage 18 (Intent Refinement & Phase Close), all ideas marked `Rolled into Phase Next Intent Refinement` are systematically harvested into `Intent-Refinement-Proposal.md` to synthesize the catalyst backlog for the subsequent cycle phase (`SPARK-vNext`).
+
+  After committing, update `docs/registers/Project-Status-Register.md` §1 ("Last … completed" / "Next … to implement" / "Session close-off checkpoint") to match.
+
+**Session-boundary note (not step-gated):** Model/session cutoffs can happen abruptly, without a clean announcement, at any point mid-story — not only at Step 9 epic boundaries. Whenever work reaches a natural pause (a decision made, a correction applied, before starting something that will take many steps), update `docs/registers/Project-Status-Register.md` §1's "Session close-off checkpoint" row with the current real state, cited against `Audit-Register.md`'s `GOV-EX-###` gate-closure records rather than any single document's own authoring-time `lifecycle_stage` frontmatter (see `docs/sequence-and-lessons.md` §8, rule 24, for why that field can lag behind the project's actual position). Treat this as cheap, frequent insurance, not a formal gate.
 
 ## When Step 1 fails outright — not every "story" is code-shaped
 
@@ -80,27 +152,8 @@ Story 5.1 ran this loop without the skill installed in the repo and drifted in f
 3. **Step 4 (component `SKILL.md`) skipped.** With no mechanical layer, nothing caught it; it was backfilled later. Treat it as a Definition-of-done item, not a nicety.
 4. **Log hash went stale after `git commit --amend`.** The `pending` backfill covers a *later* commit, not an amend. After any amend, re-read `git log -1` and fix the entry's hash.
 
-Also: install this skill into the new project's `.claude/skills/` **before** its first story, not after.
-
-## Lessons from agent-learning Epics 2, 3 and 11 (LL-007, LL-010 to LL-014)
-
-1. **Approve, then commit, then fork (LL-010).** Before `git worktree add`, confirm the story's BRD, FDD and stories are approved, and run `git status --short` in the base checkout. A worktree forks from committed state only. A `Ready` status set by the author is not an approval.
-2. **State every mode and parameter in the FDD (LL-011).** Anything you add at implementation time is an interpretation: record it in the test docstring and the log, and amend the FDD or its open questions. If the FDD is already approved, the amendment needs its own approval.
-3. **Counts and pending notes go stale in the change that resolves them (LL-007).** When a change adds a step, changes a count or completes something another document calls pending, search the repository for the old number or phrase and fix every occurrence in the same change.
-4. **Each rule lives in one story's acceptance criteria (LL-012).** Later stories reference it and assert only what is new, so every contract can be observed failing first.
-5. **Keep the validation command one that runs (LL-013).** If part of the suite cannot run, say which paths were excluded, why, and the resulting count. Never call an exclusion-adjusted count the entire suite.
-6. **Define "blank" once (LL-014).** For loosely typed inputs, one helper covers `None`, blank strings and every empty container type, and each is tested.
-7. **Observe RED honestly.** If the module cannot even be imported before implementation, add a minimal throwaway stub to see each test fail on behavior, then remove it. Tests that already pass are regression guards: name them as such.
-8. **Commit the implementation, then log it.** Record the implementation commit's hash in `docs/registers/Implementation-Log.md` in a separate follow-up commit. Do not amend the implementation commit afterwards. An amend leaves the log pointing at a commit that never reaches the base branch. If a log entry is wrong, append a dated correction entry (the log is append-only) instead of editing it once merged.
-9. **Run the tool through its own environment.** In a fresh worktree use the project's runner (`uv run python -m pytest`), not a global `pytest`, and install the dev extras first.
-10. **The last story of an epic ends with the breakout recap** (Step 9): record `LL-###` entries or a no-new-lessons sign-off in `docs/registers/Lessons-Learned-Register.md`, and propagate component-specific rules to the component skill.
-
-## Registers used by this loop
-
-- `docs/registers/Implementation-Log.md` (Step 7)
-- `docs/registers/Lessons-Learned-Register.md` (Step 9)
-- `docs/registers/Cycle-Register.md` (stories belong to the currently open cycle; the story's `cycle_id` is that cycle)
+Also: install this skill into the new project's `.claude/skills/` **before** its first story, not after. Instantiate `docs/registers/Project-Status-Register.template.md` into `docs/registers/Project-Status-Register.md` at the same time — before the first story, not backfilled after several Epics have already passed.
 
 ## Definition of done
 
-Contract exists and passes; epic's contract suite still passes; `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `docs/registers/Implementation-Log.md` entry exists with the resolved implementation hash; contract fixtures are committed and the contract passes on a clean clone; the PR reached a clean automated review with accepted findings amended and declined ones explained, and is merged with the worktree removed.
+Pre-flight specification gate passed (`python scripts/spec_gate.py <X.Y>`) with margin $\ge +0.05$; contract interpretations ($I_1, I_2, \dots$) documented in contract test docstring; contract exists and passes; the whole project's accumulated contract suite still passes, not just the current epic's (see Step 6); `SKILL.md` current; traceability (ADR/BRD/FDD/Story) still accurate; a real `implementation-log.md` entry exists, hash `pending` or resolved; contract fixtures are committed and the contract passes on a clean clone; Bayesian PR gate passed (`python scripts/pr_gate.py <pr_number>`) with positive utility margin before merge; `docs/registers/Project-Status-Register.md` §1 reflects the real current state (see the session-boundary note above — check this even when the story is not the epic's last); for the epic's last story only, the breakout recap is held and recorded in both `Lessons-Learned-Register.md` (an `LL-###` entry or no-new-lessons sign-off) and `Continuous-Improvement-Register.md` (an `IMP-###` entry or no-new-ideas sign-off).

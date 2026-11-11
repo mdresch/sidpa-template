@@ -1,4 +1,4 @@
----
+﻿---
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "4.2 Develop Project Management Plan"

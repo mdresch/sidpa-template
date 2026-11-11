@@ -1,4 +1,4 @@
-# SIDPA Template
+﻿# SIDPA Template
 
 **Synthetic Intent-Driven Process Architecture (SIDPA)**
 

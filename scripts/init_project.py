@@ -1,4 +1,4 @@
-"""
+﻿"""
 Initialize a new project from sidpa-template.
 
 Usage:

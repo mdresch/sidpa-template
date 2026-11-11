@@ -11,14 +11,15 @@ Generalized from two independently-converged real implementations. Unlike `imple
 
 SocialEngage has one (a pre-commit hook backstopping contract-first discipline). ADPA, at the time this template was built, did not — every step below was discipline-only, with nothing to catch a skipped step mechanically. **This changes how load-bearing this skill is, not what it says**: with no hook, this skill's own discipline is the only thing standing in for one. Say explicitly, in this project's own copy of this file, which case applies.
 
-## Dual Triggers: Mechanical Failure vs. PR Review Feedback ("Green Defect")
+## Three Triggers: Mechanical Failure, PR Review Feedback ("Green Defect"), and Dependency Bump PRs
 
-Contract failure is not limited to a red test runner in local validation or CI. It has two distinct triggers:
+Contract failure is not limited to a red test runner in local validation or CI. There are three distinct triggers:
 
 1. **Mechanical Test Failure (RED):** An existing assertion fails, a type-check breaks, or an unhandled exception halts execution.
 2. **Review Feedback / Latent Defect (GREEN Defect):** A code reviewer (human or automated bot, e.g. Amazon Q) identifies a bug, crash risk, unhandled edge case, inverted assertion, or missing validation while existing contract tests are passing. 
    - *Core Rule:* A passing test suite with a latent defect is a **Contract Incompleteness Failure**.
    - *Anti-Pattern:* Never jump directly into implementation code to patch a review comment. Bypassing the contract violates contract-driven development just as severely as skipping Step 3 during initial implementation.
+3. **Dependency Bump PR (e.g. Dependabot):** A bot opens a PR bumping a package version. Confirmed real gap, not speculative: this template's own source project (Enterprise Work Hierarchy) had 4 real Dependabot PRs; none were ever run against the contract suite before being closed, and automated PR-check bots attached to the repo (e.g. a Cursor approval/security agent) reported only `NEUTRAL` — they do not run the project's own contract suite. Each bump PR was instead resolved by a human directly applying the version change in a separate commit and closing the PR, with no regression *visible* afterward — but "no regression visible" was never the product of actually running the full suite against that specific bump; it is not equivalent to verification. **The correct procedure:** check out the bump PR's branch (or merge it into an isolated worktree), run the full accumulated contract suite against it (the same full-suite rule as a regular story, rule 26 in `docs/sequence-and-lessons.md`), and only then either merge it (GREEN) or walk the full heal loop below citing the dependency bump as the originating cause (RED) — never close a bump PR on the strength of "nothing looks broken" alone.
 
 ## Re-walk the whole chain, in order, every time — no classify-and-shortcut
 
@@ -37,6 +38,10 @@ Contract failure is not limited to a red test runner in local validation or CI. 
    - Run the specific contract (`uv run pytest tests/test_<x>.py` or project test command), then the full suite.
 
 **Hard stop, any step:** if getting to green requires weakening, skipping, or bypassing a contract's assertions or a lint rule, stop and escalate instead of forcing it through.
+
+## Resuming a started `implement-story` run (branch or worktree already exists)
+
+An existing story branch or worktree means `implement-story` was started — but only invoke this section once abandonment is actually confirmed (see `implement-story`'s own Step 0 guard: ask the human when there's any ambiguity about whether another agent is still actively working it; a quiet `git log` is not proof of abandonment on its own). Jumping to this section against a still-live run is interference, not healing. Once confirmed abandoned, the follow-up is this skill, not a second implementation. Inspect the leftovers read-only, then walk steps 1 to 5 from Intent: leftover tests and code are evidence to check against the ADR, BRD, FDD and story, not a contract to trust. Where the story has code, show the contract RED against the old code before the fix; where it has none, show the contract able to fail by mutating the production code it exercises (each mutation reverted, nothing committed). Record the outcome as a dated correction entry in the project log if the original entry is already merged.
 
 ## Bounded retries
 

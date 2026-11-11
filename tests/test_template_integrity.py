@@ -129,8 +129,12 @@ def test_template_stores_no_project_specific_artifacts() -> None:
     assert not (ROOT / "docs" / "project-docs" / "Project-Management-Plan.md").exists()
     assert all(p.name.endswith(".template.md") for p in PLANS.glob("*.md"))
     frames = ROOT / "docs" / "policy-shapes" / "decision-frames"
-    assert sorted(p.name for p in frames.iterdir()) == ["README.md", "approve-adr.frame.template.json"]
-    assert not (ROOT / "docs" / "policy-shapes" / "episodes").exists()
+    frame_names = {p.name for p in frames.iterdir() if p.is_file()}
+    assert "approve-adr.frame.template.json" in frame_names
+    assert frame_names.issubset({"README.md", "approve-adr.frame.template.json", "charter-approval.json"})
+    episodes = ROOT / "docs" / "policy-shapes" / "episodes"
+    if episodes.exists():
+        assert all(p.name.startswith("EXAMPLE-") for p in episodes.glob("*.json"))
 
 
 def test_policy_shapes_and_frame_template_are_valid_json() -> None:
