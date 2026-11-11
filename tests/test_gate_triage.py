@@ -146,3 +146,23 @@ def test_template_register_log_path_is_accepted() -> None:
         f"b/docs/registers/Implementation-Log.md\n+`{GOOD}`\n"
     )
     assert pr_gate.added_triage_lines(diff) == [GOOD]
+
+
+def test_unknown_claim_type_is_not_silently_mapped_to_correctness() -> None:
+    """Q-7-2: claim type 'unknown' must not fall through to correctness."""
+    from triage_replay import map_claim_to_criterion
+
+    with pytest.raises(ValueError, match="no criterion mapping"):
+        map_claim_to_criterion("unknown")
+
+
+def test_reconcile_skips_unknown_claim_without_touching_correctness_deltas() -> None:
+    """Q-7-2: an unknown claim must not cancel or reserve a correctness defect."""
+    unknown = (
+        "Q-7-2 | unknown | verified: yes | decision: declined | "
+        "no criterion for this claim | fix: none"
+    )
+    deltas = [_delta("REV1-CRIT-1")]
+    kept, notes = pr_gate.reconcile_triage(deltas, [parse_triage_line(unknown)], 7)
+    assert kept == deltas
+    assert any("skipped" in n and "unknown" in n for n in notes)

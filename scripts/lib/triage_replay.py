@@ -18,6 +18,12 @@ CLAIM_TO_CRITERION_MAP: Mapping[str, str] = {
 
 
 def map_claim_to_criterion(claim_type: str) -> str:
-    """Map a finding claim type to a standardized DecisionFrame criterion."""
+    """Map a finding claim type to a standardized DecisionFrame criterion.
+
+    Raises ``ValueError`` for unmapped types (including ``unknown``) so
+    ``reconcile_triage`` cannot silently attach them to correctness deltas.
+    """
     clean = claim_type.strip().lower()
-    return CLAIM_TO_CRITERION_MAP.get(clean, "correctness")
+    if clean not in CLAIM_TO_CRITERION_MAP:
+        raise ValueError(f"claim type {claim_type!r} has no criterion mapping")
+    return CLAIM_TO_CRITERION_MAP[clean]

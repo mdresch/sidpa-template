@@ -143,7 +143,11 @@ def reconcile_triage(
     for rec in records:
         if rec.pr != pr_number:
             continue
-        criterion = map_claim_to_criterion(rec.claim_type)
+        try:
+            criterion = map_claim_to_criterion(rec.claim_type)
+        except ValueError as err:
+            notes.append(f"{rec.finding_id}: skipped ({err})")
+            continue
         match = next(
             (
                 d
@@ -377,7 +381,7 @@ def evaluate_pr(
             ep_id = save_gate_episode(pr_number, pr_data, False, reason, -1.0, None, store_dir)
         return False, reason, {"pr_number": pr_number, "failed_checks": failed_checks, "episode_id": ep_id}
 
-    # 2b. IMP-030: review-triage lines the PR adds must stay inside the vocabulary
+    # 2. IMP-030: review-triage lines the PR adds must stay inside the vocabulary
     triage_records, triage_errors = check_triage_lines(added_triage_lines(fetch_pr_diff(pr_number)))
     if triage_errors:
         reason = "Triage line outside the vocabulary: " + "; ".join(triage_errors)
@@ -396,7 +400,7 @@ def evaluate_pr(
             },
         )
 
-    # 2. Extract & Parse Reviews into Epic 14 critique tags
+    # 3. Extract & Parse Reviews into Epic 14 critique tags
     review_sources = extract_raw_review_texts(pr_data)
     all_tagged_bullets: list[str] = []
     for r_idx, (author, body) in enumerate(review_sources, start=1):
@@ -413,7 +417,7 @@ def evaluate_pr(
 
     deltas, triage_notes = reconcile_triage(deltas, triage_records, pr_number)
 
-    # 3. Decision Frame Resolution
+    # 4. Decision Frame Resolution
     frame = build_pr_decision_frame(pr_number)
     applied = apply_critique(frame, option_id="approve_and_merge", deltas=deltas)
 

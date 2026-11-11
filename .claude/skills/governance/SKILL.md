@@ -28,7 +28,7 @@ description: Automated governance change pipeline (Stage 16) for paired diff cla
 
 ## Gate standards (propagated from agent-learning Phase-2 close)
 
-- `scripts/pr_gate.py` checks triage lines a PR adds to `implementation-log.md` or `docs/registers/Implementation-Log.md` (IMP-030) and reconciles maintainer triage against review defects (IMP-017). Helpers live in `scripts/lib/review_triage.py` and `scripts/lib/triage_replay.py`.
+- `scripts/pr_gate.py` checks triage lines a PR adds to `implementation-log.md` or `docs/registers/Implementation-Log.md` (IMP-030) and reconciles maintainer triage against review defects (IMP-017). Helpers live in `scripts/lib/review_triage.py` and `scripts/lib/triage_replay.py`. `map_claim_to_criterion` raises for unmapped claim types (including `unknown`); reconcile skips those rows instead of silently routing them to `correctness`.
 - `scripts/spec_gate.py` flags a discrete primitive widened to a continuous domain without clamp + integer limit (IMP-021) and `isclose`/`allclose` absolute tolerances without `rel_tol=0.0` (IMP-024).
 - Every gate subprocess that reads text uses `encoding="utf-8", errors="replace"`; `main()` calls `ensure_utf8_stdout()` first (IMP-045).
 - Tests use a temporary store and must leave the configured store unchanged (IMP-063 / `tests/conftest.py`).

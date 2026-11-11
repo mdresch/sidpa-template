@@ -215,7 +215,8 @@ def run_adversarial_checks(
 
     all_ac_text = " ".join(ac.prose for ac in story.acceptance_criteria)
     low_text = all_ac_text.lower()
-    full_context = (story.epic_context + " " + all_ac_text).lower()
+    # Keyword checks and IMP-021/024 are scoped to acceptance-criteria prose only
+    # (epic preamble must not silence AC findings; see test_a_clamp_in_the_epic_preamble...).
 
     # 1. Specification Completeness
     if not story.acceptance_criteria:

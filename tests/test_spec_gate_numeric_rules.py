@@ -2,9 +2,14 @@
 
 from __future__ import annotations
 
+import ast
+from pathlib import Path
+
 import pytest
 
 from spec_gate import AcceptanceCriterionSpec, StorySpec, audit_story_spec
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def _spec(*prose: str) -> StorySpec:
@@ -123,3 +128,23 @@ def test_the_cue_and_the_input_domain_are_not_taken_for_a_clamp_or_an_integer_li
 def test_a_compound_primitive_name_counts(name: str) -> None:
     spec = _spec(f"`{name}` takes float successes in [0, total].")
     assert "SPEC-COMPL-DOMAIN-WIDENING" in _findings(spec)
+
+
+def test_run_adversarial_checks_does_not_bind_unused_full_context() -> None:
+    """Q-7-1: do not compute a dead full_context that never feeds the keyword checks."""
+    tree = ast.parse((ROOT / "scripts" / "spec_gate.py").read_text(encoding="utf-8"))
+    for node in tree.body:
+        if isinstance(node, ast.FunctionDef) and node.name == "run_adversarial_checks":
+            assigned = {
+                t.id
+                for stmt in node.body
+                if isinstance(stmt, ast.Assign)
+                for t in stmt.targets
+                if isinstance(t, ast.Name)
+            }
+            assert "full_context" not in assigned, (
+                "full_context is assigned in run_adversarial_checks but unused; "
+                "remove it or feed the keyword checks from it"
+            )
+            return
+    raise AssertionError("run_adversarial_checks not found")
