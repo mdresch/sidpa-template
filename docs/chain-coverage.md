@@ -76,9 +76,9 @@ There is an important distinction between the abstract conceptual trace and the 
 | 10 | **Verification Evidence** | **Monitoring & Controlling** | Contract Tests & Execution Logs | Executable Test Suite | `.claude/skills/heal-contract-failure` | 4-Ring Quality Gate | Inputs: Code deliverable & contract tests. Process: Execute test suite. Output: Verification evidence report (pytest / vitest). |
 | 11 | **Audit Record** | **Monitoring & Controlling** | `Audit-Register.md`<br>`Audit-Finding.md` | `approve-audit-record` | `run-lifecycle-pipeline.mjs` | `FULL` (3 actions) | Inputs: Deliverables & verification logs. Process: Audit architectural conformance. Output: Approved Audit Register entries. |
 | 12 | **Actual Outcome** | **Monitoring & Controlling** | Post-Delivery Impact Assessment | Empirical Observation | `analyze-graph.mjs` | Baseline Comparison | Inputs: Production telemetry & Benefits Statement. Process: Compare realized vs expected value. Output: Impact deltas. |
-| 13 | **Observation** | **Monitoring & Controlling** | Telemetry Logs & Gotchas (`OBS-*.md`) | Second Brain Ingestion | `heal-brain.mjs`<br>`diagnose-broken-links.mjs` | Raw Input | Inputs: Runtime telemetry & review findings. Process: Record raw telemetry. Output: Unfiltered observation log. |
-| 14 | **Insight** | **Monitoring & Controlling** | Synthesized Technical Findings (`INSIGHT-*.md`) | `synthesis-validator.mjs` | `synthesis-validator.mjs` | `FULL` (trust existing, supersede, flag) | Inputs: Observation logs. Process: Synthesize causal significance. Output: Resolved insight node. |
-| 15 | **Lesson Learned** | **Monitoring & Controlling** | Formalized Knowledge (`LL-*.md`, Register) | `resolve-kb-conflict` | `heal-brain.mjs` | `FULL` (trust existing, supersede, flag) | Inputs: Verified insights. Process: Crystallize actionable knowledge. Output: Formalized Lessons Learned register. |
+| 13 | **Observation** | **Monitoring & Controlling** | Telemetry Logs & Gotchas (`OBS-*.md`) | Second Brain Ingestion | `heal-brain.mjs`<br>`diagnose-broken-links.mjs` | Raw Input | Inputs: Runtime telemetry & review findings. Process: Record raw telemetry. Output: Unfiltered observation log. Path: §3.2. |
+| 14 | **Insight** | **Monitoring & Controlling** | Synthesized Technical Findings (`INSIGHT-*.md`) | `synthesis-validator.mjs` | `synthesis-validator.mjs` | `FULL` (trust existing, supersede, flag) | Inputs: Observation logs. Process: Synthesize causal significance. Output: Resolved insight node. Path: §3.2. |
+| 15 | **Lesson Learned** | **Monitoring & Controlling** | Formalized Knowledge (`LL-*.md`, Register) | `resolve-kb-conflict` | `heal-brain.mjs` | `FULL` (trust existing, supersede, flag) | Inputs: Verified insights. Process: Crystallize actionable knowledge. Output: Formalized Lessons Learned register. Path: §3.2. |
 | 16 | **Governance Change** | **Monitoring & Controlling** | Governance Amendments & Diffs (`GC-*.md`) | • `classify-diff-type`<br>• `escalate-diff-response` | `compile-ontology-graph.mjs` | Paired Pipeline: `FULL` / `LOW` | Inputs: Lessons learned (`evidence_basis: execution`) or Stage 7-8 baseline findings (`evidence_basis: design_time`, §3.1) & proposed diffs. Process: Semantic classification & escalation bandit. Output: Governed baseline update. |
 | 17 | **Adaptation Plan** | **Closing / Adaptive Feedback** | `Adaptation-Plan.md` | `approve-adaptation-plan` | `orchestrate_pmbok.py --mode adapt` | `FULL` (3 actions) | Inputs: Validated Stage 16 governance change & realized outcomes from executed work (design-time changes go Stage 16 → Stage 6 directly, §3.1). Process: Tailor PMP subsidiary plans via Governance Change Impact Matrix. Output: Impacted plan list. |
 | 18 | **Intent Refinement** | **Closing / Strategic Feedback** | `Intent-Refinement-Proposal.md` | `approve-intent-refinement` | `build-18-stage-canvas.mjs`<br>`run-lifecycle-pipeline.mjs` | `FULL` (3 actions) | Inputs: Accepted Stage 17 adaptations & phase review. Process: Strategic review of original Intent. Output: **Catalyst for Phase N+1 Spark Capture**. |
@@ -145,6 +145,40 @@ flowchart TD
 - Change-control episodes carry `evidence_basis: design_time | execution`, so policies that later learn from them do not mix the two kinds.
 
 **Versioning.** Design-time revisions are patch increments (`PMP-BL-v1.0.x`). Minor increments (`PMP-BL-v1.1.0`) are reserved for Stage 17 adaptations from executed work. The case that surfaced the loop is in `sequence-and-lessons.md` Rule #21.
+
+### 3.2 The Stage 13-15 knowledge path (Observation → Insight → Lesson Learned)
+
+Stages 13-15 had a named home (the shared knowledge base) but no written path. This is the path, first written in Kayros Bay's PROP-002 (2026-10-27) and reviewed against the shared vault ontology. The vault node types are `observation`, `insight`, `lesson_learned`, `governance_change` and `adaptation`; the ids below follow the ontology's own patterns.
+
+```mermaid
+flowchart TD
+    RUN["Executed work: a pipeline run, a test, a delivery, an audit"] --> OBS["Stage 13: OBS-nnnn in raw/observations<br/>status Observed · evidence = what ran, when, output"]
+    OBS -->|"triage: real? repeatable? whose?"| TRI["Observed → Triaged"]
+    TRI --> INS["Stage 14: INSIGHT-nnnn<br/>derived from the observation"]
+    INS --> KBC{"resolve-kb-conflict<br/>does it contradict an existing node?"}
+    KBC -->|"no conflict / trust_existing"| ACT["Insight Active"]
+    KBC -->|"supersede"| SUP["Existing node marked superseded<br/>insight Active"]
+    KBC -->|"flag"| HUM["Held for the Project Owner"]
+    ACT --> LL["Stage 15: Lesson-nnnn<br/>Draft → Reviewed → Active"]
+    SUP --> LL
+    LL -->|"changes how the project or its tooling works"| G16["Stage 16: classify-diff-type<br/>evidence_basis = execution · escalate-diff-response"]
+    G16 -->|"validated change"| A17["Stage 17: Adaptation-Plan.md entry<br/>cites the lesson · approve-adaptation-plan"]
+    KBC -.->|"a note contradicts an accepted project document"| DOC["trust_existing (correct the note)<br/>or flag → BFI (§3.1)"]
+```
+
+**Stage 13, capture (no adjudication).** Record only what was seen: what ran (command, version), when, the output or file evidence and the artifact touched. No interpretation and no fix. Triage (`Observed → Triaged`) confirms it is real and reproducible; a one-off that cannot be reproduced stays `Observed`.
+
+**Stage 14, the `resolve-kb-conflict` decision.** Does the insight contradict an existing knowledge-base node (a concept note, an earlier insight or lesson, a compiled ADR page)? `trust_existing`: the existing node stands and the insight is recorded and linked. `supersede`: the insight replaces the node, which is marked superseded, not deleted. `flag`: not decidable from the evidence; held for the Project Owner.
+
+**Authority rule for project documents.** The knowledge base cannot supersede an accepted project document (an ADR, BRD, FDD or plan). A conflict between a note and such a document is resolved as `trust_existing` (the note is corrected) or `flag` (the project document may be wrong).
+
+**Which route a contradiction takes.** A contradiction that is visible from the documents alone (for example a note against an accepted ADR) is a baseline feedback item, raised as a BFI and handled by §3.1. A lesson that comes from executed work and shows an accepted ADR or the baseline to be wrong is execution evidence and takes the execution route: Stage 16 (`evidence_basis: execution`), then Stage 17. A finding enters one route, never both (§3.1).
+
+**Stage 15 to 17.** A lesson that changes how the project or its tooling works enters Stage 16 with `evidence_basis: execution`. Only a validated Stage 16 change becomes an Adaptation-Plan entry citing the lesson, approved by `approve-adaptation-plan`. A change to the shared vault's own scripts is governed in the project but lands in the vault repository.
+
+**Ids.** Projects that share a vault allocate a range per node type, recorded in the project's own documents, so the vault's duplicate-id audit stays clean. Use the ontology's patterns (`OBS-nnnn`, `INSIGHT-nnnn`, `Lesson-nnnn`, `GOV-CHG-nnnn`, `ADAPT-nnnn`).
+
+**Policy status.** `resolve-kb-conflict` belongs to the shared `obsidian-brain-ingestor`, not to a project's governance namespace (`sequence-and-lessons.md` Rule #19). Its three actions are kept as reference in `docs/policy-shapes/resolve-kb-conflict.NOT-INITIALIZED.actions.json`: `FULL` authority, human approval required (Rule #18), zero episodes. Nothing is automated, nothing is learned, no project-local knowledge base is built, and there is no Stage 18 shape (Rule #20). Before the first real episode, validate the frame against a deliberately wrong case (Rule #10).
 
 ---
 
