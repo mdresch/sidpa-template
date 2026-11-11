@@ -88,7 +88,7 @@ def test_dependencies_form_a_dag_rooted_at_scope() -> None:
         data, _ = split_frontmatter(path.read_text(encoding="utf-8"))
         graph[str(data["plan_id"])] = list(data["depends_on"])
     assert graph["scope-management"] == []
-    assert [pid for pid, deps in graph.items() if not deps] == ["scope-management"]
+    assert set(pid for pid, deps in graph.items() if not deps) == {"scope-management"}
     for pid, deps in graph.items():
         assert set(deps) <= set(graph), f"{pid} depends on an unknown plan"
     visiting: set[str] = set()
@@ -111,8 +111,11 @@ def test_dependencies_form_a_dag_rooted_at_scope() -> None:
 def test_tier_one_plans_have_the_stricter_floors() -> None:
     def floor_line(plan: str) -> str:
         return next(
-            line for line in (PLANS / f"{plan}.template.md").read_text(encoding="utf-8").split("\n")
-            if line.startswith("Word count")
+            (
+                line for line in (PLANS / f"{plan}.template.md").read_text(encoding="utf-8").split("\n")
+                if line.startswith("Word count")
+            ),
+            "",
         )
 
     for plan in ("Scope-Management-Plan", "Schedule-Management-Plan", "Cost-Management-Plan"):
@@ -160,6 +163,7 @@ def scratch_copy(tmp_path: Path) -> Path:
 
 def load_init(project: Path):
     spec = importlib.util.spec_from_file_location("init_project_under_test", project / "scripts" / "init_project.py")
+    assert spec is not None and spec.loader is not None, f"Could not create import spec for {project / 'scripts' / 'init_project.py'}"
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -175,6 +179,8 @@ def test_init_start_stage_scaffolds_documents_and_opens_the_first_cycle(scratch_
     assert (scratch_copy / "docs/project-docs/Project-Charter.md").exists()
     assert (scratch_copy / "docs/registers/Methodology-Best-Practice-Ledger.md").exists()
     assert not (scratch_copy / "docs/project-docs/management-plans/Scope-Management-Plan.md").exists()
+    ideation = (scratch_copy / "docs/project-docs/Ideation-Document.md").read_text(encoding="utf-8")
+    assert "HYP-my-demo-app-001" in ideation
     store = scratch_copy / "data/agent-learning/store/policies"
     assert (store / "my-demo-app-governance").exists()
     assert not (store / "template-governance").exists()

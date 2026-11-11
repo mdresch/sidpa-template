@@ -90,17 +90,20 @@ def rename_governance(clean_name: str) -> int:
             print(f"  [OK] Renamed {new_dir.relative_to(repo_root)}")
         if new_dir.exists():
             for json_file in new_dir.glob("*.json"):
-                content = json_file.read_text(encoding="utf-8")
-                if old_agent_id in content:
-                    json_file.write_text(
-                        content.replace(f'"{old_agent_id}"', f'"{new_agent_id}"'),
-                        encoding="utf-8",
-                    )
-                    updated += 1
+                try:
+                    content = json_file.read_text(encoding="utf-8")
+                    if old_agent_id in content:
+                        json_file.write_text(
+                            content.replace(f'"{old_agent_id}"', f'"{new_agent_id}"'),
+                            encoding="utf-8",
+                        )
+                        updated += 1
+                except (OSError, PermissionError) as err:
+                    print(f"  [WARN] Failed to update {json_file.relative_to(repo_root)}: {err}")
     return updated
 
 
-def copy_stage_documents(stage: str, project_title: str, today: str) -> int:
+def copy_stage_documents(stage: str, project_title: str, clean_name: str, today: str) -> int:
     """Copy the stage's templates to their working names without overwriting anything."""
     created = 0
     for pattern in STAGES[stage]:
@@ -112,6 +115,7 @@ def copy_stage_documents(stage: str, project_title: str, today: str) -> int:
             text = template_file.read_text(encoding="utf-8")
             text = (
                 text.replace("<project name>", project_title)
+                .replace("HYP-<project>-", f"HYP-{clean_name}-")
                 .replace("<project>", project_title)
                 .replace("<date the project starts>", today)
                 .replace("<date this project starts using it>", today)
@@ -132,7 +136,7 @@ def init_project(project_name: str, stage: str = "start", create_docs: bool = Tr
     print(f"  [OK] Updated agent_id in {updated} policy file(s).")
 
     if create_docs:
-        created = copy_stage_documents(stage, project_name.strip(), datetime.date.today().isoformat())
+        created = copy_stage_documents(stage, project_name.strip(), clean_name, datetime.date.today().isoformat())
         print(f"  [OK] Created {created} document(s) for stage '{stage}'.")
 
     print("\nNext steps:")
