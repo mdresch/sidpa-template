@@ -1,9 +1,10 @@
----
+﻿---
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Planning"
 pmbok_process: "5.3 Define Scope & Detailed Interface/Solution Design"
-pmp_baseline: "PMP-BL-v<X.Y.Z>"
-lifecycle_stage: "Stage 6 (Requirement: Solution)"
+baseline_id: "<target-baseline-id>"
+cycle_id: "CYC-001"
+lifecycle_stage: "Stage 7 (Requirement: Solution)"
 governance_policy: "approve-fdd"
 inputs:
   - "ADR-*.md"
@@ -17,7 +18,7 @@ outputs:
 # FDD-<NNN>: <Title>
 
 > **PMBOK 8 Process:** `5.3 Define Scope & Detailed Interface/Solution Design` (Planning)  
-> **Governance Policy:** `approve-fdd` | **Lifecycle Stage:** `Stage 6 (Requirement: Solution)`  
+> **Governance Policy:** `approve-fdd` | **Lifecycle Stage:** `Stage 7 (Requirement: Solution)`  
 > **Inputs:** ADR-*.md, BRD-*.md, Quality Management Plan  
 > **Process:** Specify technical interfaces, data schemas, algorithmic logic, and invariant contracts  
 > **Outputs:** FDD-*.md
@@ -25,7 +26,7 @@ outputs:
 
 **Source ADR:** [ADR-<NNN>](../../07-architecture/ADR-<NNN>-<slug>.md)
 **Source BRD:** [BRD-<NNN>](../Business-Requirements/BRD-<NNN>-<slug>.md)
-**Governing Baseline:** `PMP-BL-v<X.Y.Z>` (Invariant 6)
+**Governing Baseline:** `<baseline_id>` · **Cycle:** `<cycle_id>` (see the Cycle Register)
 **Status:** Draft — technical design derived from an Accepted ADR
 
 ## Design: <name>
@@ -37,13 +38,6 @@ outputs:
 ## Error Handling / Compatibility
 | Condition | Behavior |
 |---|---|
-
-## Baseline Feedback (Stage 7-8 → 6)
-<While writing or reviewing this document, did you find that it contradicts, or cannot be satisfied by, the approved baseline (the PMP, a subsidiary plan, the Charter, or an upstream document)? Raise each contradiction as a BFI-NNN in the PMP's Pending Baseline Feedback table (PMP §3.3) and cite it here by id and by the documents it concerns. Do not fix the baseline inside this document, and do not open an Adaptation Plan: that is the Stage 17 route and needs evidence from executed work. "None found" is a valid entry.>
-
-| BFI | Contradiction (cite the documents) | Status |
-|---|---|---|
-| None found | | |
 
 ## Out of Scope
 <Same as BRD. Don't introduce new scope here.>
