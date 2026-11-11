@@ -58,8 +58,21 @@ For each approved row, record the baseline identifier, approved manifest/version
 
 The four baseline rows above are integrated through their approved parent plans. Foundation manifests remain the detailed artifact registers; the PMP records the approved plan-level baseline and its approval evidence.
 
-## 3. Feedback Loop from Adaptation
-When an **Adaptation Plan** (Stage 17) is approved, this PMP and its subsidiary plans are updated with tailored operational changes, which in turn trigger refined ADRs, BRDs, FDDs, and Stories for the next cycle.
+## 3. Feedback Loops
+The approved baseline has two routes back, kept apart. Both end at this PMP; they differ in what triggers them and in how the baseline is versioned.
+
+### 3.1 Execution loop (Stage 17)
+When an **Adaptation Plan** (Stage 17) is approved on evidence from executed work (deliverables, tests, audits, observed outcomes, insights and lessons learned: Stages 9-15), this PMP and its subsidiary plans are updated with tailored operational changes, which in turn trigger refined ADRs, BRDs, FDDs, and Stories for the next cycle. A Stage 17 adaptation is a minor baseline increment (`PMP-BL-v1.1.0`).
+
+### 3.2 Design-time loop (Stages 7-8 → 16 → 6)
+When writing or reviewing Stage 7 requirements, or checking Stage 8 readiness, finds a defect in the approved baseline, it is logged as a **BFI-NNN** (baseline feedback item) in §3.3 and routed through Stage 16 (`classify-diff-type` with `evidence_basis = design_time`, then `escalate-diff-response`), never through an Adaptation Plan. A Steering-Committee-level item is submitted as a **Baseline Revision Package**: the revised PMP and the changed plans, plus Spark, Ideation, Business Case, Benefits Statement and Stakeholder Register, and the Charter only if it is amended. The Steering Committee approves the revised baseline and `approve-pmp` records it as a patch increment (`PMP-BL-v1.0.x`). The loop fixes logic and records variance only, adds no new durations, costs or estimated dates, and invents no evidence. See `docs/chain-coverage.md` §3.1.
+
+### 3.3 Pending Baseline Feedback
+Internal working items raised by the design-time loop. "None" is a valid entry.
+
+| BFI | Raised at (stage, document) | Finding (cite the documents) | Classification (`classify-diff-type`) | Route (`escalate-diff-response`) | Status |
+|---|---|---|---|---|---|
+| None | | | | | |
 
 ## What this is not yet
 This document integrates governance and operational plans. It does NOT contain code architecture or solution logic—those belong in ADRs, BRDs, and FDDs, which are drafted only after this PMP is approved.

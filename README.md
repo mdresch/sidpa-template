@@ -99,15 +99,15 @@ Canonical action specifications, decision frames, and idle policy stores:
 - `data/agent-learning/store/` — Pre-initialized, idle policy instances.
 
 ### 7. Governance Principles & Empirical Lessons
-- **`docs/chain-coverage.md`** — Comprehensive mapping of the closed-loop lifecycle, process mappings, and directory layouts.
-- **`docs/sequence-and-lessons.md`** — The battle-tested ordering rules, cited against the real projects (ADPA, SocialEngage, Enterprise Work Hierarchy) that surfaced them.
+- **`docs/chain-coverage.md`** — Comprehensive mapping of the 18-stage closed-loop lifecycle, process mappings, and directory layouts.
+- **`docs/sequence-and-lessons.md`** — The battle-tested ordering rules, cited against the real projects (ADPA, SocialEngage, Enterprise Work Hierarchy, Kairos Bay) that surfaced them.
 - **`docs/root-cause-log.md`** — Explanations for why each policy was built and where real projects diverged.
 
 ---
 
 ## Core Governance Invariants & Baseline Versioning Rules
 
-The template enforces 7 fundamental governance invariants across the lifecycle:
+The template enforces 9 fundamental governance invariants across the lifecycle:
 
 1. **Requirements Ground Baselines (Invariant 1):** Technical Requirements (Stage 6: ADRs, BRDs, FDDs, User Stories) must be formulated and approved to define scope and work packages before the integrated Project Management Plan (Stage 7) and its triple baselines (Scope, Schedule, Cost) can be formally baselined (`PMP-BL-v1.0.0`).
 2. **Pillars Full-Coverage Invariant (Invariant 2):** High-level foundational ADRs drafted immediately after the Pillars Exercise must provide 100% full coverage across all identified pillars before moving to detailed requirements.
@@ -117,6 +117,7 @@ The template enforces 7 fundamental governance invariants across the lifecycle:
 6. **Baseline Traceability Invariant (Invariant 6):** Every approved PMP, ADR, BRD, FDD, User Story, and Adaptation Plan must record its governing PMP baseline identifier (`pmp_baseline: "PMP-BL-vX.Y.Z"`).
 7. **Implementation Authorization Prerequisite (Invariant 7):** No developer may commence implementation work (Stage 9) until the Stage 8 Implementation Readiness Gate formally issues an Execution Authorization Notice reconciling all Stage 6 requirements approvals and the Stage 7 PMP baseline.
 8. **Deterministic Rollback Protocol (Invariant 8):** If downstream execution reveals regressions or operational failure (detected via ADR-005 `compare_decision_results()`), atomic rollback restores the prior approved baseline from archive and penalizes the escalation bandit.
+9. **Design-Time Baseline Revisions Are Patches (Invariant 9):** Defects discovered in the baseline during design time (Stages 7-8) route directly to Stage 16 classification and require Steering Committee approval of a Baseline Revision Package, resulting in a patch release (`PMP-BL-v1.0.x`) without creating unevidenced Stage 17 adaptations.
 
 ---
 
