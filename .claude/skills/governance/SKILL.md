@@ -26,3 +26,16 @@ description: Automated governance change pipeline (Stage 16) for paired diff cla
 - Stage 16 scope boundary: pipeline terminates with a validated governance baseline; Stage 17 Execution Adaptation is strictly out of scope.
 - Zero storage expansion: no new Cosmos containers or LearningStore record types (ADR-002 Invariant #2).
 
+## Gate standards (propagated from agent-learning Phase-2 close)
+
+- `scripts/pr_gate.py` checks triage lines a PR adds to `implementation-log.md` or `docs/registers/Implementation-Log.md` (IMP-030) and reconciles maintainer triage against review defects (IMP-017). Helpers live in `scripts/lib/review_triage.py` and `scripts/lib/triage_replay.py`.
+- `scripts/spec_gate.py` flags a discrete primitive widened to a continuous domain without clamp + integer limit (IMP-021) and `isclose`/`allclose` absolute tolerances without `rel_tol=0.0` (IMP-024).
+- Every gate subprocess that reads text uses `encoding="utf-8", errors="replace"`; `main()` calls `ensure_utf8_stdout()` first (IMP-045).
+- Tests use a temporary store and must leave the configured store unchanged (IMP-063 / `tests/conftest.py`).
+
+## Running a governance command (LL-040)
+
+- Before any decide / adjudicate / episode-register step, resolve and print the store path (`AGENT_LEARNING_LOCAL_STORE_DIR` if set, else `./data/agent-learning/store`) and count the files in it before and after.
+- Refuse a store outside the repository unless an explicit allow flag is set.
+- **Deferred:** `scripts/approve.py` (IMP-007) and `scripts/stage16_amend.py` (IMP-062) need a template-facing CLI adapter over the learning decide/adjudicate/register commands. Do not invent a project-specific hard-wired agent id until that CLI lands.
+

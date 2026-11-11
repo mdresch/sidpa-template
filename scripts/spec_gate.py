@@ -16,7 +16,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 import json
 from pathlib import Path
 import re
@@ -48,6 +48,33 @@ from critique_evidence import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_STORE_DIR = ROOT / "data" / "agent-learning" / "store"
+
+# IMP-024: math.isclose / allclose with an absolute tolerance keep a default relative
+# tolerance that can silently relax a tight contract. pytest.approx(abs=...) does not.
+_ISCLOSE = re.compile(r"\b(?:isclose|allclose)\b", re.IGNORECASE)
+_ABS_TOL = re.compile(r"\b(?:abs_tol|atol)\b")
+_TIGHT = re.compile(r"\b1e-(\d+)\b")
+_ZERO_REL = re.compile(r"\b(?:rel_tol|rtol)\s*=\s*0(?:\.0+)?(?![\d.])")
+_STRICT = re.compile(r"pytest\.approx\([^)]*\babs\s*=|absolute difference|\babs\(", re.IGNORECASE)
+
+# IMP-021: discrete primitive widened to a continuous domain.
+_DISCRETE = re.compile(r"\b(?:wilson|binomial|clopper|agresti)(?![A-Za-z])", re.IGNORECASE)
+_WIDENED = re.compile(
+    r"\bfloats?\b.*\bsuccesses\b|\bsuccesses\b.*\bfloats?\b|\bin steps of 0\.[0-9]+|"
+    r"\bcumulative reward\b|\bfractional\b|\bnon-integer\b|\breal-valued\b|"
+    r"mapped (?:from \[-1, 1\] )?to \[0, 1\]",
+    re.IGNORECASE,
+)
+_CLAMP = re.compile(
+    r"\bclamp(?:ed|s)?\b|\b(?:stays?|remains?|bounded|clipped)\b[^.]{0,20}\[0, ?1\]|max\(0|min\(1",
+    re.IGNORECASE,
+)
+_INTEGER_LIMIT = re.compile(
+    r"(?<!non-)\binteger\b[^.]*\b(?:equal|equals|agree|agrees|match|matches|identical|reduces)\b|"
+    r"\b(?:equal|equals|agree|agrees|match|matches|identical|reduces)\b[^.]*(?<!non-)\binteger\b",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
@@ -257,7 +284,82 @@ def run_adversarial_checks(
         audit_log.append(("OK", "Architectural", "Component operates within standard architectural boundaries."))
         deltas.append(CritiqueDelta("architectural_boundaries", delta=0.10, doubt=0.0, claim_type="confirmation", verified="yes"))
 
+    # Check E (IMP-021): discrete primitive widened to a continuous domain without clamp + integer limit
+    all_ac_prose = " ".join(ac.prose for ac in story.acceptance_criteria)
+    widened = [
+        ac for ac in story.acceptance_criteria if _DISCRETE.search(ac.prose) and _WIDENED.search(ac.prose)
+    ]
+    if widened and not (_CLAMP.search(all_ac_prose) and _INTEGER_LIMIT.search(all_ac_prose)):
+        labels = ", ".join(ac.label for ac in widened)
+        deltas.append(
+            CritiqueDelta(
+                "specification_completeness",
+                delta=-0.05,
+                doubt=0.05,
+                claim_type="test gap",
+                verified="partial",
+                finding_id="SPEC-COMPL-DOMAIN-WIDENING",
+            )
+        )
+        interpretations.append(
+            Interpretation(
+                id=f"I{len(interpretations)+1}",
+                title="Continuous-Domain Widening",
+                category="specification_completeness",
+                text=(
+                    "State how the widened result is clamped (for a proportion bound, to [0, 1]), why it stays "
+                    "inside that range for every float input, and that it equals the classical value at integer counts."
+                ),
+                governing_ac=widened[0].label,
+            )
+        )
+        audit_log.append(
+            ("WARN", "Completeness", f"[domain-widening] {labels}: discrete primitive on a continuous domain.")
+        )
+
+    # Check A2 (IMP-024): isclose/allclose absolute tolerance without zero relative tolerance
+    tight = any(int(n) >= 9 for n in _TIGHT.findall(all_ac_prose))
+    if (
+        _ISCLOSE.search(all_ac_prose)
+        and (_ABS_TOL.search(all_ac_prose) or tight)
+        and not _ZERO_REL.search(all_ac_prose)
+        and not _STRICT.search(all_ac_prose)
+    ):
+        deltas.append(
+            CritiqueDelta(
+                "testability",
+                delta=-0.05,
+                doubt=0.05,
+                claim_type="test gap",
+                verified="partial",
+                finding_id="SPEC-TEST-REL-TOL-GAP",
+            )
+        )
+        interpretations.append(
+            Interpretation(
+                id=f"I{len(interpretations)+1}",
+                title="Zero Relative Tolerance",
+                category="testability",
+                text=(
+                    "Pass rel_tol=0.0 (or rtol=0) with abs_tol (atol): the default relative tolerance "
+                    "(1e-9 for math.isclose, 1e-5 for numpy.allclose) silently relaxes a 1e-12 contract. "
+                    "pytest.approx(abs=...) or an absolute difference check is equally strict."
+                ),
+            )
+        )
+        audit_log.append(
+            ("WARN", "Testability", "isclose / allclose absolute tolerance without rel_tol=0.0.")
+        )
+
     return deltas, interpretations, audit_log
+
+
+def audit_story_spec(
+    story: StorySpec,
+) -> tuple[list[CritiqueDelta], list[Interpretation], list[str]]:
+    """Alias for contract tests: same checks as run_adversarial_checks with string log lines."""
+    deltas, interpretations, audit_log = run_adversarial_checks(story)
+    return deltas, interpretations, [f"[{status}] {cat}: {msg}" for status, cat, msg in audit_log]
 
 
 def build_spec_decision_frame(story_id: str) -> DecisionFrame:
@@ -303,7 +405,7 @@ def save_spec_episode(
     store_dir: Optional[Path] = None,
 ) -> str:
     """Persist the specification gate decision as an auditable Episode."""
-    target_dir = store_dir or (ROOT / "data" / "agent-learning" / "store")
+    target_dir = Path(store_dir) if store_dir else DEFAULT_STORE_DIR
     store = LocalFileStore(root_dir=target_dir)
 
     ep_uuid = uuid.uuid4().hex[:8]
@@ -392,7 +494,16 @@ def evaluate_spec(
     return passed, reason, details
 
 
+def ensure_utf8_stdout() -> None:
+    """Make stdout/stderr UTF-8 so verdict lines print on a cp1252 console (IMP-045)."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(encoding="utf-8", errors="replace")
+
+
 def main() -> int:
+    ensure_utf8_stdout()
     parser = argparse.ArgumentParser(description="Pre-Flight Specification & Contract Readiness Gatekeeper.")
     parser.add_argument("story_id", help="Story identifier (e.g. '1.1', '18.4')")
     parser.add_argument("--json", action="store_true", help="Output results in JSON format")
@@ -438,8 +549,10 @@ def main() -> int:
         print(f"  Governance Episode Persisted:     {details['episode_id']}")
     print("=" * 80)
     if passed:
+        print("✅ GATE RESULT: PASSED / APPROVED TO MERGE")
         print("VERDICT: PASSED / SPEC READY FOR CONTRACTS")
     else:
+        print("❌ GATE RESULT: HALTED / REVISIONS REQUIRED")
         print("VERDICT: HALTED / SPECIFICATION INCOMPLETE (Amend before drafting contracts)")
     print("=" * 80)
 
