@@ -52,7 +52,7 @@ Identify which subsidiary management plans require updates as a direct result of
 - [ ] **Procurement Management Plan:** <Supplier, vendor, or external package changes>
 - [ ] **Stakeholder Engagement Plan:** <Revised approval gates or escalation matrices>
 
-*Any checked plan triggers selective execution via `python scripts/orchestrate_pmbok.py --mode adapt --adaptation-plan docs/project-docs/Adaptation-Plan.md`. Prior baselines are archived to `management-plans/history/{baseline_id}/`.*
+*Any checked plan is revised in a new cycle (open `CYC-NNN` in `docs/registers/Cycle-Register.md`), re-approved with everything that depends on it, and folded into the next PMP baseline. Prior baselines are archived to `management-plans/history/{baseline_id}/`.*
 
 ## Rollback & Recovery Pathway
 If post-adaptation execution reveals regressions or operational failure (detected via ADR-005 `compare_decision_results()`), atomic rollback is triggered:

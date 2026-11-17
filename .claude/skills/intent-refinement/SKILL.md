@@ -1,32 +1,35 @@
 ---
 name: intent-refinement
-description: PMBOK 8 Stage 18 Intent Refinement, Phase Close readiness evaluation, Bayesian hypothesis adjudication, cybernetic low-pass damping, and double-loop cognitive feedback.
+description: Stage 18 Intent Refinement for a SIDPA project: phase-close readiness, hypothesis adjudication, damped strategic change, and hand-off to the next cycle. Process guidance only; the earlier Python module was removed with the legacy tooling.
 ---
 
-# Component: intent-refinement (`pmbok.models.intent_refinement` & `scripts.orchestrate_pmbok`)
+# Skill: intent-refinement (SIDPA template)
 
-**Governing:** ADR-009, BRD-009, FDD-009, Epic 9 (Stories 9.1, 9.2, 9.3).  
-**Contract:** `tests/pmbok/test_intent_refinement.py`.  
-**Baseline:** `PMP-BL-v1.0.0`.
+This skill describes Stage 18 as a process. The earlier code (`pmbok.models.intent_refinement`) was removed with the legacy tooling. If your project needs the readiness check, hypothesis adjudication or damping filter as code, build them as small pure functions with contract tests through `implement-story`, using the rules below as the contract.
 
-## Load-bearing constraints
+## Readiness before Stage 18 can proceed
 
-- **Readiness Audit Precondition ($AC_0$):** `evaluate_phase_close_readiness()` enforces that all Stage 9 deliverables are accepted, Stage 11 audit records are free of unresolved non-conformances, and Stage 15 lessons learned are crystallized before Stage 18 evaluation can proceed. Any violation raises `ReadinessPreconditionError`.
-- **Full-Authority Refinement Gate ($AC_1$):** `approve-intent-refinement` is registered under `agent-learning-governance` with `DecisionAuthority.FULL`, multi-criteria Bayesian evaluation, and permanently locked `requires_human_approval: true`.
-- **Machine-Readable Contract ($AC_2$):** The proposal artifact (`Intent-Refinement-Proposal.md`) strictly validates against `IntentRefinementProposalPayload`, enforcing structural completeness, SemVer baseline identifiers (`PMP-BL-vX.Y.Z`), and disposition constraints.
-- **Administrative Decommissioning ($AC_3$):** Under `disposition_type: "project_termination"`, `scripts/orchestrate_pmbok.py --mode decommission` prunes ephemeral worktrees, revokes temporary runtime credentials, and releases test runners.
-- **Phase $N+1$ Spark Seeding ($AC_4$):** Under `disposition_type: "phase_handoff"`, `scripts/orchestrate_pmbok.py --mode seed-next` generates Phase $N+1$ `Spark-Capture.md` and `Ideation-Document.md` populated with approved directives and incremented baseline.
-- **Zero Storage Expansion ($AC_5$):** All refinement proposals, decision frames, evaluations, and human sign-off episodes are persisted using ADR-002's five record types as metadata-enriched `Episode` instances.
-- **Bayes Factor Adjudication ($AC_6$):** `resolve_hypothesis()` adjudicates empirical Bayes factors:
-  - $BF_{10} \ge 10 \implies$ `VALIDATED` (graduated into permanent architectural invariant).
-  - $BF_{10} \le 0.1 \implies$ `REFUTED` (archived with negative reinforcement learning penalty).
-- **Strict Recurrence Depth Guard ($AC_7$):** On the 3rd cycle ($d=2$), `REFINED` is strictly prohibited. `resolve_hypothesis()` and `adjudicate_hypothesis_batch()` automatically collapse inconclusive hypotheses ($BF_{10} < 10$) at $d=2$ to `REFUTED` due to budget exhaustion.
-- **Hypothesis Terminality Verification ($AC_8$):** `adjudicate_hypothesis_batch()` asserts that 100% of Stage 3 hypotheses resolve to terminal states. Any missing Bayes factor or lingering active state raises `HypothesisTerminalityError`.
-- **Low-Pass Filter Damping ($AC_9$):** `LowPassOutcomeDampingFilter` smooths rolling outcome deltas using exponential moving average $\mathbf{\Theta}_{N+1} = \beta \mathbf{\Theta}_N + (1 - \beta)\nabla\mathcal{L}$ with $\beta \in [0.6, 0.85]$ and bias-corrected warmup ($\frac{\mathbf{\Theta}_N}{1 - \beta^N}$) for initial generations ($N < 3$) to eliminate strategic whiplash.
-- **S3–S4 Homeostatic Capacity Balance ($AC_{10}$):** `validate_strategic_pivot_capacity()` rate-limits proposed strategic pivots against operational adaptation capacity ($\text{Pivots}_{\max} \le \lceil C_{\text{adapt}} / 2 \rceil$). Violations raise `StrategicWhiplashError`.
-- **Cumulative Lineage Kernel ($AC_{11}$):** `compute_lineage_kernel()` generates an immutable `CumulativeLineageKernel` preserving `root_spark`, `parent_refinement`, `immutable_core_invariants`, and an incremental cryptographic SHA-256 knowledge hash linking project generations without memory decay.
+- Every Stage 9 deliverable is accepted.
+- No Stage 11 audit record has an unresolved non-conformance.
+- Stage 15 lessons learned are recorded for the phase (an entry, or a no-new-lessons sign-off).
 
-## Call sites
+## The gate
 
-- `pmbok/models/intent_refinement.py`: Exports `IntentRefinementProposalPayload`, `ReadinessAuditResult`, `ReadinessPreconditionError`, `evaluate_phase_close_readiness`, `HypothesisTerminalityError`, `resolve_hypothesis`, `adjudicate_hypothesis_batch`, `LowPassOutcomeDampingFilter`, `StrategicWhiplashError`, `validate_strategic_pivot_capacity`, `compute_lineage_kernel`.
-- `scripts/orchestrate_pmbok.py`: CLI `--mode seed-next`, `--mode decommission`, and `--mode rollback`.
+`approve-intent-refinement` runs under full authority with permanent human approval. The Intent Refinement Proposal records the disposition (`phase_handoff` or `project_termination`), the evidence, and the baseline it refines.
+
+## Hypotheses
+
+- Every Stage 3 hypothesis ends in a terminal state before Stage 18 closes: validated (graduates into an architectural invariant), refuted (archived), or collapsed.
+- Adjudicate with Bayes factors where evidence supports it: a factor of 10 or more validates, 0.1 or less refutes.
+- A hypothesis may be refined for at most two generations. On the third, an inconclusive hypothesis collapses to refuted because its budget is spent. A generation is not a cycle: the generation counter and the `CYC-NNN` counter are separate.
+
+## Damping and capacity
+
+- Smooth rolling outcome deltas before they drive a strategic change, so one noisy period does not cause whiplash. A bias-corrected exponential moving average with a smoothing factor between 0.6 and 0.85 is the starting point.
+- Rate-limit strategic pivots against what the operation can absorb. After a major charter revision, require at least one complete delivery and audit cycle under the new baseline before the next refinement proposal.
+
+## Hand-off
+
+- `phase_handoff`: seed the next phase's Spark and Ideation from the approved directives, open a new cycle in the Cycle Register, and increment the baseline.
+- `project_termination`: prune ephemeral worktrees, revoke temporary credentials, release test runners, and close the open cycle.
+- Record refinement proposals, frames, evaluations and sign-offs as episode metadata. Add no new store record type.

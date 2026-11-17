@@ -1,159 +1,257 @@
-"""
-Template integrity and lifecycle sequence tests for SIDPA template.
+"""Integrity checks for the SIDPA template itself.
 
-Enforces:
-1. Stage 6: Requirements (ADRs, BRDs, FDDs, User Stories)
-2. Stage 7: Integrated PMP & 9 Subsidiary Management Plans (PMP-BL-v1.0.0, Foundation Packs 7.A-7.D)
-3. Stage 8: Implementation Readiness Gate & Implementation Authorization Notice
-4. Valid JSON structure across all policy declarations and decision frames
+The template stores only template values. These tests keep it that way:
+the plan skeletons follow the ADR-012 content contract, their dependency
+graph is a DAG rooted at Scope, no project-specific artifacts are stored,
+and scripts/init_project.py scaffolds a working project.
 """
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import re
+import shutil
 from pathlib import Path
+
 import pytest
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-
-NINE_PLANS = [
-    "Scope-Management-Plan.md",
-    "Schedule-Management-Plan.md",
-    "Cost-Management-Plan.md",
-    "Resource-Management-Plan.md",
-    "Quality-Management-Plan.md",
-    "Communications-Management-Plan.md",
-    "Risk-Management-Plan.md",
-    "Procurement-Management-Plan.md",
-    "Stakeholder-Engagement-Plan.md",
+ROOT = Path(__file__).resolve().parent.parent
+PLANS = ROOT / "docs" / "project-docs" / "management-plans"
+DOMAINS = {"Governance", "Scope", "Schedule", "Finance", "Stakeholders", "Resources", "Risk"}
+REQUIRED_KEYS = [
+    "plan_id", "plan_name", "pmbok_edition", "pmbok_focus_area", "primary_pmbok_domain",
+    "secondary_pmbok_domains", "legacy_process", "route", "generator", "version", "baseline_id",
+    "cycle_id", "owner_role", "depends_on", "inputs", "outputs", "governance_policy",
 ]
+HEADINGS = [
+    r"^##\s+1\.\s+Intent,\s+Alignment\s+&\s+Boundaries",
+    r"^##\s+2\.\s+Domain\s+Mechanics\s+&\s+Standards",
+    r"^##\s+3\.\s+Governance,\s+Control\s+&\s+Decision\s+Rights",
+]
+WORD = re.compile(r"\b[^\W_]+(?:['’][^\W_]+)?\b")
 
 
-def test_nine_subsidiary_plans_are_generated_not_shipped() -> None:
-    """The 9 subsidiary plans are Stage 7 outputs of orchestrate_pmbok.py --mode full
-    against a real project's own Charter -- they must never ship pre-filled in the
-    template itself (that was a real regression: self-hosted "SIDPA Project" plans
-    leaking into every project scaffolded from this template)."""
-    plans_dir = REPO_ROOT / "docs" / "project-docs" / "management-plans"
-    for plan_name in NINE_PLANS:
-        plan_path = plans_dir / plan_name
-        assert not plan_path.exists(), (
-            f"{plan_name} must not be pre-shipped in the template -- it is a generated "
-            "Stage 7 output. Delete it and let orchestrate_pmbok.py produce it per project."
-        )
-
-    orchestrator_src = (REPO_ROOT / "scripts" / "orchestrate_pmbok.py").read_text(encoding="utf-8")
-    for plan_name in NINE_PLANS:
-        plan_stem = plan_name.removesuffix(".md")
-        assert plan_stem in orchestrator_src, (
-            f"orchestrate_pmbok.py no longer appears to generate {plan_name}"
-        )
-
-
-def test_project_management_plan_template_has_stage_7_frontmatter() -> None:
-    template_path = REPO_ROOT / "docs" / "project-docs" / "Project-Management-Plan.template.md"
-    assert template_path.is_file(), "Missing Project-Management-Plan.template.md"
-    content = template_path.read_text(encoding="utf-8")
-    assert 'lifecycle_stage: "Stage 7 (Planning: Integrated PMP & Baselines)"' in content
-    assert 'pmbok_process: "4.2 Develop Project Management Plan"' in content
-
-    active_path = REPO_ROOT / "docs" / "project-docs" / "Project-Management-Plan.md"
-    assert not active_path.exists(), (
-        "Project-Management-Plan.md must not be pre-shipped in the template -- it is a "
-        "generated Stage 7 output, approved per project, not template content."
-    )
-
-
-def test_requirements_templates_have_stage_6_frontmatter() -> None:
-    req_templates = [
-        (REPO_ROOT / "docs" / "07-architecture" / "ADR-TEMPLATE.md", "Stage 6 (Requirement: Architecture)"),
-        (REPO_ROOT / "docs" / "project-docs" / "Business-Requirements" / "BRD-TEMPLATE.md", "Stage 6 (Requirement: Business)"),
-        (REPO_ROOT / "docs" / "project-docs" / "Functional-Design" / "FDD-TEMPLATE.md", "Stage 6 (Requirement: Solution)"),
-        (REPO_ROOT / "docs" / "user-stories" / "EPIC-TEMPLATE.md", "Stage 6 (Requirement: Story)"),
-    ]
-    for path, expected_stage in req_templates:
-        assert path.is_file(), f"Missing {path}"
-        content = path.read_text(encoding="utf-8")
-        assert f'lifecycle_stage: "{expected_stage}"' in content, (
-            f"{path.name} does not declare {expected_stage}"
-        )
-
-
-def test_stage_8_authorization_notice_template_exists_but_not_pre_authorized() -> None:
-    reports_dir = REPO_ROOT / "docs" / "project-docs" / "Status-Reports"
-    assert reports_dir.is_dir()
-
-    template_notice = reports_dir / "Stage-8-Implementation-Authorization-Notice.template.md"
-    active_notice = reports_dir / "Stage-8-Implementation-Authorization-Notice.md"
-
-    assert template_notice.is_file(), "Missing Stage 8 notice template"
-    content = template_notice.read_text(encoding="utf-8")
-    assert 'artifact_type: "execution_authorization_notice"' in content
-    assert "Stage 8 (Implementation Readiness Gate" in content
-    assert "AUTHORIZED_TO_EXECUTE" in content
-
-    # The active notice certifies that a real project has actually completed every
-    # upstream gate and been authorized to execute. The template itself has not --
-    # shipping this pre-filled was a real regression (a false execution-authorization
-    # claim for whatever project got scaffolded from this template).
-    assert not active_notice.exists(), (
-        "Stage-8-Implementation-Authorization-Notice.md must not be pre-shipped in the "
-        "template -- it asserts real execution authorization that only a real project's "
-        "own Stage 8 gate can grant."
-    )
-
-
-def test_foundation_packs_have_stage_7_manifests() -> None:
-    pack_checks = [
-        ("scope-baseline", "Scope-Foundation-Pack-Manifest.template.md", "Stage 7.A"),
-        ("schedule-baseline", "Schedule-Foundation-Pack-Manifest.template.md", "Stage 7.B"),
-        ("resource-baseline", "Resource-Foundation-Pack-Manifest.template.md", "Stage 7.C"),
-        ("cost-baseline", "Cost-Foundation-Pack-Manifest.template.md", "Stage 7.D"),
-    ]
-    for pack_dir, manifest_name, expected_stage in pack_checks:
-        path = REPO_ROOT / "templates" / "management-plans" / pack_dir / manifest_name
-        assert path.is_file(), f"Missing {path}"
-        content = path.read_text(encoding="utf-8")
-        assert f"## {expected_stage} process" in content, (
-            f"{manifest_name} does not reference {expected_stage}"
-        )
-
-
-def test_continuous_improvement_register_not_pre_shipped() -> None:
-    template_path = REPO_ROOT / "docs" / "registers" / "Continuous-Improvement-Register.template.md"
-    active_path = REPO_ROOT / "docs" / "registers" / "Continuous-Improvement-Register.md"
-    assert template_path.is_file(), "Missing Continuous-Improvement-Register.template.md"
-    assert not active_path.exists(), (
-        "Continuous-Improvement-Register.md must not be pre-shipped in the template -- "
-        "a real project's register starts empty and is populated per Epic, not seeded "
-        "with another project's worked example rows."
-    )
-
-
-def test_policy_shapes_contain_no_project_specific_identifiers() -> None:
-    """Regression guard: decision-frames/episodes shipped in the template must be
-    either generic (no real project name/codebase baked in) or explicitly marked
-    illustrative_example. Real project governance history does not belong here."""
-    policy_dir = REPO_ROOT / "docs" / "policy-shapes"
-    banned_substrings = ["enterprise-work-hierarchy", "EWH-", "Menno Drescher", "wiki/Projects/"]
-    for jf in policy_dir.rglob("*.json"):
-        content = jf.read_text(encoding="utf-8")
-        data = json.loads(content)
-        if isinstance(data, dict) and data.get("illustrative_example"):
+def split_frontmatter(text: str) -> tuple[dict[str, object], str]:
+    """Parse the flat-key, string-list frontmatter subset without PyYAML."""
+    text = text.replace("\r\n", "\n").lstrip("﻿")
+    assert text.startswith("---\n"), "missing opening frontmatter delimiter"
+    head, _, body = text[4:].partition("\n---\n")
+    data: dict[str, object] = {}
+    key = None
+    for raw in head.split("\n"):
+        line = re.sub(r"\s+#.*$", "", raw) if not raw.lstrip().startswith("-") else re.sub(r'(?<=")\s+#.*$', "", raw)
+        if not line.strip():
             continue
-        for banned in banned_substrings:
-            assert banned not in content, f"{jf.relative_to(REPO_ROOT)} contains project-specific identifier {banned!r}"
+        if line.startswith("  - "):
+            assert key is not None
+            assert isinstance(data[key], list)
+            data[key].append(line[4:].strip().strip('"'))
+            continue
+        name, _, value = line.partition(":")
+        key = name.strip()
+        assert re.fullmatch(r"[a-z_]+", key), f"bad key {key!r}"
+        assert key not in data, f"duplicate key {key}"
+        value = value.strip()
+        data[key] = [] if value in ("", "[]") else value.strip('"')
+    return data, body
 
 
-def test_policy_shapes_and_frames_are_valid_json() -> None:
-    policy_dir = REPO_ROOT / "docs" / "policy-shapes"
-    assert policy_dir.is_dir()
-    json_files = list(policy_dir.rglob("*.json"))
-    assert len(json_files) >= 10, "Found fewer policy JSON files than expected"
-    for jf in json_files:
-        try:
-            data = json.loads(jf.read_text(encoding="utf-8"))
-            assert isinstance(data, (dict, list)), f"{jf.name} did not load as dict or list"
-        except Exception as e:
-            pytest.fail(f"Invalid JSON in {jf}: {e}")
+def plan_templates() -> list[Path]:
+    return sorted(PLANS.glob("*.template.md"))
+
+
+def test_there_are_nine_plan_skeletons() -> None:
+    assert len(plan_templates()) == 9
+
+
+@pytest.mark.parametrize("path", plan_templates(), ids=lambda p: p.stem)
+def test_plan_skeleton_follows_the_content_contract(path: Path) -> None:
+    data, body = split_frontmatter(path.read_text(encoding="utf-8"))
+    for key in REQUIRED_KEYS:
+        assert key in data, f"{path.name} lacks {key}"
+    assert data["primary_pmbok_domain"] in DOMAINS
+    assert set(data["secondary_pmbok_domains"]) <= DOMAINS
+    assert data["route"] in {"full_plan", "pmp_section", "not_applicable"}
+    assert data["generator"] in {"llm", "human", "stub", "mock"}
+    assert data["generator"] not in {"stub", "mock"}, "a skeleton must not be marked stub or mock"
+    assert re.fullmatch(r"CYC-\d{3,}", str(data["cycle_id"]))
+    for pattern in HEADINGS:
+        assert re.search(pattern, body, re.M), f"{path.name} lacks heading {pattern}"
+    assert not re.search(r"\[(TBD|TODO|Insert here)\]", path.read_text(encoding="utf-8"), re.I)
+    assert "Stub content for Artifact" not in body
+
+
+def test_dependencies_form_a_dag_rooted_at_scope() -> None:
+    graph = {}
+    for path in plan_templates():
+        data, _ = split_frontmatter(path.read_text(encoding="utf-8"))
+        graph[str(data["plan_id"])] = list(data["depends_on"])
+    assert graph["scope-management"] == []
+    assert set(pid for pid, deps in graph.items() if not deps) == {"scope-management"}
+    for pid, deps in graph.items():
+        assert set(deps) <= set(graph), f"{pid} depends on an unknown plan"
+    visiting: set[str] = set()
+    done: set[str] = set()
+
+    def visit(node: str) -> None:
+        assert node not in visiting, f"cycle through {node}"
+        if node in done:
+            return
+        visiting.add(node)
+        for dep in graph[node]:
+            visit(dep)
+        visiting.discard(node)
+        done.add(node)
+
+    for pid in graph:
+        visit(pid)
+
+
+def test_tier_one_plans_have_the_stricter_floors() -> None:
+    def floor_line(plan: str) -> str:
+        return next(
+            (
+                line for line in (PLANS / f"{plan}.template.md").read_text(encoding="utf-8").split("\n")
+                if line.startswith("Word count")
+            ),
+            "",
+        )
+
+    for plan in ("Scope-Management-Plan", "Schedule-Management-Plan", "Cost-Management-Plan"):
+        assert "pmp_section 180 to 750" in floor_line(plan)
+        assert "full_plan 700 to 4500" in floor_line(plan)
+
+
+def test_template_stores_no_project_specific_artifacts() -> None:
+    assert not (ROOT / "pmbok").exists()
+    assert not (ROOT / "scripts" / "orchestrate_pmbok.py").exists()
+    assert not (ROOT / "docs" / "project-docs" / "Project-Management-Plan.md").exists()
+    assert all(p.name.endswith(".template.md") for p in PLANS.glob("*.md"))
+    frames = ROOT / "docs" / "policy-shapes" / "decision-frames"
+    frame_names = {p.name for p in frames.iterdir() if p.is_file()}
+    assert "approve-adr.frame.template.json" in frame_names
+    assert frame_names.issubset({"README.md", "approve-adr.frame.template.json", "charter-approval.json"})
+    episodes = ROOT / "docs" / "policy-shapes" / "episodes"
+    if episodes.exists():
+        assert all(p.name.startswith("EXAMPLE-") for p in episodes.glob("*.json"))
+
+
+def test_policy_shapes_and_frame_template_are_valid_json() -> None:
+    for path in (ROOT / "docs" / "policy-shapes").glob("*.json"):
+        json.loads(path.read_text(encoding="utf-8"))
+    frame = json.loads((ROOT / "docs/policy-shapes/decision-frames/approve-adr.frame.template.json").read_text(encoding="utf-8"))
+    assert {o["action_id"] for o in frame["options"]} == {"approve_adr", "reject_adr", "request_revision_before_decision"}
+    assert len(frame["criteria"]) == 4
+
+
+def test_governed_templates_carry_baseline_and_cycle_ids() -> None:
+    for rel in (
+        "docs/07-architecture/ADR-TEMPLATE.md",
+        "docs/project-docs/Business-Requirements/BRD-TEMPLATE.md",
+        "docs/project-docs/Functional-Design/FDD-TEMPLATE.md",
+        "docs/user-stories/EPIC-TEMPLATE.md",
+    ):
+        text = (ROOT / rel).read_text(encoding="utf-8")
+        assert 'baseline_id: "<target-baseline-id>"' in text, rel
+        assert 'cycle_id: "CYC-001"' in text, rel
+        assert "pmp_baseline" not in text, rel
+
+
+@pytest.fixture()
+def scratch_copy(tmp_path: Path) -> Path:
+    dest = tmp_path / "project"
+    shutil.copytree(ROOT, dest, ignore=shutil.ignore_patterns(".git", ".hypothesis", ".pytest_cache", "__pycache__"))
+    return dest
+
+
+def load_init(project: Path):
+    spec = importlib.util.spec_from_file_location("init_project_under_test", project / "scripts" / "init_project.py")
+    assert spec is not None and spec.loader is not None, f"Could not create import spec for {project / 'scripts' / 'init_project.py'}"
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_init_start_stage_scaffolds_documents_and_opens_the_first_cycle(scratch_copy: Path) -> None:
+    init = load_init(scratch_copy)
+    init.init_project("My Demo App", stage="start")
+    register = (scratch_copy / "docs/registers/Cycle-Register.md").read_text(encoding="utf-8")
+    assert "CYC-001 | OPEN" in register
+    assert "<date the project starts>" not in register
+    assert "My Demo App" in register
+    assert (scratch_copy / "docs/project-docs/Project-Charter.md").exists()
+    assert (scratch_copy / "docs/registers/Methodology-Best-Practice-Ledger.md").exists()
+    assert not (scratch_copy / "docs/project-docs/management-plans/Scope-Management-Plan.md").exists()
+    ideation = (scratch_copy / "docs/project-docs/Ideation-Document.md").read_text(encoding="utf-8")
+    assert "HYP-my-demo-app-001" in ideation
+    store = scratch_copy / "data/agent-learning/store/policies"
+    assert (store / "my-demo-app-governance").exists()
+    assert not (store / "template-governance").exists()
+    assert (store / "agent-learning-governance").exists()
+
+
+def test_init_plans_stage_creates_the_nine_plans_and_never_overwrites(scratch_copy: Path) -> None:
+    init = load_init(scratch_copy)
+    init.init_project("demo", stage="plans")
+    plans = sorted((scratch_copy / "docs/project-docs/management-plans").glob("*-Plan.md"))
+    assert len(plans) == 9
+    scope = scratch_copy / "docs/project-docs/management-plans/Scope-Management-Plan.md"
+    scope.write_text("edited by a human", encoding="utf-8")
+    init.init_project("demo", stage="plans")
+    assert scope.read_text(encoding="utf-8") == "edited by a human"
+
+
+def test_init_rejects_an_empty_project_name(scratch_copy: Path) -> None:
+    init = load_init(scratch_copy)
+    with pytest.raises(SystemExit):
+        init.init_project("---", stage="start")
+
+
+# --- learning methodologies: catalog, tailoring matrix, ledger template -------------------------------
+
+METHODOLOGIES = ROOT / "docs" / "methodologies"
+CLASSES = {"runnable", "proof_of_concept", "documented"}
+RUNNABLE_STATES = {"implemented", "example_only", "partial", "practiced"}
+
+
+def test_methodology_catalog_has_32_entries_with_consistent_classes() -> None:
+    catalog = json.loads((METHODOLOGIES / "catalog.json").read_text(encoding="utf-8"))
+    assert sorted(entry["id"] for entry in catalog) == list(range(1, 33))
+    for entry in catalog:
+        label = f"#{entry['id']}"
+        assert entry["example_class"] in CLASSES, label
+        if entry["state"] in RUNNABLE_STATES:
+            assert entry["example_class"] == "runnable", label
+        elif entry["state"] == "candidate" and entry.get("adr"):
+            assert entry["example_class"] == "proof_of_concept", label
+        else:
+            assert entry["example_class"] == "documented", label
+        if entry["example_class"] == "documented":
+            assert entry.get("reason", "").strip() and entry.get("reopening_condition", "").strip(), label
+            assert entry.get("path") is None, label
+        else:
+            assert str(entry.get("path", "")).startswith("examples/methodologies/"), label
+
+
+def test_tailoring_matrix_rows_are_all_hypotheses_over_existing_catalog_ids() -> None:
+    ids = {entry["id"] for entry in json.loads((METHODOLOGIES / "catalog.json").read_text(encoding="utf-8"))}
+    rows = [
+        [cell.strip() for cell in line.strip().strip("|").split("|")]
+        for line in (METHODOLOGIES / "Tailoring-Matrix.md").read_text(encoding="utf-8").splitlines()
+        if line.startswith("| ") and not line.startswith("| Need") and not line.startswith("|---")
+    ]
+    assert len(rows) == 6
+    for row in rows:
+        assert len(row) == 7, row
+        assert row[1] in {"store", "lessons-learned"}, row
+        assert {int(n) for n in re.findall(r"#(\d+)", row[2])} <= ids, row
+        assert row[4], row
+        assert row[6] == "hypothesis", row
+
+
+def test_ledger_template_ships_no_entries_and_no_adopted_practice() -> None:
+    text = (ROOT / "docs" / "registers" / "Methodology-Best-Practice-Ledger.template.md").read_text(encoding="utf-8")
+    assert not re.search(r"^## BP-\d{3}", text, re.MULTILINE)
+    assert "status: adopted" not in text
+    assert "real-episodes" in text
