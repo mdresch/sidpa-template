@@ -16,7 +16,7 @@ outputs:
 # Example: Tailored Hybrid SIDPA Governance (Lightweight Funnel → Full Project Maturity)
 
 > **Labeling Contract:** Illustrative tailoring pattern — **not** empirical evidence and **not** a governed project instance.  
-> **Originating Reference Case:** Adapted from `mdresch/oppurtunities-2027` (a 117-opportunity zero-working-capital consulting portfolio operating under a 10–15 hrs/week cap), applying `docs/sequence-and-lessons.md` Rules #18, #23–24, #30, and #32.
+> **Originating Reference Case:** Adapted from [`mdresch/oppurtunities-2027`](https://github.com/mdresch/oppurtunities-2027) *(exact GitHub repository slug)* (a 117-opportunity zero-working-capital consulting portfolio operating under a 10–15 hrs/week cap), applying `docs/sequence-and-lessons.md` Rules #18, #23–24, #30, and #32.
 
 ---
 
@@ -142,8 +142,8 @@ Best for software platforms, multi-agent systems, or multi-epic product builds:
 3. Record the graduated repo URL in the funnel’s `Portfolio-Status-Register.md`.
 4. Execute full **Stages 5–18** per [docs/chain-coverage.md](../chain-coverage.md):
    - **Stage 5:** Pillars Exercise (`PILLARS-EXERCISE.md`, `Project-Pillars.md`) + foundational ADRs (100% pillar coverage)
-   - **Stage 6:** Strict `ADR → BRD → FDD → User Stories` sequence (User Stories = PMBOK Work Packages)
-   - **Stage 7:** Tailored Subsidiary Plans + Integrated PMP (`PMP-BL-vX.Y.Z`; Foundation Packs only when justified — Rule #30)
+   - **Stage 6:** Tailored Subsidiary Plans + Integrated PMP (`PMP-BL-vX.Y.Z`; Foundation Packs only when justified — Rule #30)
+   - **Stage 7:** Strict `ADR → BRD → FDD → User Stories` sequence (User Stories = PMBOK Work Packages)
    - **Stage 8:** Implementation Readiness Gate (`validate-intent-foundation`)
    - **Stages 9–11:** Contract-first TDD (`implement-story`), full regression suite (Rule #26), and `Audit-Register.md`
    - **Stages 12–18:** Outcomes, Observations/Lessons (shared KB), Stage 16 Governance Change, Stage 17 Adaptation Plan, and Stage 18 Intent Refinement feeding back into the parent portfolio’s Quarterly Review.
