@@ -13,7 +13,7 @@ Actions performed:
    never overwriting an existing file, and fills <project name> and the start date.
 
 Stages (documents are copied when their stage is reached, not all at once):
-    start    Spark, Ideation, Business Case, Benefits Statement, Charter, and the registers
+    start    Spark, Ideation, Hypothesis Register, Business Case, Benefits plans, Charter, and the registers
     plans    the nine subsidiary plan skeletons and the Project Management Plan
     closing  the Adaptation Plan and the Intent Refinement Proposal
     all      everything
@@ -35,7 +35,10 @@ STAGES = {
         "docs/project-docs/Ideation-Document.template.md",
         "docs/project-docs/Business-Case.template.md",
         "docs/project-docs/Benefits-Statement.template.md",
+        "docs/project-docs/Benefits-Management-Plan.template.md",
         "docs/project-docs/Project-Charter.template.md",
+        "docs/registers/Project-Status-Register.template.md",
+        "docs/registers/Hypothesis-Register.template.md",
         "docs/registers/Cycle-Register.template.md",
         "docs/registers/Lessons-Learned-Register.template.md",
         "docs/registers/Implementation-Log.template.md",
@@ -44,6 +47,8 @@ STAGES = {
         "docs/registers/Methodology-Best-Practice-Ledger.template.md",
     ],
     "plans": [
+        "docs/07-architecture/PILLARS-EXERCISE.template.md",
+        "docs/project-docs/Project-Pillars.template.md",
         "docs/project-docs/management-plans/*.template.md",
         "docs/project-docs/Project-Management-Plan.template.md",
     ],
@@ -56,13 +61,14 @@ STAGES["all"] = STAGES["start"] + STAGES["plans"] + STAGES["closing"]
 
 NEXT_STEPS = {
     "start": [
-        "Write the Spark, then the Ideation Document, then the Business Case and Benefits Statement, then the Charter.",
-        "Run the matching approve-* gate for each (see docs/policy-shapes/decision-frames/README.md).",
+        "Write Spark → Ideation → open Hypothesis Register → Business Case → Benefits Management Plan & Benefits Statement → Charter.",
+        "Run approve-ideation, then track hypotheses in the register; run approve-business-case and approve-benefits separately, then approve-charter.",
         "CYC-001 is open in docs/registers/Cycle-Register.md. Add the upstream pins as those documents are approved.",
         "After the Charter is approved, run: python scripts/init_project.py --name <name> --stage plans",
     ],
     "plans": [
-        "Draft the plans in dependency order (Scope first). See .claude/skills/pmbok-planning/SKILL.md.",
+        "After Charter: complete PILLARS-EXERCISE.md, Project-Pillars.md (approve-project-pillars), then foundational ADRs.",
+        "Draft subsidiary plans in dependency order (Scope first). See .claude/skills/pmbok-planning/SKILL.md.",
         "Approve each full_plan, then synthesize and approve the Project Management Plan.",
     ],
     "closing": ["Use these when a governance change reaches Stage 17 or the phase reaches Stage 18."],

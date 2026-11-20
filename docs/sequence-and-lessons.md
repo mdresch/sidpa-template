@@ -4,9 +4,9 @@ Every rule below was learned by hitting it, not derived in the abstract. Cited a
 
 ## 1. Governance-document order
 
-1. **Spark → Ideation → Business Case → Benefits Statement → Charter.** Benefits Statement before Charter, not after — PMBOK 8 confirms the Benefits Plan is a Charter *input*, not a follow-on (ADPA, corrected after an earlier draft had them in the wrong order).
+1. **Spark → Ideation → Hypothesis Register → Business Case → Benefits Management Plan & Benefits Statement → Charter.** Benefits artifacts before Charter, not after — PMBOK 8 confirms the Benefits Plan is a Charter *input*, not a follow-on (ADPA, corrected after an earlier draft had them in the wrong order). Run `approve-business-case` and `approve-benefits` as **two** gates (agent-learning Stage 3 methodology).
 2. **Charter before the Pillars Exercise before the 9 subsidiary management plans.** Obvious in principle; the real trap is treating the Charter as a PMP (Project Management Plan) — it isn't one. The PMP is an *integration* document, built only after every subsidiary plan is grounded in concrete work packages. Don't draft a PMP early thinking it's the Charter's natural next step.
-3. **Pillars Exercise bridges Charter to Architecture.** Right after the Project Charter is approved, execute the **Pillars Exercise** (`docs/07-architecture/PILLARS-EXERCISE.md`) to decompose the project into 4–6 mutually exclusive, collectively exhaustive architectural and functional pillars.
+3. **Pillars Exercise bridges Charter to Architecture.** Right after the Project Charter is approved, execute the **Pillars Exercise** (`docs/07-architecture/PILLARS-EXERCISE.md`), roll up **Project-Pillars.md**, and run `approve-project-pillars` before foundational ADRs.
 4. **100% ADR Pillar Coverage Invariant.** For each identified pillar, draft high-level foundational ADRs. The set of initial ADRs must provide 100% full coverage across every identified pillar before proceeding to requirements. No architectural pillar may be left floating or unassigned.
 5. **Hypothesis before Requirement.** A Hypothesis (falsifiable design assumption) gets tested and its status updated *before* it becomes an ADR (a Requirement-stage artifact). `classify-hypothesis-status` sits here; `approve-adr` sits one stage later. Don't skip straight to drafting an ADR from an untested Hypothesis.
 

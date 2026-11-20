@@ -183,8 +183,11 @@ def test_init_start_stage_scaffolds_documents_and_opens_the_first_cycle(scratch_
     assert (scratch_copy / "docs/project-docs/Project-Charter.md").exists()
     assert (scratch_copy / "docs/registers/Methodology-Best-Practice-Ledger.md").exists()
     assert not (scratch_copy / "docs/project-docs/management-plans/Scope-Management-Plan.md").exists()
+    assert (scratch_copy / "docs/registers/Hypothesis-Register.md").exists()
+    hypothesis = (scratch_copy / "docs/registers/Hypothesis-Register.md").read_text(encoding="utf-8")
+    assert "HYP-my-demo-app-001" in hypothesis
     ideation = (scratch_copy / "docs/project-docs/Ideation-Document.md").read_text(encoding="utf-8")
-    assert "HYP-my-demo-app-001" in ideation
+    assert "Hypothesis-Register" in ideation
     store = scratch_copy / "data/agent-learning/store/policies"
     assert (store / "my-demo-app-governance").exists()
     assert not (store / "template-governance").exists()

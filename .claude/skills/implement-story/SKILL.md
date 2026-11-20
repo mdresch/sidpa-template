@@ -100,8 +100,12 @@ Run the story's own contract first, then the **whole project's accumulated contr
 ### 7. Commit & log (Automated via CLI)
 Run `npm run story:done <STORY-ID>` (e.g. `npm run story:done US-01.1`). The CLI automatically executes the story's contract test suite, verifies database referential integrity, stamps the audit row in `docs/registers/Story-Execution-Register.md`, and creates a single atomic Git commit (`feat(US-X.Y): ...`). Manual two-phase commit logging is deprecated, eliminating commit hash drift.
 
-### 8. Open a PR, don't merge directly
-Direct-push-to-default-branch was tried once (ADPA's real Story 1.2) and found to bypass real branch-protection value, not just a compliance checkbox — PR review triggers scrutiny no local check can provide. Push the branch, open the PR, tear down the worktree only after it actually merges upstream.
+### 8. Open a PR, get review clean, then merge
+Direct-push-to-default-branch was tried once (ADPA's real Story 1.2) and found to bypass real branch-protection value, not just a compliance checkbox — PR review triggers scrutiny no local check can provide. Push the branch, open the PR, request automated review on each push, triage every finding against the repository (decline with a one-line reason when unsupported), and tear down the worktree only after merge on the default branch.
+
+- **Reviewer silence is not approval.** Repeat until the latest review targets the head commit and leaves no unaddressed blocking comments (stop after three stale rounds and ask the human).
+- **Confirmations on old commits:** triage follow-up "confirm" comments against the **head** commit the same way as first-round findings — log stale or out-of-scope items as noise.
+- **`python scripts/pr_gate.py <pr_number>`** before merge when this repo ships the gate scripts; record triage rounds in the implementation log when `pr_gate` is configured to check it.
 
 ### 8.1. Bayesian PR review gatekeeper
 ```bash
