@@ -28,6 +28,8 @@ outputs:
 ## Triggering Governance Change
 <Reference the specific validated ADR/BRD amendment, supersession, or policy update from Stage 16 that necessitates behavioral or process adaptation.>
 
+**One adaptation plan per phase:** do not open a second Stage 17 plan until the current one is executed or formally closed (see `docs/methodology/Stage-17-Adaptation-Plan-Methodology.template.md`).
+
 ## Scope of Behavioral / Tooling Adaptation
 - **Workflow / Process Adjustments:** <What steps in the engineering, review, or operational workflow are modified?>
 - **Agent Skill / Tooling Updates:** <What agent skills, hooks, or system prompts require revision to enforce the updated governance?>

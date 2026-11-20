@@ -2,22 +2,23 @@
 pmbok_edition: "PMBOK 8"
 pmbok_process_group: "Initiating / Planning"
 pmbok_process: "5.3 Define Scope & Architectural Strategy Formulation"
-lifecycle_stage: "Stage 5.5 (Pillars Exercise)"
-governance_policy: "approve-charter"
+lifecycle_stage: "Stage 5 (Pillars & Architecture)"
+governance_policy: "approve-project-pillars"
 inputs:
   - "Project-Charter.md"
-  - "Ideation-Document.md (Hypotheses)"
-  - "Benefits-Statement.md"
+  - "Ideation-Document.md"
+  - "Hypothesis-Register.md"
+  - "Benefits-Management-Plan.md"
 process: "Decompose Project Charter objectives into mutually exclusive, collectively exhaustive architectural and functional pillars"
 outputs:
   - "PILLARS-EXERCISE.md"
-  - "Pillar-to-ADR Coverage Matrix"
+  - "Project-Pillars.md (rollup, approved via approve-project-pillars)"
 ---
 
 # Pillars Exercise — <Project Name>
 
 > **PMBOK 8 Process:** `5.3 Define Scope & Architectural Strategy Formulation` (Initiating / Planning)  
-> **Lifecycle Stage:** `Stage 5.5 (Pillars Exercise)` | **Inputs:** Project-Charter.md, Ideation-Document.md, Benefits-Statement.md  
+> **Lifecycle Stage:** `Stage 5 (Pillars & Architecture)` | **Inputs:** Project-Charter.md, Ideation-Document.md, Hypothesis Register, Benefits Management Plan  
 > **Process:** Decompose Project Charter into mutually exclusive, collectively exhaustive architectural and functional pillars  
 > **Outputs:** PILLARS-EXERCISE.md, Pillar-to-ADR Coverage Matrix
 

@@ -8,6 +8,22 @@ All document-approval policies operate under `DecisionAuthority.FULL` using mult
 
 ---
 
+## 0. Initiating stage numbering (authoritative)
+
+The **Initiating** substages use this numbering everywhere in this template (authoring sequence, methodology guides, and `lifecycle_stage` frontmatter on new work):
+
+| Stage | Name | Primary artifacts | TaskPolicies |
+|---:|---|---|---|
+| 1 | Intent | Spark-Capture, Ideation-Document | `approve-ideation` |
+| 2 | Hypothesis | Hypothesis-Register | `classify-hypothesis-status` |
+| 3 | Benefit | Business-Case, Benefits-Management-Plan, Benefits-Statement | `approve-business-case`, `approve-benefits` |
+| 4 | Objective | Project-Charter | `approve-charter` |
+| 5 | Pillars & Architecture | PILLARS-EXERCISE, Project-Pillars, foundational ADRs | `approve-project-pillars`, `approve-adr` |
+
+Older documents may still show legacy stage numbers in frontmatter until amended; translate using the table above rather than assuming retroactive rewrites.
+
+---
+
 ## 1. Document Authoring Sequence vs. Conceptual Ontology
 
 There is an important distinction between the abstract conceptual trace and the **actual document build sequence**:
@@ -16,46 +32,42 @@ There is an important distinction between the abstract conceptual trace and the 
   $$\text{Intent} \longrightarrow \text{Objective} \longrightarrow \text{Hypothesis} \longrightarrow \text{Benefit} \longrightarrow \text{Pillars} \longrightarrow \text{Requirement} \longrightarrow \text{Project (PMP)} \longrightarrow \text{Readiness} \dots$$
 * **Actual Document Authoring & Governance Sequence (PMBOK 8 / SIDPA Lifecycle):**
   ```
-  1. Spark Capture (Intent — Initiating)
+  1. Spark Capture & Ideation Document (Intent — Initiating)
          │
-  2. Ideation Document (Hypotheses — Initiating)
+  2. Hypothesis Register (Hypothesis — Initiating)
          │
-  3. Business Case & Benefits Statement (Benefit — Initiating)
+  3. Business Case, Benefits Management Plan & Benefits Statement (Benefit — Initiating)
          │
   4. Project Charter (Objective — Initiating: 4.1 Develop Project Charter)
          │
-  5. Pillars Exercise (Architectural Strategy Formulation: 5.3)
+  5. Pillars Exercise, Project-Pillars rollup & foundational ADRs (Pillars & Architecture)
          │
   6. Technical Requirements & Design (Planning: 5.2 & 5.3 & 5.4)
-     ├── High-Level Foundational ADRs (100% Pillar Coverage: 5.3)
-     ├── Business Requirements Document (BRD: 5.2 Collect Requirements)
-     ├── Functional Design Document (FDD: 5.3 Define Scope / Design)
-     └── User Stories (Work Packages & WBS Decomposition: 5.4)
+     ├── BRD (5.2), FDD (5.3), User Stories / Work Packages (5.4)
          │
-  7. Subsidiary Management Plans (Scope 5.1/7.A, Schedule 6.1/7.B, Cost 7.1/7.D, Resource 9.1/7.C, Quality 8.1, etc.)
-     & Integrated Project Management Plan (Planning: 4.2 Develop PMP — Baseline PMP-BL-v1.0.0)
+  7. Subsidiary Management Plans & integrated PMP (Planning: 4.2 — Baseline PMP-BL-vX.Y.Z)
          │
-  8. Implementation Readiness Gate / Implementation Authorization Notice (Planning ➔ Executing Gate: validate-intent-foundation)
+  8. Implementation Readiness Gate / Implementation Authorization Notice
          │
-  9. Deliverables (Executing: 4.3 Direct & Manage Work — implement-story)
+  9. Deliverables (Executing — implement-story)
          │
-  10. Verification Evidence (Monitoring & Controlling: 8.3 Control Quality — Contract Test Suite)
+  10. Verification Evidence (Contract test suite)
          │
-  11. Audit Record (Monitoring & Controlling: 8.2 Manage Quality Audits — Audit Register)
+  11. Audit Record
          │
-  12. Actual Outcome (Monitoring & Controlling: 5.5 Validate Scope & Value Realization)
+  12. Actual Outcome
          │
-  13. Observation (Monitoring & Controlling: 4.5 Monitor & Control Project Work — Telemetry Logs)
+  13. Observation
          │
-  14. Insight (Monitoring & Controlling: 4.4 Manage Project Knowledge — Synthesis)
+  14. Insight
          │
-  15. Lesson Learned (Monitoring & Controlling: 4.4 Manage Project Knowledge — Lessons Learned Register)
+  15. Lesson Learned
          │
-  16. Governance Change (Monitoring & Controlling: 4.6 Integrated Change Control)
+  16. Governance Change
          │
-  17. Adaptation Plan (Adaptive Closing / Feedback: Tailoring PMP Updates)
+  17. Adaptation Plan
          │
-  18. Intent Refinement (Closing: 4.7 Close Phase & Strategic Feedback to Spark)
+  18. Intent Refinement (feeds next Spark Part N)
   ```
 
 ---
@@ -65,12 +77,12 @@ There is an important distinction between the abstract conceptual trace and the 
 | # | Chain Stage | PMBOK 8 Process Group | Governed Document Artifact | Assigned TaskPolicy | Second Brain Tooling & Scripts | Authority & Decision Shape | Lifecycle Role & IPO |
 |---|---|---|---|---|---|---|---|
 | 1 | **Intent** | **Initiating** | `Spark-Capture.md`<br>`Ideation-Document.md` | `approve-ideation` | `run-lifecycle-pipeline.mjs` | `FULL` (3 actions) | **Starts with a Spark.** Inputs: Trigger event / strategic driver. Process: Validate intent. Output: Approved Ideation. |
-| 2 | **Objective** | **Initiating** | `Project-Charter.md` | `approve-charter` | `query-knowledge-graph.mjs` | `FULL` (3 actions) | Inputs: Business Case & Benefits. Process: Authorize project & assign sponsor. Output: Project Charter. |
-| 3 | **Hypothesis** | **Initiating** | `Ideation-Document.md`<br>(`HYP-*.md`) | `classify-hypothesis-status` | `query-knowledge-graph.mjs` | `FULL` (7 actions) | Inputs: Design assumptions & test logs. Process: Evaluate empirical evidence. Output: Validated / testing status. |
-| 4 | **Benefit** | **Initiating** | `Business-Case.md`<br>`Benefits-Statement.md` | `approve-business-case` | `run-lifecycle-pipeline.mjs` | `FULL` (3 actions) | Inputs: Hypotheses & ROI premise. Process: Validate economics. Output: Benefits Statement (Input to Charter). |
-| 5 | **Pillars & Architecture** | **Planning** | `PILLARS-EXERCISE.md`<br>High-Level `ADR-*.md` | `approve-adr` | `ground-adrs-to-concepts.mjs` | `FULL` (3 actions) | Inputs: Project Charter & Hypotheses. Process: Decompose Charter into pillars; draft ADRs providing 100% pillar coverage. Output: Approved Pillars & ADRs. |
+| 2 | **Hypothesis** | **Initiating** | `Hypothesis-Register.md` | `classify-hypothesis-status` | `query-knowledge-graph.mjs` | `FULL` (7 actions) | Inputs: Design assumptions & test logs. Process: Evaluate empirical evidence. Output: Validated / testing status. |
+| 3 | **Benefit** | **Initiating** | `Business-Case.md`<br>`Benefits-Management-Plan.md`<br>`Benefits-Statement.md` | `approve-business-case`<br>`approve-benefits` | `run-lifecycle-pipeline.mjs` | `FULL` (3 actions each) | Inputs: Hypotheses & ROI premise. Process: Validate economics. Output: Benefits artifacts (Charter inputs). |
+| 4 | **Objective** | **Initiating** | `Project-Charter.md` | `approve-charter` | `query-knowledge-graph.mjs` | `FULL` (3 actions) | Inputs: Business Case & Benefits. Process: Authorize project & assign sponsor. Output: Project Charter. |
+| 5 | **Pillars & Architecture** | **Planning** | `PILLARS-EXERCISE.md`<br>`Project-Pillars.md`<br>High-Level `ADR-*.md` | `approve-project-pillars`<br>`approve-adr` | `ground-adrs-to-concepts.mjs` | `FULL` (3 actions each) | Inputs: Charter & initiating artifacts. Process: Decompose into pillars; draft ADRs with 100% pillar coverage. Output: Approved pillars & ADRs. |
 | 6 | **Requirement** | **Planning** | • `ADR-*.md`<br>• `BRD-*.md`<br>• `FDD-*.md`<br>• `user-stories/*.md` | • `approve-adr`<br>• `approve-brd`<br>• `approve-fdd`<br>• `approve-user-stories` | `vault-ingestion.mjs`<br>`ground-adrs-to-concepts.mjs` | `FULL` (3 actions each) | Inputs: Approved Pillars & Architecture. Process: Business requirements, functional specifications, and atomic User Stories. **Output: Approved technical requirements and work packages.** |
-| 7 | **Project (PMP & Baselines)** | **Planning** | `Project-Management-Plan.md`<br>& Subsidiary Plans (5.1–13.2)<br>Foundation Packs (7.A–7.D) | • `approve-subsidiary-plan`<br>• `approve-pmp` | `orchestrate_pmbok.py --mode full` | `FULL` (3 actions each) | Inputs: Stage 6 Requirements, WBS & Foundation Packs (Scope 7.A, Schedule 7.B, Resource 7.C, Cost 7.D). Process: Ground duration/cost/scope baselines and integrate plans. Output: Approved PMP (`PMP-BL-vX.Y.Z`). |
+| 7 | **Project (PMP & Baselines)** | **Planning** | `Project-Management-Plan.md`<br>& Subsidiary Plans (5.1–13.2)<br>Foundation Packs (7.A–7.D) | • `approve-subsidiary-plan`<br>• `approve-pmp` | `.claude/skills/pmbok-planning` | `FULL` (3 actions each) | Inputs: Stage 6 Requirements, WBS & Foundation Packs (Scope 7.A, Schedule 7.B, Resource 7.C, Cost 7.D). Process: Ground duration/cost/scope baselines and integrate plans. Output: Approved PMP (`PMP-BL-vX.Y.Z`). |
 | 8 | **Implementation Readiness** | **Planning ➔ Executing** | `Stage-8-Implementation-Authorization-Notice.md`<br>Epic Readiness Check | `validate-intent-foundation` | `run-lifecycle-pipeline.mjs` | `FULL` (3 actions: accept, reject, flag) | **Focus:** Certifies that tests, environment, criteria readiness, and planning artifacts are reconciled before developer begins implementation. Formally informs all parties that PMP is approved and authorizes staffing, procurement, and execution. Output: Provisioned git worktree. |
 | 9 | **Deliverable** | **Executing** | Source Code & Release Artifacts | Direct Execution | `.claude/skills/implement-story` | Code-First TDD | Inputs: Approved stories & acceptance criteria. Process: TDD / contract-first build. Output: Executable code deliverable. |
 | 10 | **Verification Evidence** | **Monitoring & Controlling** | Contract Tests & Execution Logs | Executable Test Suite | `.claude/skills/heal-contract-failure` | 4-Ring Quality Gate | Inputs: Code deliverable & contract tests. Process: Execute test suite. Output: Verification evidence report (pytest / vitest). |
@@ -80,7 +92,7 @@ There is an important distinction between the abstract conceptual trace and the 
 | 14 | **Insight** | **Monitoring & Controlling** | Synthesized Technical Findings (`INSIGHT-*.md`) | `synthesis-validator.mjs` | `synthesis-validator.mjs` | `FULL` (trust existing, supersede, flag) | Inputs: Observation logs. Process: Synthesize causal significance. Output: Resolved insight node. Path: §3.2. |
 | 15 | **Lesson Learned** | **Monitoring & Controlling** | Formalized Knowledge (`LL-*.md`, Register) | `resolve-kb-conflict` | `heal-brain.mjs` | `FULL` (trust existing, supersede, flag) | Inputs: Verified insights. Process: Crystallize actionable knowledge. Output: Formalized Lessons Learned register. Path: §3.2. |
 | 16 | **Governance Change** | **Monitoring & Controlling** | Governance Amendments & Diffs (`GC-*.md`) | • `classify-diff-type`<br>• `escalate-diff-response` | `compile-ontology-graph.mjs` | Paired Pipeline: `FULL` / `LOW` | Inputs: Lessons learned (`evidence_basis: execution`) or Stage 7-8 baseline findings (`evidence_basis: design_time`, §3.1) & proposed diffs. Process: Semantic classification & escalation bandit. Output: Governed baseline update. |
-| 17 | **Adaptation Plan** | **Closing / Adaptive Feedback** | `Adaptation-Plan.md` | `approve-adaptation-plan` | `orchestrate_pmbok.py --mode adapt` | `FULL` (3 actions) | Inputs: Validated Stage 16 governance change & realized outcomes from executed work (design-time changes go Stage 16 → Stage 6 directly, §3.1). Process: Tailor PMP subsidiary plans via Governance Change Impact Matrix. Output: Impacted plan list. |
+| 17 | **Adaptation Plan** | **Closing / Adaptive Feedback** | `Adaptation-Plan.md` | `approve-adaptation-plan` | `.claude/skills/pmbok-planning` | `FULL` (3 actions) | Inputs: Validated Stage 16 governance change & realized outcomes from executed work (design-time changes go Stage 16 → Stage 6 directly, §3.1). Process: Tailor PMP subsidiary plans via Governance Change Impact Matrix. Output: Impacted plan list. |
 | 18 | **Intent Refinement** | **Closing / Strategic Feedback** | `Intent-Refinement-Proposal.md` | `approve-intent-refinement` | `build-18-stage-canvas.mjs`<br>`run-lifecycle-pipeline.mjs` | `FULL` (3 actions) | Inputs: Accepted Stage 17 adaptations & phase review. Process: Strategic review of original Intent. Output: **Catalyst for Phase N+1 Spark Capture**. |
 
 ---
@@ -225,7 +237,8 @@ sidpa-template/
 │   │       ├── resource-baseline/                 # Stage 7.C Resource Foundation Pack
 │   │       └── cost-baseline/                     # Stage 7.D Cost Foundation Pack
 │   ├── 07-architecture/
-│   │   ├── PILLARS-TEMPLATE.md                    # Stage 5: Architectural Pillars Definition
+│   │   ├── PILLARS-EXERCISE.template.md           # Stage 5: Pillars Exercise
+│   │   ├── Project-Pillars.template.md             # Stage 5: approved pillar rollup
 │   │   └── ADR-TEMPLATE.md                        # Stage 6: Architectural Decision Records
 │   ├── user-stories/
 │   │   └── EPIC-TEMPLATE.md                       # Stage 6: Work Packages & User Stories (Planning: 5.4)

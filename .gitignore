@@ -6,8 +6,8 @@ data/pmbok_runtime/
 .pytest_cache/
 .hypothesis/
 
-# Nested sibling clones used for local comparison (not part of the template)
-agent-learning/
+# Nested sibling clone at repo root (not part of the template); does not apply to data/agent-learning/
+/agent-learning/
 
 # Ignore vscode AI rules
 .github\instructions\codacy.instructions.md

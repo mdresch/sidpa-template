@@ -35,7 +35,7 @@ Contract failure is not limited to a red test runner in local validation or CI. 
 4. **Re-validate and, only now, fix the implementation (GREEN).** 
    - Minimal change to satisfy the now-failing, confirmed-correct contract test.
 5. **Validate.** 
-   - Run the specific contract (`uv run pytest tests/test_<x>.py` or project test command), then the full suite.
+   - Run the story contract first, then the **whole project suite** using the same rules as `implement-story` Step 6 (never call a partial run "the full suite").
 
 **Hard stop, any step:** if getting to green requires weakening, skipping, or bypassing a contract's assertions or a lint rule, stop and escalate instead of forcing it through.
 

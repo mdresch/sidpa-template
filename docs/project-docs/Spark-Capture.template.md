@@ -32,3 +32,18 @@ outputs:
 
 ## What this is not yet
 This is pre-Ideation. Don't draft Hypotheses or Objectives here — that's the next document's job. A Spark Capture that already reads like a Business Case is a sign the stages got collapsed.
+
+---
+
+## Optional: later phase sparks (multi-phase projects)
+
+When Stage 18 closes a phase with `phase_handoff`, add a new **Part** below instead of overwriting Part 1. Keep prior parts as historical record.
+
+### Part 2 — Phase <N> refined spark (optional)
+**Date:** <date>  
+**Anchor baseline:** `PMP-BL-v<X.Y.Z>` | **Target baseline:** `PMP-BL-v<X.Y+1.Z>`  
+**Inputs:** Intent-Refinement-Proposal.md, Phase Close Decision, Cumulative Lineage Kernel (if your project maintains one)
+
+**The spark:** <What Stage 18 concluded should motivate the next phase.>
+
+**Approved directives:** <Numbered SPARK-00N items carried from Stage 18 — or "None yet.">

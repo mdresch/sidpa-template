@@ -26,6 +26,13 @@ description: Automated governance change pipeline (Stage 16) for paired diff cla
 - Stage 16 scope boundary: pipeline terminates with a validated governance baseline; Stage 17 Execution Adaptation is strictly out of scope.
 - Zero storage expansion: no new Cosmos containers or LearningStore record types (ADR-002 Invariant #2).
 
+## Stage 16 operator checklist (template)
+
+- Pass **both** Lessons Learned and Continuous Improvement registers before closing a governance-change tranche.
+- Print store path and file counts before and after any episode registration (see **Running a governance command** below).
+- Tier 2 skill edits require lesson ids in the changed text; Tier 3 `sidpa-template` ports are **proposed**, not marked done in the project repo.
+- Dependency diffs that meet your dependency-invariant bar route through pillar check and requirement amendment — not `clarification_section` alone.
+
 ## Gate standards (propagated from agent-learning Phase-2 close)
 
 - `scripts/pr_gate.py` checks triage lines a PR adds to `implementation-log.md` or `docs/registers/Implementation-Log.md` (IMP-030) and reconciles maintainer triage against review defects (IMP-017). Helpers live in `scripts/lib/review_triage.py` and `scripts/lib/triage_replay.py`. `map_claim_to_criterion` raises for unmapped claim types (including `unknown`); reconcile skips those rows instead of silently routing them to `correctness`.
