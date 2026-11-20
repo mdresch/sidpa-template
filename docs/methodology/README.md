@@ -2,10 +2,12 @@
 
 Operational **Stage … — Methodology Guide** documents for each chain stage, synced from `agent-learning` and aligned with `docs/chain-coverage.md` (Purpose blockquotes, overview tables, process steps, pitfalls, references).
 
-Re-sync from the sibling `agent-learning` repo:
+Re-sync from a sibling `agent-learning` checkout (or specify `--source` / `AGENT_LEARNING_METHODOLOGY_DIR`):
 
 ```bash
 python scripts/templify_methodology_from_agent_learning.py
+# or:
+python scripts/templify_methodology_from_agent_learning.py --source /path/to/agent-learning/docs/project-docs/Methodology
 ```
 
 Instantiate by copying `Stage-NN-*-Methodology.template.md` to `docs/project-docs/Methodology/` (or your project path) and filling project-specific instances.

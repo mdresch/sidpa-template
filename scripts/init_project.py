@@ -37,6 +37,7 @@ STAGES = {
         "docs/project-docs/Benefits-Statement.template.md",
         "docs/project-docs/Benefits-Management-Plan.template.md",
         "docs/project-docs/Project-Charter.template.md",
+        "docs/registers/Project-Status-Register.template.md",
         "docs/registers/Hypothesis-Register.template.md",
         "docs/registers/Cycle-Register.template.md",
         "docs/registers/Lessons-Learned-Register.template.md",

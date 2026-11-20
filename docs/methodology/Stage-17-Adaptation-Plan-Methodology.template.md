@@ -457,51 +457,68 @@ validation_methods:
 
 **Adaptation Plan Template:**
 ```markdown
----
-artifact_type: "adaptation_plan"
-plan_id: "ADP-[PROJECT]-[DATE]"
-baseline_from: "PMP-BL-vX.Y.Z"
-baseline_to: "PMP-BL-vA.B.C"
-version: "1.0"
-date: "YYYY-MM-DD"
-prepared_by: "[Name]"
-status: "[draft|in_review|approved|rejected]"
-related_changes:
-  - "GC-001"
-  - "GC-002"
-  - "GC-003"
-  - "GC-004"
----
-
-# Adaptation Plan: [Plan ID]
-
-> **Purpose:** [Brief purpose statement]
->
-> **Status:** [draft|in_review|approved|rejected]
+# (Extended template omitted — port detail from agent-learning when instantiating.)
+```
 
 ---
 
-## Executive Summary
+### Step 7: Validation
 
-| Field | Value |
-|---|---|
-| **Plan ID** | ADP-[PROJECT]-[DATE] |
-| **From Baseline** | PMP-BL-vX.Y.Z |
-| **To Baseline** | PMP-BL-vA.B.C |
-| **Changes Included** | [Number] |
-| **Status** | [Status] |
+**Purpose:** Validate that all changes are correctly implemented and working as expected.
+
+**Validation Checklist:**
+
+#### Skill Validation
+- [ ] All skill updates are committed
+- [ ] All skill tests pass
+- [ ] All skill changes are documented
+- [ ] All cross-references are valid
+
+#### Workflow Validation
+- [ ] All workflow updates are committed
+- [ ] All workflow tests pass
+- [ ] All workflow changes are documented
+
+#### PMP Validation
+- [ ] All PMP updates are committed
+- [ ] All version numbers are consistent
+- [ ] All cross-references are valid
+- [ ] All changes are approved
+
+#### Integration Validation
+- [ ] All skills work together correctly
+- [ ] All workflows execute properly
+- [ ] All PMP changes are reflected in operations
+
+**Validation Commands** (the scripts `validate_pmp.py`, `validate_links.py` and `validate_episodes.py` do not exist in this repository):
+```bash
+uv run pytest                                  # the whole suite, no --ignore
+uv run pytest tests/test_governance_baseline.py tests/test_stage16_amend.py tests/test_lessons_learned.py
+# plan consistency: the plan-lint and plan-approval-gate skills, run by the planning tooling
+python (project phase-close / seed tooling — not shipped in sidpa-template) --mode adapt --adaptation-plan <plan>   # only after approval
+```
+Run the suite with `AGENT_LEARNING_LOCAL_STORE_DIR` pointing at a temporary directory until IMP-063 lands: the suite writes fixture episodes into the configured store.
 
 ---
 
-## 1. Change Inventory
+### Step 8: Approval and Completion
 
-[Include the inventory from Step 2]
+**Purpose:** Submit the Adaptation Plan for approval and complete Stage 17.
 
----
+**Approval Process:**
 
-## 2. Impact Mapping
+1. **Merge the plan as a draft.** The plan document is committed with `status: draft`. Implementation work it lists is done in separate PRs, each merged through `scripts/pr_gate.py` after every required workflow has concluded (LL-060) and the whole suite has passed.
+2. **Decision.** The Sponsor reads the plan. Run `task-policy-decide` for `approve-adaptation-plan`, show the gate's recommendation, and wait. On the Sponsor's explicit words run `task-policy-adjudicate` and `task-episode-register`, after printing the store path and its file count before and after (LL-040).
+3. **Record.** Put the decision, its date and the episode id in the plan and in the Project-Status-Register. A gate that was missed is not approved afterwards; record the gap and run the gate going forward.
+4. **Finalize.** Regenerate the PMP and plans with the tooling, commit, and mark Stage 17 COMPLETED only when the work the plan authorizes is merged.
 
-[Include the impact mapping from Step 3]
+**Completion Checklist:**
+- [ ] All skill and workflow updates are committed
+- [ ] All PMP updates are committed
+- [ ] Adaptation Plan document is approved
+- [ ] All validation tests pass
+- [ ] Project-Status-Register.md is updated
+- [ ] All artifacts are pushed to repository
 
 ---
 

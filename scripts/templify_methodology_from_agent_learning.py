@@ -2,10 +2,17 @@
 
 from __future__ import annotations
 
+import argparse
+import os
 import re
 from pathlib import Path
 
-SOURCE = Path(r"D:\Source\repos\agent-learning\docs\project-docs\Methodology")
+DEFAULT_SOURCE = (
+    Path(os.environ["AGENT_LEARNING_METHODOLOGY_DIR"]).expanduser()
+    if os.environ.get("AGENT_LEARNING_METHODOLOGY_DIR")
+    else Path(__file__).resolve().parents[2] / "agent-learning" / "docs" / "project-docs" / "Methodology"
+)
+SOURCE = DEFAULT_SOURCE
 TARGET = Path(__file__).resolve().parents[1] / "docs" / "methodology"
 
 SLUGS: dict[int, str] = {
@@ -149,24 +156,47 @@ def strip_phase1_examples_stage15(body: str) -> str:
     return body
 
 
+def _find_heading_outside_fences(text: str, heading_pattern: str) -> int | None:
+    """Return char index of the first line matching heading_pattern outside fenced code blocks."""
+    compiled = re.compile(heading_pattern)
+    in_fence = False
+    fence_char = ""
+    fence_len = 0
+    offset = 0
+    for line in text.splitlines(keepends=True):
+        stripped = line.lstrip()
+        fence_match = re.match(r"^(`{3,}|~{3,})", stripped)
+        if fence_match:
+            marker = fence_match.group(1)
+            if not in_fence:
+                in_fence = True
+                fence_char = marker[0]
+                fence_len = len(marker)
+            elif marker[0] == fence_char and len(marker) >= fence_len and stripped[len(marker) :].strip() == "":
+                in_fence = False
+        elif not in_fence and compiled.match(line):
+            return offset
+        offset += len(line)
+    return None
+
+
 def truncate_after_section_2(body: str, stage: int) -> str:
-    m = re.search(r"\n## 2\. ", body)
-    if not m:
-        m = re.search(r"\n## 2\. Process", body)
-    if not m:
+    start = _find_heading_outside_fences(body, r"^## 2\. ")
+    if start is None:
+        start = _find_heading_outside_fences(body, r"^## 2\. Process")
+    if start is None:
         return body
-    start = m.start()
     rest = body[start:]
-    cut = re.search(r"\n## 3\. ", rest)
-    if cut:
-        rest = rest[: cut.start()]
-    pitfall = re.search(r"\n## [58]\. Common Pitfalls", body)
-    refs = re.search(r"\n## [69]\. References", body)
+    cut = _find_heading_outside_fences(rest, r"^## 3\. ")
+    if cut is not None:
+        rest = rest[:cut]
+    pitfall = _find_heading_outside_fences(body, r"^## [58]\. Common Pitfalls")
+    refs = _find_heading_outside_fences(body, r"^## [69]\. References")
     suffix = ""
-    if pitfall and refs:
-        end = refs.end()
-        next_sec = re.search(r"\n## 1[01]\.", body[refs.start() :])
-        chunk = body[pitfall.start() : refs.start() + (next_sec.start() if next_sec else len(body[refs.start() :]))]
+    if pitfall is not None and refs is not None:
+        next_sec = _find_heading_outside_fences(body[refs:], r"^## 1[01]\.")
+        chunk_end = refs + next_sec if next_sec is not None else len(body)
+        chunk = body[pitfall:chunk_end]
         chunk = re.sub(r"## 8\. Common Pitfalls", "## 5. Common Pitfalls", chunk)
         chunk = re.sub(r"## 9\. References", "## 6. References", chunk)
         chunk = re.sub(r"### 9\.", "###", chunk)
@@ -306,6 +336,23 @@ def templify_stage(stage: int) -> str:
 
 
 def main() -> None:
+    global SOURCE
+    parser = argparse.ArgumentParser(
+        description="Sync Stage-*-Methodology.md from agent-learning into docs/methodology/*.template.md."
+    )
+    parser.add_argument(
+        "--source",
+        type=Path,
+        default=DEFAULT_SOURCE,
+        help="Path to agent-learning Methodology directory (or set AGENT_LEARNING_METHODOLOGY_DIR).",
+    )
+    args = parser.parse_args()
+    SOURCE = args.source.expanduser().resolve()
+    if not SOURCE.is_dir():
+        raise FileNotFoundError(
+            f"Methodology source directory not found: {SOURCE}. "
+            "Pass --source <path> or set AGENT_LEARNING_METHODOLOGY_DIR."
+        )
     obsolete = [
         "Stage-14-Reflection-Methodology.template.md",
         "Stage-15-Learning-Object-Methodology.template.md",
