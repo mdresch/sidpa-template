@@ -123,9 +123,10 @@ flowchart TD
 
 ## Using This Scaffold for a New Project
 
-You can instantiate SIDPA for a new project in one of two ways:
-- **Approach A (Recommended): GitHub Template / Repo Clone / Fork** — Best when starting a new repository from scratch.
+You can instantiate SIDPA for a new project in one of three ways:
+- **Approach A (Recommended for Build Projects): GitHub Template / Repo Clone / Fork** — Best when starting a new repository from scratch.
 - **Approach B: Scaffold Copy** — Best when embedding SIDPA governance into an already existing codebase.
+- **Approach C (Lightweight / Hybrid Tailoring for Funnels & Advisory Pilots):** Keep early-stage ideation portfolios and non-code advisory pilots lightweight (Stages 1–4 + 3 registers, zero premature subsidiary plans or policy stores) and graduate only build-heavy flagships into a standalone `sidpa-template` repo for Stages 5–18. See the full worked example in [docs/examples/EXAMPLE-Tailored-Hybrid-Governance.md](docs/examples/EXAMPLE-Tailored-Hybrid-Governance.md).
 
 ---
 
