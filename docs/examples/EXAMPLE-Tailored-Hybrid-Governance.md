@@ -137,10 +137,11 @@ Best for diagnostics, advisory sprints, assessments, and non-code deliverables:
 Best for software platforms, multi-agent systems, or multi-epic product builds:
 
 **Graduation Gate (`G4-B`):**
-1. Instantiate a standalone repository from `sidpa-template` and run `python scripts/init_project.py --name <op-id>`.
+1. Instantiate a standalone repository from `sidpa-template` and run `python scripts/init_project.py --name <project-name> --opportunity-id <OP-ID> --portfolio-repo <org/portfolio-repo>`.
 2. Seed its Stage 1–4 artifacts from `opportunities/<OP-ID>/` (citing upstream, no duplication).
-3. Record the graduated repo URL in the funnel’s `Portfolio-Status-Register.md`.
-4. Execute full **Stages 5–18** per [docs/chain-coverage.md](../chain-coverage.md):
+3. Record the graduated repo URL and `docs/registers/Project-Status-Register.md` pointer in the funnel’s `Portfolio-Status-Register.md`.
+4. **Non-Duplicating Rollup Reporting:** Keep all ADRs, stories, subsidiary plans, gate JSONs, and execution queues exclusively in the graduated repo. At macro gate crossings only (**Stage 8** authorization, **Phase/Epic completion / Stage 11 Audit**, and **Stage 12/18** close), run `python scripts/export_portfolio_rollup.py` to emit the 5-field executive rollup row (`Opportunity ID`, `Graduated Repo SSOT`, `Macro Stage & Baseline`, `Coarse Delivery Progress`, `Commercial / Pilot Status`) for the upstream portfolio register.
+5. Execute full **Stages 5–18** per [docs/chain-coverage.md](../chain-coverage.md):
    - **Stage 5:** Pillars Exercise (`PILLARS-EXERCISE.md`, `Project-Pillars.md`) + foundational ADRs (100% pillar coverage)
    - **Stage 6:** Tailored Subsidiary Plans + Integrated PMP (`PMP-BL-vX.Y.Z`; Foundation Packs only when justified — Rule #30)
    - **Stage 7:** Strict `ADR → BRD → FDD → User Stories` sequence (User Stories = PMBOK Work Packages)

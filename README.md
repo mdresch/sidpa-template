@@ -1,4 +1,4 @@
-﻿# SIDPA Template
+# SIDPA Template
 
 **Synthetic Intent-Driven Process Architecture (SIDPA)**
 
@@ -18,7 +18,8 @@ Every artifact-producing stage is gated by real, Bayesian `agent_learning` TaskP
 Nine subsidiary-plan skeletons (`*.template.md`), one per PMBOK 8 plan, each carrying the same content contract: frontmatter (`plan_id`, domains, `route`, `generator`, `baseline_id`, `cycle_id`, `owner_role`, `depends_on`, `inputs`, `outputs`, `governance_policy`), three literal headings (`## 1. Intent, Alignment & Boundaries`, `## 2. Domain Mechanics & Standards`, `## 3. Governance, Control & Decision Rights`), an out-of-scope rule, and word-count floors and caps that are flags, not blocks. The standards come from `agent-learning` ADR-012 and ADR-025 to ADR-033. Scope, Schedule and Cost are Tier 1 (baseline-substantiating); Risk and Quality are Tier 2; Resource, Stakeholder Engagement, Communications and Procurement are Tier 3. Dependencies form a graph rooted at Scope.
 
 ### 2. Scripts (`scripts/`)
-- **`scripts/init_project.py`**: renames `template-governance` to `<name>-governance` in the policy store (keeping `agent-learning-governance` intact), then copies the skeletons for the chosen stage to working `.md` files without overwriting anything, filling the project name and start date. Stages: `start` (Spark through Charter and the registers), `plans`, `closing`, `all`.
+- **`scripts/init_project.py`**: renames `template-governance` to `<name>-governance` in the policy store (keeping `agent-learning-governance` intact), then copies the skeletons for the chosen stage to working `.md` files without overwriting anything, filling the project name, start date, and optional `--opportunity-id` / `--portfolio-repo` rollup pointers. Stages: `start` (Spark through Charter and the registers), `plans`, `closing`, `all`.
+- **`scripts/export_portfolio_rollup.py`**: extracts a thin, non-duplicating 5-field Markdown or JSON status rollup from `docs/registers/Project-Status-Register.md` for reporting macro progress back to an upstream portfolio funnel (for example, on Stage 8, Stage 11, or Stage 18 transitions).
 
 This template stores only template values. The earlier SQLite/FastAPI planning engine and `orchestrate_pmbok.py` were removed, following `agent-learning` ADR-034. Plans are drafted from the skeletons (see `.claude/skills/pmbok-planning/SKILL.md`) until a small pure-Python module replaces the old engine.
 

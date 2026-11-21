@@ -109,7 +109,14 @@ def rename_governance(clean_name: str) -> int:
     return updated
 
 
-def copy_stage_documents(stage: str, project_title: str, clean_name: str, today: str) -> int:
+def copy_stage_documents(
+    stage: str,
+    project_title: str,
+    clean_name: str,
+    today: str,
+    opportunity_id: str = "none",
+    portfolio_repo: str = "none",
+) -> int:
     """Copy the stage's templates to their working names without overwriting anything."""
     created = 0
     for pattern in STAGES[stage]:
@@ -123,6 +130,8 @@ def copy_stage_documents(stage: str, project_title: str, clean_name: str, today:
                 text.replace("<project name>", project_title)
                 .replace("HYP-<project>-", f"HYP-{clean_name}-")
                 .replace("<project>", project_title)
+                .replace("<opportunity-id>", opportunity_id)
+                .replace("<portfolio-repo>", portfolio_repo)
                 .replace("<date the project starts>", today)
                 .replace("<date this project starts using it>", today)
             )
@@ -132,7 +141,13 @@ def copy_stage_documents(stage: str, project_title: str, clean_name: str, today:
     return created
 
 
-def init_project(project_name: str, stage: str = "start", create_docs: bool = True) -> None:
+def init_project(
+    project_name: str,
+    stage: str = "start",
+    create_docs: bool = True,
+    opportunity_id: str = "none",
+    portfolio_repo: str = "none",
+) -> None:
     clean_name = clean_project_name(project_name)
     if not clean_name:
         raise SystemExit("Project name is empty after sanitizing; use letters, digits, '-' or '_'.")
@@ -142,7 +157,14 @@ def init_project(project_name: str, stage: str = "start", create_docs: bool = Tr
     print(f"  [OK] Updated agent_id in {updated} policy file(s).")
 
     if create_docs:
-        created = copy_stage_documents(stage, project_name.strip(), clean_name, datetime.date.today().isoformat())
+        created = copy_stage_documents(
+            stage,
+            project_name.strip(),
+            clean_name,
+            datetime.date.today().isoformat(),
+            opportunity_id=opportunity_id,
+            portfolio_repo=portfolio_repo,
+        )
         print(f"  [OK] Created {created} document(s) for stage '{stage}'.")
 
     print("\nNext steps:")
@@ -155,9 +177,17 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Initialize a new project from sidpa-template")
     parser.add_argument("--name", required=True, help="Project name (for example 'my-awesome-app')")
     parser.add_argument("--stage", choices=sorted(STAGES), default="start", help="Which documents to create")
+    parser.add_argument("--opportunity-id", default="none", help="Optional upstream portfolio opportunity ID (e.g. 'OP-ITG-017')")
+    parser.add_argument("--portfolio-repo", default="none", help="Optional upstream portfolio repository (e.g. 'org/opportunities-2027')")
     parser.add_argument("--skip-docs", action="store_true", help="Rename the governance agent only")
     args = parser.parse_args()
-    init_project(args.name, stage=args.stage, create_docs=not args.skip_docs)
+    init_project(
+        args.name,
+        stage=args.stage,
+        create_docs=not args.skip_docs,
+        opportunity_id=args.opportunity_id,
+        portfolio_repo=args.portfolio_repo,
+    )
 
 
 if __name__ == "__main__":

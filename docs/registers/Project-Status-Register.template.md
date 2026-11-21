@@ -71,3 +71,17 @@ caused this, both worth guarding against here:
 - **At any natural pause, not only at Epic boundaries** — a decision made, a correction applied, before starting work that will take many steps. Session/model cutoffs do not always announce themselves in advance; treat this update as cheap, frequent insurance, not a formal gate.
 - **Any out-of-loop work** (built directly, no ADR/BRD/FDD/Story) gets one line in §1's "Open side-thread" field, not a fabricated Epic/Story entry elsewhere.
 - This register is **not** append-only and carries **no version bump on every edit** — same convention as `Story-Execution-Register.template.md`'s "live" framing. Only `last_updated` changes.
+
+## 5. Upstream Portfolio Rollup (Non-Duplicating Pointer)
+
+> **Single-Source-of-Truth (SSOT) Boundary:** When this repository was graduated from an upstream portfolio funnel (Track B), **all** ADRs, BRDs, FDDs, Epics, User Stories, subsidiary management plans, gate JSONs, and execution queues stay exclusively in this repository. Never copy them back upstream.
+>
+> Report only the 5-field executive rollup below to the upstream portfolio's `Portfolio-Status-Register.md` — and **only on macro gate crossings** (Stage 8 Implementation Authorization, Phase/Epic completion or Stage 11 Audit closure, and Stage 12/18 Phase close). Run `python scripts/export_portfolio_rollup.py` to generate the ready-to-paste row.
+
+| Field | Value |
+|---|---|
+| **Upstream Portfolio Repo** | `<portfolio-repo>` *(e.g. `org/opportunities-portfolio`, or `none` if standalone)* |
+| **Opportunity ID** | `<opportunity-id>` *(e.g. `OP-XXX-001`, or `none` if standalone)* |
+| **Commercial / Pilot Status** | *(e.g. "Track B technical build active; commercial pilot status governed in upstream portfolio")* |
+| **Next Rollup Sync Trigger** | *(e.g. "Stage 8 authorization / Phase 1 completion (Stage 11 Audit) / Stage 18 Phase close")* |
+| **Rollup Export Command** | `python scripts/export_portfolio_rollup.py --format markdown` *(or `--format json`)* |
