@@ -91,7 +91,14 @@ def rename_governance(clean_name: str) -> int:
         new_dir = store_dir / kind / new_agent_id
         if old_dir.exists():
             if new_dir.exists():
-                shutil.rmtree(new_dir)
+                raise SystemExit(
+                    f"\nGovernance rename blocked: both\n"
+                    f"  {old_dir.relative_to(repo_root)}\n"
+                    f"  {new_dir.relative_to(repo_root)}\n"
+                    f"already exist. Removing {new_dir.name} would destroy project-specific "
+                    f"policy data. Finish init for the existing agent id, or use a fresh "
+                    f"template checkout for a new project name.\n"
+                )
             old_dir.rename(new_dir)
             print(f"  [OK] Renamed {new_dir.relative_to(repo_root)}")
         if new_dir.exists():
